@@ -15,6 +15,7 @@ html {
     font-family: 'League Spartan', sans-serif;    
     scroll-behavior: smooth;
     overflow-x: hidden;
+    background-color: ${(props) => props.theme.colors.whisperBg}
 }
 
 body {
