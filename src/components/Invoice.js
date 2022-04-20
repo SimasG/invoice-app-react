@@ -62,27 +62,31 @@ const Invoice = () => {
           </div>
         </div>
         <div className="price-container">
-          <table className="price-table">
+          <table>
             <thead>
               <tr>
-                <th>Item Name</th>
-                <th>QTY.</th>
-                <th>Price</th>
-                <th>Total</th>
+                <th className="item-name-title">Item Name</th>
+                <th className="quantity-title">QTY.</th>
+                <th className="price-title">Price</th>
+                <th className="total-item-title">Total</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{invoices[0].items[0].name}</td>
-                <td>{invoices[0].items[0].quantity}</td>
-                <td>{invoices[0].items[0].price}</td>
-                <td>{invoices[0].items[0].total}</td>
+                <td className="item-name dark">{invoices[0].items[0].name}</td>
+                <td className="quantity">{invoices[0].items[0].quantity}</td>
+                <td className="price">{invoices[0].items[0].price}</td>
+                <td className="total-item dark">
+                  {invoices[0].items[0].total}
+                </td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <td>Amount Due</td>
-                <td>{invoices[0].total}</td>
+                <td className="amount-due">Amount Due</td>
+                <td className="total" colSpan="3">
+                  {invoices[0].total}
+                </td>
               </tr>
             </tfoot>
           </table>

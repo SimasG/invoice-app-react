@@ -67,11 +67,93 @@ export const StyledInvoice = styled.main`
       .invoice-recipient-email {
       }
     }
-    .price-table {
-      width: 100%;
-      background-color: #f9fafe;
-      border-radius: 8px;
-      padding: 3.2rem;
+    .price-container {
+      table {
+        width: 100%;
+        background-color: #d5d5d5;
+        /* F9FAFE */
+        border-radius: 8px;
+        border-collapse: collapse;
+        border-spacing: 0;
+        thead {
+          tr {
+            .item-name-title {
+              text-align: left;
+              padding-left: 3.2rem;
+            }
+            .quantity-title {
+              text-align: right;
+            }
+            .price-title {
+              text-align: right;
+            }
+            .total-item-title {
+              text-align: right;
+              padding-right: 3.2rem;
+            }
+            th {
+              padding: 3.2rem 0 1.15rem 0;
+              color: ${(props) => props.theme.colors.shipCove};
+              font-size: 1.1rem;
+              line-height: 1.8rem;
+              letter-spacing: -0.023rem;
+              font-weight: 500;
+            }
+          }
+        }
+        tbody {
+          tr {
+            .item-name {
+              padding-left: 3.2rem;
+            }
+            .quantity {
+              text-align: right;
+              padding-left: 8.2rem;
+            }
+            .price {
+              text-align: right;
+              padding-left: 1.5rem;
+            }
+            .total-item {
+              text-align: right;
+              padding-right: 3.2rem;
+            }
+            td {
+              padding: 1.15rem 0;
+              color: ${(props) => props.theme.colors.shipCove};
+              font-size: 1.2rem;
+              font-weight: 700;
+              line-height: 1.5rem;
+              letter-spacing: -0.025rem;
+            }
+            .dark {
+              color: ${(props) => props.theme.colors.vulcan};
+            }
+          }
+        }
+        tfoot {
+          color: #fff;
+          background-color: #373b53;
+          border-radius: 8px;
+          tr {
+            border-radius: 8px;
+            .amount-due {
+              border-radius: 0 0 0 8px;
+            }
+            .total {
+              text-align: right;
+              border-radius: 0 0 8px 0;
+              font-size: 2.4rem;
+              line-height: 3.2rem;
+              letter-spacing: -0.05rem;
+              font-weight: 700;
+            }
+            td {
+              padding: 2.4rem 3.2rem;
+            }
+          }
+        }
+      }
     }
   }
 `;
