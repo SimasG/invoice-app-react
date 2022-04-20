@@ -2,6 +2,7 @@ import GlobalStyles from "./styles/Global";
 import { ThemeProvider } from "styled-components";
 import Homepage from "./components/Homepage";
 import Sidebar from "./components/Sidebar";
+import Invoice from "./components/Invoice";
 
 const theme = {
   colors: {
@@ -25,7 +26,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Sidebar />
-      <Homepage />
+      {/* <Homepage /> */}
+      <Invoice />
     </ThemeProvider>
   );
 }

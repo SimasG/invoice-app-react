@@ -24,6 +24,7 @@ body {
 h1, h2, h3, h4, p, li, ul, span, a, button {
     list-style-type: none;
     text-decoration: none;
+    background: none;
 }
 
 h1 {
