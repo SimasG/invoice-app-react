@@ -28,15 +28,6 @@ h1, h2, h3, h4, p, li, ul, span, a, button {
     font-family: 'League Spartan', sans-serif;
 }
 
-button {
-    font-size: 1.2rem;
-    height: 4.8rem;
-    border-radius: 24px;
-    font-weight: bold;
-    line-height: 1.5rem;
-    letter-spacing: -0.025rem;
-}
-
 h1 {
     font-size: 3.2rem;
     font-weight: 700;
@@ -74,6 +65,21 @@ p, li, span, input, ul, a, label {
     line-height: 1.5rem;
     font-weight: 400;
     letter-spacing: -0.25px;
+}
+
+p {
+    color: ${(props) => props.theme.colors.baliHai};
+    line-height: 2.2rem;
+    letter-spacing: -0.025rem;
+}
+
+button {
+    font-size: 1.2rem;
+    height: 4.8rem;
+    border-radius: 24px;
+    font-weight: bold;
+    line-height: 1.5rem;
+    letter-spacing: -0.025rem;
 }
 
 label {

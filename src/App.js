@@ -4,6 +4,8 @@ import Homepage from "./components/Homepage";
 import Sidebar from "./components/Sidebar";
 import Invoice from "./components/Invoice";
 import NewInvoiceModal from "./components/NewInvoiceModal";
+import EditInvoiceModal from "./components/EditInvoiceModal";
+import DeleteInvoiceModal from "./components/DeleteInvoiceModal";
 
 const theme = {
   colors: {
@@ -29,7 +31,9 @@ function App() {
       <Sidebar />
       {/* <Homepage /> */}
       {/* <Invoice /> */}
-      <NewInvoiceModal />
+      {/* <NewInvoiceModal /> */}
+      {/* <EditInvoiceModal /> */}
+      <DeleteInvoiceModal />
     </ThemeProvider>
   );
 }

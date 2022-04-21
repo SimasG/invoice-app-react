@@ -1,7 +1,7 @@
-import { StyledNewInvoiceModal } from "../styles/NewInvoiceModal.styled";
+import { StyledEditInvoiceModal } from "../styles/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
 
-const NewInvoiceModal = () => {
+const EditInvoiceModal = () => {
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
@@ -11,9 +11,11 @@ const NewInvoiceModal = () => {
   });
 
   return (
-    <StyledNewInvoiceModal className="new-invoice-modal-overlay">
+    <StyledEditInvoiceModal className="new-invoice-modal-overlay">
       <main className="new-invoice-modal-container">
-        <h1>New Invoice</h1>
+        <h1>
+          Edit <span>#</span>XM9141
+        </h1>
         <section className="bill-from-container">
           <p className="bill-from-parapgrah">Bill From</p>
           <div className="from-address-container">
@@ -167,15 +169,12 @@ const NewInvoiceModal = () => {
           <button className="add-new-item-btn">+ Add New Item</button>
         </section>
         <section className="new-invoice-btn-container">
-          <button className="discard-btn">Discard</button>
-          <div className="save-btn-container">
-            <button className="save-draft-btn">Save as Draft</button>
-            <button className="save-send-btn">Save & Send</button>
-          </div>
+          <button className="cancel-btn">Discard</button>
+          <button className="save-changes-btn">Save & Send</button>
         </section>
       </main>
-    </StyledNewInvoiceModal>
+    </StyledEditInvoiceModal>
   );
 };
 
-export default NewInvoiceModal;
+export default EditInvoiceModal;
