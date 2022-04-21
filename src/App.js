@@ -3,6 +3,7 @@ import { ThemeProvider } from "styled-components";
 import Homepage from "./components/Homepage";
 import Sidebar from "./components/Sidebar";
 import Invoice from "./components/Invoice";
+import NewInvoiceModal from "./components/NewInvoiceModal";
 
 const theme = {
   colors: {
@@ -27,7 +28,8 @@ function App() {
       <GlobalStyles />
       <Sidebar />
       {/* <Homepage /> */}
-      <Invoice />
+      {/* <Invoice /> */}
+      <NewInvoiceModal />
     </ThemeProvider>
   );
 }

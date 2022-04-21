@@ -32,6 +32,7 @@ h1 {
     font-weight: 700;
     line-height: 3.6rem;
     letter-spacing: -1px;
+    color: ${(props) => props.theme.colors.vulcan}
 }
 
 h2 {
@@ -39,6 +40,7 @@ h2 {
     font-weight: 700;
     line-height: 2.2rem;
     letter-spacing: -0.63px;
+    color: ${(props) => props.theme.colors.vulcan}
 }
 
 h3 {
@@ -46,6 +48,7 @@ h3 {
     font-weight: 700;
     line-height: 2.4rem;
     letter-spacing: -0.8px;
+    color: ${(props) => props.theme.colors.vulcan}
 }
 
 h4 {
@@ -53,17 +56,27 @@ h4 {
     font-weight: 700;
     line-height: 1.5rem;
     letter-spacing: -0.25px;
+    color: ${(props) => props.theme.colors.vulcan}
 }
 
-p, li, span, input, ul, a {
+p, li, span, input, ul, a, label {
     font-size: 1.2rem;
     line-height: 1.5rem;
     font-weight: 400;
     letter-spacing: -0.25px;
 }
 
+label {
+    display: block;
+}
+
 input {
     outline: none;
+    border-radius: 4px;
+    border: 1px solid ${(props) => props.theme.colors.selago};
+    :focus {
+        border: 1px solid ${(props) => props.theme.colors.cornflowerBlue};
+    }
 }
 
 ul, li, button {
