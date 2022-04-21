@@ -79,7 +79,7 @@ const NewInvoiceModal = () => {
                   width: "22rem",
                 },
                 month: {
-                  width: "22rem",
+                  width: "21.5rem",
                 },
                 dropdown: {
                   width: "24rem",
@@ -147,8 +147,34 @@ const NewInvoiceModal = () => {
             </div>
           </div>
         </section>
-        {/* <section className="item-list-container">
-        </section> */}
+        <section className="item-list-container">
+          <h2>Item List</h2>
+          <div className="item-list-input-table">
+            <div className="item-list-title-container">
+              <label>Item Name</label>
+              <label>Qty.</label>
+              <label>Price</label>
+              <label>Total</label>
+            </div>
+            <div className="item-list-input-container">
+              <div className="item-list-input">
+                <input type="text" placeholder="Item Name" />
+                <input type="number" placeholder="Qty." />
+                <input type="number" placeholder="Price" />
+                <input type="number" placeholder="total" />
+                <img src="/assets/icon-delete.svg" alt="delete item" />
+              </div>
+            </div>
+          </div>
+          <button className="add-new-item-btn">+ Add New Item</button>
+        </section>
+        <section className="new-invoice-btn-container">
+          <button className="discard-btn">Discard</button>
+          <div className="save-btn-container">
+            <button className="save-draft-btn">Save as Draft</button>
+            <button className="save-send-btn">Save & Send</button>
+          </div>
+        </section>
       </main>
     </StyledNewInvoiceModal>
   );

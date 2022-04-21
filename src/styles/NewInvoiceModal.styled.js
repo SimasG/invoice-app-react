@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const StyledNewInvoiceModal = styled.div`
-  /* background-color: yellow; */
   height: 100vh;
   position: fixed;
   width: 100%;
@@ -9,7 +8,7 @@ export const StyledNewInvoiceModal = styled.div`
   left: 10.3rem;
   background-color: rgba(0, 0, 0, 0.2);
   .new-invoice-modal-container {
-    background-color: yellow;
+    background-color: #fff;
     width: 61.6rem;
     height: 100vh;
     padding: 5.6rem;
@@ -105,8 +104,8 @@ export const StyledNewInvoiceModal = styled.div`
       }
       .invoice-info-container {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-between;
+        align-items: flex-start;
         .mantine-date-picker {
         }
         .payment-terms-container {
@@ -176,6 +175,58 @@ export const StyledNewInvoiceModal = styled.div`
               }
             }
           }
+        }
+      }
+    }
+    .item-list-container {
+      margin-bottom: 3.5rem;
+      h2 {
+        font-size: 1.8rem;
+      }
+      .item-list-input-table {
+        margin-bottom: 2rem;
+        .item-list-title-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .item-list-input-container {
+          .item-list-input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+        }
+      }
+      .add-new-item-btn {
+        background-color: #f9fafe;
+        color: ${(props) => props.theme.colors.shipCove};
+        width: 100%;
+      }
+    }
+    .new-invoice-btn-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .discard-btn {
+        background-color: #f9fafe;
+        color: ${(props) => props.theme.colors.shipCove};
+        padding: 0 2.5rem;
+      }
+      .save-btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.8rem;
+        .save-draft-btn {
+          background-color: #373b53;
+          color: ${(props) => props.theme.colors.baliHai};
+          padding: 0 2.5rem;
+        }
+        .save-send-btn {
+          background-color: ${(props) => props.theme.colors.cornflowerBlue};
+          color: #fff;
+          padding: 0 2.5rem;
         }
       }
     }

@@ -25,6 +25,16 @@ h1, h2, h3, h4, p, li, ul, span, a, button {
     list-style-type: none;
     text-decoration: none;
     background: none;
+    font-family: 'League Spartan', sans-serif;
+}
+
+button {
+    font-size: 1.2rem;
+    height: 4.8rem;
+    border-radius: 24px;
+    font-weight: bold;
+    line-height: 1.5rem;
+    letter-spacing: -0.025rem;
 }
 
 h1 {
