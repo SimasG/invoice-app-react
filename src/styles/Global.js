@@ -71,10 +71,13 @@ p {
     color: ${(props) => props.theme.colors.baliHai};
     line-height: 2.2rem;
     letter-spacing: -0.025rem;
+    /* TEMPORARY FONT SIZE */
+    font-size: 2rem;
 }
 
 button {
-    font-size: 1.2rem;
+    /* TEMPORARY FONT SIZE */
+    font-size: 2rem;
     height: 4.8rem;
     border-radius: 24px;
     font-weight: bold;

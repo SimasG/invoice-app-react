@@ -1,7 +1,47 @@
 import { StyledEditInvoiceModal } from "../styles/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
+import { useState } from "react";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
-const EditInvoiceModal = ({ setEditOpen }) => {
+const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
+  const [senderStreetAddress, setSenderStreetAddress] = useState(
+    selectedInvoice.senderAddress.street
+  );
+  const [senderCity, setSenderCity] = useState(
+    selectedInvoice.senderAddress.city
+  );
+  const [senderPostcode, setSenderPostcode] = useState(
+    selectedInvoice.senderAddress.postCode
+  );
+  const [senderCountry, setSenderCountry] = useState(
+    selectedInvoice.senderAddress.country
+  );
+
+  const [clientName, setClientName] = useState(selectedInvoice.clientName);
+  const [clientEmail, setClientEmail] = useState(selectedInvoice.clientEmail);
+
+  const [clientStreetAddress, setClientStreetAddress] = useState(
+    selectedInvoice.clientAddress.street
+  );
+  const [clientCity, setClientCity] = useState(
+    selectedInvoice.clientAddress.city
+  );
+  const [clientPostcode, setClientPostcode] = useState(
+    selectedInvoice.clientAddress.postCode
+  );
+  const [clientCountry, setClientCountry] = useState(
+    selectedInvoice.clientAddress.country
+  );
+
+  const [invoiceDate, setInvoiceDate] = useState(
+    dayjs(selectedInvoice.createdAt).$d
+  );
+
+  const [paymentTerms, setPaymentTerms] = useState(
+    selectedInvoice.paymentTerms
+  );
+
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
@@ -23,27 +63,56 @@ const EditInvoiceModal = ({ setEditOpen }) => {
         }}
       >
         <h1>
-          Edit <span>#</span>XM9141
+          Edit <span>#</span>
+          {selectedInvoice.id}
         </h1>
         <section className="bill-from-container">
           <p className="bill-from-parapgrah">Bill From</p>
           <div className="from-address-container">
             <div className="street-address">
               <label>Street Address</label>
-              <input type="text" placeholder="Street Address" />
+              <input
+                type="text"
+                placeholder="Street Address"
+                value={senderStreetAddress}
+                onChange={(e) => {
+                  setSenderStreetAddress(e.target.value);
+                }}
+              />
             </div>
             <div className="from-address-subcontainer">
               <div className="city">
                 <label>City</label>
-                <input type="text" placeholder="City" />
+                <input
+                  type="text"
+                  placeholder="City"
+                  value={senderCity}
+                  onChange={(e) => {
+                    setSenderCity(e.target.value);
+                  }}
+                />
               </div>
               <div className="post-code">
                 <label>Post Code</label>
-                <input type="text" placeholder="Post Code" />
+                <input
+                  type="text"
+                  placeholder="Post Code"
+                  value={senderPostcode}
+                  onChange={(e) => {
+                    setSenderPostcode(e.target.value);
+                  }}
+                />
               </div>
               <div className="country">
                 <label>Country</label>
-                <input type="text" placeholder="country" />
+                <input
+                  type="text"
+                  placeholder="country"
+                  value={senderCountry}
+                  onChange={(e) => {
+                    setSenderCountry(e.target.value);
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -53,28 +122,70 @@ const EditInvoiceModal = ({ setEditOpen }) => {
           <div className="client-info-container">
             <div className="client-name">
               <label>Client's Name</label>
-              <input type="text" placeholder="Client's Name" />
+              <input
+                type="text"
+                placeholder="Client's Name"
+                value={clientName}
+                onChange={(e) => {
+                  setClientName(e.target.value);
+                }}
+              />
             </div>
             <div className="client-email">
               <label>Client's Email</label>
-              <input type="text" placeholder="Client's Email" />
+              <input
+                type="text"
+                placeholder="Client's Email"
+                value={clientEmail}
+                onChange={(e) => {
+                  setClientEmail(e.target.value);
+                }}
+              />
             </div>
             <div className="client-street-address">
               <label>Street Address</label>
-              <input type="text" placeholder="Street Address" />
+              <input
+                type="text"
+                placeholder="Street Address"
+                value={clientStreetAddress}
+                onChange={(e) => {
+                  setClientStreetAddress(e.target.value);
+                }}
+              />
             </div>
             <div className="to-address-subcontainer">
               <div className="to-city">
                 <label>City</label>
-                <input type="text" placeholder="City" />
+                <input
+                  type="text"
+                  placeholder="City"
+                  value={clientCity}
+                  onChange={(e) => {
+                    setClientCity(e.target.value);
+                  }}
+                />
               </div>
               <div className="to-post-code">
                 <label>Post Code</label>
-                <input type="text" placeholder="Post Code" />
+                <input
+                  type="text"
+                  placeholder="Post Code"
+                  value={clientPostcode}
+                  onChange={(e) => {
+                    setClientPostcode(e.target.value);
+                  }}
+                />
               </div>
               <div className="to-country">
                 <label>Country</label>
-                <input type="text" placeholder="country" />
+                <input
+                  type="text"
+                  placeholder="country"
+                  value={clientCountry}
+                  onChange={(e) => {
+                    setClientCountry(e.target.value);
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -100,21 +211,26 @@ const EditInvoiceModal = ({ setEditOpen }) => {
               className="mantine-date-picker"
               placeholder="Pick date"
               label="Invoice date"
+              value={invoiceDate}
+              onChange={(e) => {
+                setInvoiceDate(e);
+              }}
             />
             <div className="payment-terms-container">
               <label>Payment Terms</label>
               <div className="payment-terms-select-box">
                 <div className="options-container">
-                  <div className="option">
+                  <div className="option" onClick={() => setPaymentTerms(1)}>
                     <input
                       type="radio"
                       className="radio"
                       id="net-1-day"
                       name="payment-term-date"
+                      value={1}
                     />
                     <label htmlFor="net-1-day">Net 1 Day</label>
                   </div>
-                  <div className="option">
+                  <div className="option" onClick={() => setPaymentTerms(7)}>
                     <input
                       type="radio"
                       className="radio"
@@ -123,7 +239,7 @@ const EditInvoiceModal = ({ setEditOpen }) => {
                     />
                     <label htmlFor="net-7-days">Net 7 Days</label>
                   </div>
-                  <div className="option">
+                  <div className="option" onClick={() => setPaymentTerms(14)}>
                     <input
                       type="radio"
                       className="radio"
@@ -132,7 +248,7 @@ const EditInvoiceModal = ({ setEditOpen }) => {
                     />
                     <label htmlFor="net-14-days">Net 14 Days</label>
                   </div>
-                  <div className="option">
+                  <div className="option" onClick={() => setPaymentTerms(30)}>
                     <input
                       type="radio"
                       className="radio"

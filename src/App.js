@@ -32,14 +32,7 @@ function App() {
       <Sidebar />
       <Routes>
         <Route exact path="/" element={<Homepage />} />
-        <Route path="/:clientName/:id" element={<Invoice />}>
-          {/* <Route
-            path="edit"
-            element={
-              <EditInvoiceModal editOpen={editOpen} setEditOpen={setEditOpen} />
-            }
-          /> */}
-        </Route>
+        <Route path="/:clientName/:id" element={<Invoice />}></Route>
         <Route
           path="*"
           element={

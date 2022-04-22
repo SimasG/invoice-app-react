@@ -7,7 +7,6 @@ import EditInvoiceModal from "./EditInvoiceModal";
 
 const Invoice = () => {
   const [editOpen, setEditOpen] = useState(false);
-  console.log(`editOpen is ${editOpen}`);
 
   const params = useParams();
   const getInvoice = (id) => {
@@ -119,7 +118,12 @@ const Invoice = () => {
           </div>
         </section>
       </StyledInvoice>
-      {editOpen && <EditInvoiceModal setEditOpen={setEditOpen} />}
+      {editOpen && (
+        <EditInvoiceModal
+          setEditOpen={setEditOpen}
+          selectedInvoice={selectedInvoice}
+        />
+      )}
       <Outlet />
     </>
   );
