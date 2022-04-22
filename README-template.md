@@ -12,3 +12,8 @@ Nested Components:
 GOOD: Easy to implement
 GOOD: No need to share state across multiple non-nested components
 BAD: Not as proper/uniform
+
+**_QUESTIONS_**
+
+1. How properly am I using uuids?
+2. How to set state to an array of items that are being mapped?

@@ -219,6 +219,9 @@ export const StyledEditInvoiceModal = styled.div`
             display: flex;
             justify-content: space-between;
             align-items: center;
+            .delete-item-btn {
+              cursor: pointer;
+            }
           }
         }
       }
@@ -226,6 +229,9 @@ export const StyledEditInvoiceModal = styled.div`
         background-color: #f9fafe;
         color: ${(props) => props.theme.colors.shipCove};
         width: 100%;
+        :hover {
+          background-color: #dfdfe0;
+        }
       }
     }
     .new-invoice-btn-container {

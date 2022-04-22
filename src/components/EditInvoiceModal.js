@@ -2,6 +2,8 @@ import { StyledEditInvoiceModal } from "../styles/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import { v4 as uuidv4 } from "uuid";
+
 // import customParseFormat from "dayjs/plugin/customParseFormat";
 
 const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
@@ -33,18 +35,21 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
   const [clientCountry, setClientCountry] = useState(
     selectedInvoice.clientAddress.country
   );
-
   const [invoiceDate, setInvoiceDate] = useState(
     dayjs(selectedInvoice.createdAt).$d
   );
-
   const [paymentTerms, setPaymentTerms] = useState(
     selectedInvoice.paymentTerms
   );
-
   const [projectDescription, setProjectDescription] = useState(
     selectedInvoice.description
   );
+
+  // Utterly useless atm
+  const [itemName, setItemName] = useState(null);
+  const [itemQuantity, setItemQuantity] = useState(null);
+  const [itemPrice, setItemPrice] = useState(null);
+  const [itemTotal, setItemTotal] = useState(null);
 
   // Pre-filling Payment Terms Dropdown
   useEffect(() => {
@@ -322,13 +327,53 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
               <label>Total</label>
             </div>
             <div className="item-list-input-container">
-              <div className="item-list-input">
+              {selectedInvoice.items.map((item) => {
+                const uuid = uuidv4();
+                return (
+                  <div className="item-list-input" key={uuid}>
+                    <input
+                      type="text"
+                      placeholder="Item Name"
+                      value={item.name}
+                      onChange={(e) => setItemName(e.target.value)}
+                    />
+                    <input
+                      type="number"
+                      placeholder="Qty."
+                      value={item.quantity}
+                      onChange={(e) => setItemQuantity(e.target.value)}
+                    />
+                    <input
+                      type="number"
+                      placeholder="Price"
+                      value={item.price}
+                      onChange={(e) => setItemPrice(e.target.value)}
+                    />
+                    <input
+                      type="number"
+                      placeholder="total"
+                      value={item.total}
+                      onChange={(e) => setItemTotal(e.target.value)}
+                    />
+                    <img
+                      className="delete-item-btn"
+                      src="/assets/icon-delete.svg"
+                      alt="delete item"
+                    />
+                  </div>
+                );
+              })}
+              {/* <div className="item-list-input">
                 <input type="text" placeholder="Item Name" />
                 <input type="number" placeholder="Qty." />
                 <input type="number" placeholder="Price" />
                 <input type="number" placeholder="total" />
-                <img src="/assets/icon-delete.svg" alt="delete item" />
-              </div>
+                <img
+                  className="delete-item-btn"
+                  src="/assets/icon-delete.svg"
+                  alt="delete item"
+                />
+              </div> */}
             </div>
           </div>
           <button className="add-new-item-btn">+ Add New Item</button>
