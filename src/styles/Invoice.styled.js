@@ -5,6 +5,22 @@ export const StyledInvoice = styled.main`
   margin: 6rem auto 5.4rem auto;
   .back-btn {
     margin-bottom: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.4rem;
+    padding: 0 2.5rem;
+
+    font-size: 1.2rem;
+    height: 4.8rem;
+    width: fit-content;
+    border-radius: 24px;
+    font-weight: bold;
+    line-height: 1.5rem;
+    letter-spacing: -0.025rem;
+    :hover {
+      background-color: ${(props) => props.theme.colors.selago};
+    }
   }
   .invoice-control-container {
     background: #fff;

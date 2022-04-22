@@ -6,6 +6,7 @@ import Invoice from "./components/Invoice";
 import NewInvoiceModal from "./components/NewInvoiceModal";
 import EditInvoiceModal from "./components/EditInvoiceModal";
 import DeleteInvoiceModal from "./components/DeleteInvoiceModal";
+import { Routes, Route } from "react-router-dom";
 
 const theme = {
   colors: {
@@ -29,11 +30,21 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Sidebar />
-      {/* <Homepage /> */}
-      {/* <Invoice /> */}
+      <Routes>
+        <Route exact path="/" element={<Homepage />} />
+        <Route path="/:clientName/:id" element={<Invoice />} />
+        <Route
+          path="*"
+          element={
+            <main style={{ padding: "5rem 5rem 5rem 15rem" }}>
+              <h1 style={{ fontSize: "4rem" }}>There's nothing here!</h1>
+            </main>
+          }
+        />
+      </Routes>
       {/* <NewInvoiceModal /> */}
       {/* <EditInvoiceModal /> */}
-      <DeleteInvoiceModal />
+      {/* <DeleteInvoiceModal /> */}
     </ThemeProvider>
   );
 }

@@ -1,18 +1,28 @@
 import { StyledInvoice } from "../styles/Invoice.styled";
 import invoices from "../data.json";
+import { Link, useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 const Invoice = () => {
+  const params = useParams();
+
+  const getInvoice = (id) => {
+    return invoices.find((invoice) => invoice.id === id);
+  };
+
+  const selectedInvoice = getInvoice(params.id);
+
   return (
     <StyledInvoice>
-      <button className="back-btn">
-        <img src="/assets/icon-arrow-left" alt="" />
+      <Link to="/" className="back-btn">
+        <img src="/assets/icon-arrow-left.svg" alt="" />
         <h3>Go Back</h3>
-      </button>
+      </Link>
       <section className="invoice-control-container">
         <div className="status-subcontainer">
           <p>Status</p>
           <div className="status">
-            <p>{invoices[0].status}</p>
+            <p>{selectedInvoice.status}</p>
           </div>
         </div>
         <div className="invoice-control-subcontainer">
@@ -26,39 +36,39 @@ const Invoice = () => {
           <div className="description-container">
             <h2>
               <span>#</span>
-              {invoices[0].id}
+              {selectedInvoice.id}
             </h2>
-            <p>{invoices[0].description}</p>
+            <p>{selectedInvoice.description}</p>
           </div>
           <div className="sender-address-container">
-            <p>{invoices[0].senderAddress.street}</p>
-            <p>{invoices[0].senderAddress.city}</p>
-            <p>{invoices[0].senderAddress.postCode}</p>
-            <p>{invoices[0].senderAddress.country}</p>
+            <p>{selectedInvoice.senderAddress.street}</p>
+            <p>{selectedInvoice.senderAddress.city}</p>
+            <p>{selectedInvoice.senderAddress.postCode}</p>
+            <p>{selectedInvoice.senderAddress.country}</p>
           </div>
         </div>
         <div className="invoice-content-subcontainer-2">
           <div className="date-container">
             <div className="invoice-date-container">
               <p>Invoice Date</p>
-              <h3>{invoices[0].createdAt}</h3>
+              <h3>{selectedInvoice.createdAt}</h3>
             </div>
             <div className="payment-date-container">
               <p>Payment Date</p>
-              <h3>{invoices[0].paymentDue}</h3>
+              <h3>{selectedInvoice.paymentDue}</h3>
             </div>
           </div>
           <div className="invoice-recipient-container">
             <p>Bill To</p>
-            <h3>{invoices[0].clientName}</h3>
-            <p>{invoices[0].clientAddress.street}</p>
-            <p>{invoices[0].clientAddress.city}</p>
-            <p>{invoices[0].clientAddress.postCode}</p>
-            <p>{invoices[0].clientAddress.country}</p>
+            <h3>{selectedInvoice.clientName}</h3>
+            <p>{selectedInvoice.clientAddress.street}</p>
+            <p>{selectedInvoice.clientAddress.city}</p>
+            <p>{selectedInvoice.clientAddress.postCode}</p>
+            <p>{selectedInvoice.clientAddress.country}</p>
           </div>
           <div className="invoice-recipient-email">
             <p>Sent to</p>
-            <h3>{invoices[0].clientEmail}</h3>
+            <h3>{selectedInvoice.clientEmail}</h3>
           </div>
         </div>
         <div className="price-container">
@@ -72,20 +82,23 @@ const Invoice = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="item-name dark">{invoices[0].items[0].name}</td>
-                <td className="quantity">{invoices[0].items[0].quantity}</td>
-                <td className="price">{invoices[0].items[0].price}</td>
-                <td className="total-item dark">
-                  {invoices[0].items[0].total}
-                </td>
-              </tr>
+              {selectedInvoice.items.map((item) => {
+                const uuid = uuidv4();
+                return (
+                  <tr key={uuid}>
+                    <td className="item-name dark">{item.name}</td>
+                    <td className="quantity">{item.quantity}</td>
+                    <td className="price">{item.price}</td>
+                    <td className="total-item dark">{item.total}</td>
+                  </tr>
+                );
+              })}
             </tbody>
             <tfoot>
               <tr>
                 <td className="amount-due">Amount Due</td>
                 <td className="total" colSpan="3">
-                  {invoices[0].total}
+                  {selectedInvoice.total}
                 </td>
               </tr>
             </tfoot>
