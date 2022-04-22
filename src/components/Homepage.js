@@ -27,9 +27,6 @@ const Homepage = () => {
             to={`${invoice.clientName}/${invoice.id}`}
             className="invoice-container"
             key={invoice.id}
-            // onClick={() => {
-            //   console.log(invoice.id);
-            // }}
           >
             <h3>
               <span className="hashtag">#</span>

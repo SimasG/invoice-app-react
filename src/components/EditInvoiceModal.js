@@ -1,7 +1,7 @@
 import { StyledEditInvoiceModal } from "../styles/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
 
-const EditInvoiceModal = () => {
+const EditInvoiceModal = ({ setEditOpen }) => {
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
@@ -11,8 +11,17 @@ const EditInvoiceModal = () => {
   });
 
   return (
-    <StyledEditInvoiceModal className="new-invoice-modal-overlay">
-      <main className="new-invoice-modal-container">
+    <StyledEditInvoiceModal
+      className="new-invoice-modal-overlay"
+      onClick={() => setEditOpen(false)}
+    >
+      <main
+        className="new-invoice-modal-container"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
         <h1>
           Edit <span>#</span>XM9141
         </h1>
@@ -169,7 +178,9 @@ const EditInvoiceModal = () => {
           <button className="add-new-item-btn">+ Add New Item</button>
         </section>
         <section className="new-invoice-btn-container">
-          <button className="cancel-btn">Discard</button>
+          <button className="cancel-btn" onClick={() => setEditOpen(false)}>
+            Discard
+          </button>
           <button className="save-changes-btn">Save & Send</button>
         </section>
       </main>

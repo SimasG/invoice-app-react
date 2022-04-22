@@ -32,7 +32,14 @@ function App() {
       <Sidebar />
       <Routes>
         <Route exact path="/" element={<Homepage />} />
-        <Route path="/:clientName/:id" element={<Invoice />} />
+        <Route path="/:clientName/:id" element={<Invoice />}>
+          {/* <Route
+            path="edit"
+            element={
+              <EditInvoiceModal editOpen={editOpen} setEditOpen={setEditOpen} />
+            }
+          /> */}
+        </Route>
         <Route
           path="*"
           element={
@@ -42,8 +49,8 @@ function App() {
           }
         />
       </Routes>
-      {/* <NewInvoiceModal /> */}
       {/* <EditInvoiceModal /> */}
+      {/* <NewInvoiceModal /> */}
       {/* <DeleteInvoiceModal /> */}
     </ThemeProvider>
   );

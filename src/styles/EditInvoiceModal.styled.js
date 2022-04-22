@@ -12,6 +12,7 @@ export const StyledEditInvoiceModal = styled.div`
     width: 61.6rem;
     height: 100vh;
     padding: 5.6rem;
+    border-radius: 0 20px 20px 0;
     h1 {
       margin-bottom: 4rem;
       span {
