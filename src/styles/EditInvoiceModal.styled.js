@@ -104,77 +104,100 @@ export const StyledEditInvoiceModal = styled.div`
         }
       }
       .invoice-info-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        .mantine-date-picker {
-        }
-        .payment-terms-container {
-          .payment-terms-select-box {
+        margin-bottom: 2.5rem;
+        .date-payment-terms-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 1rem;
+          .mantine-date-picker {
             display: flex;
             flex-direction: column;
-            width: 24rem;
-            cursor: pointer;
-            .options-container {
-              max-height: 0;
-              opacity: 0;
-              background-color: #c8c5c5;
-              /* transition: all 0.4s; */
-              border-radius: 8px;
-              overflow: hidden;
-              order: 1;
-              .option {
-                padding: 1.55rem 2.4rem;
-                cursor: pointer;
-                :hover {
-                  background-color: ${(props) => props.theme.colors.whisperBg};
-                }
-                .radio {
-                  display: none;
-                }
-                label {
-                  display: inline;
-                  color: ${(props) => props.theme.colors.vulcan};
+          }
+          .payment-terms-container {
+            display: flex;
+            flex-direction: column;
+            .payment-terms-select-box {
+              display: flex;
+              flex-direction: column;
+              width: 24rem;
+              cursor: pointer;
+              .options-container {
+                display: flex;
+                flex-direction: column;
+                width: 24rem;
+                max-height: 0;
+                opacity: 0;
+                background-color: #c8c5c5;
+                /* transition: all 0.4s; */
+                border-radius: 8px;
+                overflow: hidden;
+                order: 1;
+                .option {
+                  width: 24rem;
+                  padding: 1.55rem 2.4rem;
                   cursor: pointer;
                   :hover {
-                    color: ${(props) => props.theme.colors.cornflowerBlue};
+                    background-color: ${(props) =>
+                      props.theme.colors.whisperBg};
+                  }
+                  .payment-terms-radio {
+                    display: none;
+                  }
+                  label {
+                    display: inline;
+                    color: ${(props) => props.theme.colors.vulcan};
+                    cursor: pointer;
+                    :hover {
+                      color: ${(props) => props.theme.colors.cornflowerBlue};
+                    }
                   }
                 }
               }
-            }
-            .options-container.active {
-              max-height: 19.1rem;
-              opacity: 1;
-            }
-            .options-container.active + .selected::after {
-              transform: rotateX(180deg);
-              top: -2rem;
-            }
-            .selected {
-              padding: 1.55rem 2.4rem;
-              border-radius: 8px;
-              border: 1px solid ${(props) => props.theme.colors.selago};
-              margin-bottom: 2.4rem;
-              position: relative;
-              order: 0;
-              ::after {
-                content: "";
-                background-image: url("/assets/icon-arrow-down.svg");
-                background-size: contain;
-                background-repeat: no-repeat;
-                position: absolute;
-                height: 100%;
-                width: 1rem;
-                top: 2rem;
-                right: 1.4rem;
-                transition: 0.4s all;
+              .options-container.active {
+                max-height: 19.1rem;
+                opacity: 1;
               }
-              :focus,
-              :active {
-                border: 1px solid
-                  ${(props) => props.theme.colors.cornflowerBlue};
+              .options-container.active + .selected::after {
+                transform: rotateX(180deg);
+                top: -2rem;
+              }
+              .selected {
+                padding: 1.55rem 2.4rem;
+                width: 24rem;
+                border-radius: 8px;
+                border: 1px solid ${(props) => props.theme.colors.selago};
+                position: relative;
+                order: 0;
+                ::after {
+                  content: "";
+                  background-image: url("/assets/icon-arrow-down.svg");
+                  background-size: contain;
+                  background-repeat: no-repeat;
+                  position: absolute;
+                  height: 100%;
+                  width: 1rem;
+                  top: 2rem;
+                  right: 1.4rem;
+                  transition: 0.4s all;
+                }
+                :focus,
+                :active {
+                  border: 1px solid
+                    ${(props) => props.theme.colors.cornflowerBlue};
+                }
+              }
+              .selected.margin-bottom {
+                margin-bottom: 2.4rem;
               }
             }
+          }
+        }
+        .project-description-container {
+          display: flex;
+          flex-direction: column;
+          input {
+            width: 100%;
           }
         }
       }

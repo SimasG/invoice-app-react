@@ -1,8 +1,8 @@
 import { StyledEditInvoiceModal } from "../styles/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+// import customParseFormat from "dayjs/plugin/customParseFormat";
 
 const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
   const [senderStreetAddress, setSenderStreetAddress] = useState(
@@ -42,11 +42,41 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
     selectedInvoice.paymentTerms
   );
 
+  const [projectDescription, setProjectDescription] = useState(
+    selectedInvoice.description
+  );
+
+  // Pre-filling Payment Terms Dropdown
+  useEffect(() => {
+    document.querySelectorAll(".option").forEach((option) => {
+      if (
+        parseInt(option.querySelector(".payment-terms-radio").value) ===
+        paymentTerms
+      ) {
+        document.querySelector(".selected").innerHTML =
+          option.querySelector("label").innerHTML;
+      }
+    });
+  }, [paymentTerms]);
+
+  const handleSelectedPaymentTermBtn = () => {
+    document.querySelector(".options-container").classList.toggle("active");
+    if (
+      document.querySelector(".options-container").classList.contains("active")
+    ) {
+      document.querySelector(".selected").classList.add("margin-bottom");
+    } else {
+      document.querySelector(".selected").classList.remove("margin-bottom");
+    }
+  };
+
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
         option.querySelector("label").innerHTML;
+      console.log(option.querySelector("label"));
       document.querySelector(".options-container").classList.remove("active");
+      document.querySelector(".selected").classList.remove("margin-bottom");
     });
   });
 
@@ -190,85 +220,95 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
             </div>
           </div>
           <div className="invoice-info-container">
-            <DatePicker
-              styles={{
-                wrapper: {
-                  width: "24rem",
-                },
-                calendarHeader: {
-                  width: "22rem",
-                },
-                month: {
-                  width: "21.5rem",
-                },
-                dropdown: {
-                  width: "24rem",
-                },
-                arrow: {
-                  color: "green",
-                },
-              }}
-              className="mantine-date-picker"
-              placeholder="Pick date"
-              label="Invoice date"
-              value={invoiceDate}
-              onChange={(e) => {
-                setInvoiceDate(e);
-              }}
-            />
-            <div className="payment-terms-container">
-              <label>Payment Terms</label>
-              <div className="payment-terms-select-box">
-                <div className="options-container">
-                  <div className="option" onClick={() => setPaymentTerms(1)}>
-                    <input
-                      type="radio"
-                      className="radio"
-                      id="net-1-day"
-                      name="payment-term-date"
-                      value={1}
-                    />
-                    <label htmlFor="net-1-day">Net 1 Day</label>
+            <div className="date-payment-terms-container">
+              <DatePicker
+                styles={{
+                  wrapper: {
+                    width: "24rem",
+                  },
+                  calendarHeader: {
+                    width: "22rem",
+                  },
+                  month: {
+                    width: "21.5rem",
+                  },
+                  dropdown: {
+                    width: "24rem",
+                  },
+                  arrow: {
+                    color: "green",
+                  },
+                }}
+                className="mantine-date-picker"
+                placeholder="Pick date"
+                label="Invoice date"
+                value={invoiceDate}
+                onChange={(e) => {
+                  setInvoiceDate(e);
+                }}
+              />
+              <div className="payment-terms-container">
+                <label>Payment Terms</label>
+                <div className="payment-terms-select-box">
+                  <div className="options-container">
+                    <div className="option" onClick={() => setPaymentTerms(1)}>
+                      <input
+                        type="radio"
+                        className="payment-terms-radio"
+                        id="net-1-day"
+                        name="payment-term-date"
+                        value={1}
+                      />
+                      <label htmlFor="net-1-day">Net 1 Day</label>
+                    </div>
+                    <div className="option" onClick={() => setPaymentTerms(7)}>
+                      <input
+                        type="radio"
+                        className="payment-terms-radio"
+                        id="net-7-days"
+                        name="payment-term-date"
+                        value={7}
+                      />
+                      <label htmlFor="net-7-days">Net 7 Days</label>
+                    </div>
+                    <div className="option" onClick={() => setPaymentTerms(14)}>
+                      <input
+                        type="radio"
+                        className="payment-terms-radio"
+                        id="net-14-days"
+                        name="payment-term-date"
+                        value={14}
+                      />
+                      <label htmlFor="net-14-days">Net 14 Days</label>
+                    </div>
+                    <div className="option" onClick={() => setPaymentTerms(30)}>
+                      <input
+                        type="radio"
+                        className="payment-terms-radio"
+                        id="net-30-days"
+                        name="payment-term-date"
+                        value={30}
+                      />
+                      <label htmlFor="net-30-days">Net 30 Days</label>
+                    </div>
                   </div>
-                  <div className="option" onClick={() => setPaymentTerms(7)}>
-                    <input
-                      type="radio"
-                      className="radio"
-                      id="net-7-days"
-                      name="payment-term-date"
-                    />
-                    <label htmlFor="net-7-days">Net 7 Days</label>
+                  <div
+                    className="selected"
+                    onClick={() => handleSelectedPaymentTermBtn()}
+                  >
+                    <h4>Select Payment Terms</h4>
                   </div>
-                  <div className="option" onClick={() => setPaymentTerms(14)}>
-                    <input
-                      type="radio"
-                      className="radio"
-                      id="net-14-days"
-                      name="payment-term-date"
-                    />
-                    <label htmlFor="net-14-days">Net 14 Days</label>
-                  </div>
-                  <div className="option" onClick={() => setPaymentTerms(30)}>
-                    <input
-                      type="radio"
-                      className="radio"
-                      id="net-30-days"
-                      name="payment-term-date"
-                    />
-                    <label htmlFor="net-30-days">Net 30 Days</label>
-                  </div>
-                </div>
-                <div
-                  className="selected"
-                  onClick={() => {
-                    document
-                      .querySelector(".options-container")
-                      .classList.toggle("active");
-                  }}
-                >
-                  <h4>Select Payment Terms</h4>
                 </div>
               </div>
+            </div>
+            <div className="project-description-container">
+              <label>Project Description</label>
+              <input
+                type="text"
+                placeholder="Project Description"
+                value={projectDescription}
+                onChange={(e) => setProjectDescription(e.target.value)}
+              />
             </div>
           </div>
         </section>
