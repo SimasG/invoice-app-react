@@ -4,7 +4,6 @@ import Homepage from "./components/Homepage";
 import Sidebar from "./components/Sidebar";
 import Invoice from "./components/Invoice";
 import NewInvoiceModal from "./components/NewInvoiceModal";
-import EditInvoiceModal from "./components/EditInvoiceModal";
 import DeleteInvoiceModal from "./components/DeleteInvoiceModal";
 import { Routes, Route } from "react-router-dom";
 
@@ -33,6 +32,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Homepage />} />
         <Route path="/:clientName/:id" element={<Invoice />}></Route>
+        {/* <Route path="/newInvoice/:id" element={<NewInvoiceModal />}></Route> */}
         <Route
           path="*"
           element={
@@ -42,7 +42,6 @@ function App() {
           }
         />
       </Routes>
-      {/* <EditInvoiceModal /> */}
       {/* <NewInvoiceModal /> */}
       {/* <DeleteInvoiceModal /> */}
     </ThemeProvider>

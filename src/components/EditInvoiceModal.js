@@ -7,43 +7,27 @@ import { v4 as uuidv4 } from "uuid";
 // import customParseFormat from "dayjs/plugin/customParseFormat";
 
 const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
-  const [senderStreetAddress, setSenderStreetAddress] = useState(
-    selectedInvoice.senderAddress.street
-  );
-  const [senderCity, setSenderCity] = useState(
-    selectedInvoice.senderAddress.city
-  );
-  const [senderPostcode, setSenderPostcode] = useState(
-    selectedInvoice.senderAddress.postCode
-  );
-  const [senderCountry, setSenderCountry] = useState(
-    selectedInvoice.senderAddress.country
-  );
-
-  const [clientName, setClientName] = useState(selectedInvoice.clientName);
-  const [clientEmail, setClientEmail] = useState(selectedInvoice.clientEmail);
-
-  const [clientStreetAddress, setClientStreetAddress] = useState(
-    selectedInvoice.clientAddress.street
-  );
-  const [clientCity, setClientCity] = useState(
-    selectedInvoice.clientAddress.city
-  );
-  const [clientPostcode, setClientPostcode] = useState(
-    selectedInvoice.clientAddress.postCode
-  );
-  const [clientCountry, setClientCountry] = useState(
-    selectedInvoice.clientAddress.country
-  );
-  const [invoiceDate, setInvoiceDate] = useState(
-    dayjs(selectedInvoice.createdAt).$d
-  );
-  const [paymentTerms, setPaymentTerms] = useState(
-    selectedInvoice.paymentTerms
-  );
-  const [projectDescription, setProjectDescription] = useState(
-    selectedInvoice.description
-  );
+  const [editInvoiceModal, setEditInvoiceModal] = useState({
+    senderAddress: {
+      street: selectedInvoice.senderAddress.street,
+      city: selectedInvoice.senderAddress.city,
+      postcode: selectedInvoice.senderAddress.postCode,
+      country: selectedInvoice.senderAddress.country,
+    },
+    clientInfo: {
+      clientName: selectedInvoice.clientName,
+      clientEmail: selectedInvoice.clientEmail,
+    },
+    clientAddress: {
+      street: selectedInvoice.clientAddress.street,
+      city: selectedInvoice.clientAddress.city,
+      postcode: selectedInvoice.clientAddress.postCode,
+      country: selectedInvoice.clientAddress.country,
+    },
+    invoiceDate: dayjs(selectedInvoice.createdAt).$d,
+    paymentTerms: selectedInvoice.paymentTerms,
+    description: selectedInvoice.description,
+  });
 
   // Utterly useless atm
   const [itemName, setItemName] = useState(null);
@@ -51,18 +35,20 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
   const [itemPrice, setItemPrice] = useState(null);
   const [itemTotal, setItemTotal] = useState(null);
 
+  console.log(editInvoiceModal);
+
   // Pre-filling Payment Terms Dropdown
   useEffect(() => {
     document.querySelectorAll(".option").forEach((option) => {
       if (
         parseInt(option.querySelector(".payment-terms-radio").value) ===
-        paymentTerms
+        editInvoiceModal.paymentTerms
       ) {
         document.querySelector(".selected").innerHTML =
           option.querySelector("label").innerHTML;
       }
     });
-  }, [paymentTerms]);
+  }, [editInvoiceModal.paymentTerms]);
 
   const handleSelectedPaymentTermBtn = () => {
     document.querySelector(".options-container").classList.toggle("active");
@@ -109,9 +95,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
               <input
                 type="text"
                 placeholder="Street Address"
-                value={senderStreetAddress}
+                value={editInvoiceModal.senderAddress.street}
                 onChange={(e) => {
-                  setSenderStreetAddress(e.target.value);
+                  setEditInvoiceModal({
+                    ...editInvoiceModal,
+                    senderAddress: {
+                      ...editInvoiceModal.senderAddress,
+                      street: e.target.value,
+                    },
+                  });
                 }}
               />
             </div>
@@ -121,9 +113,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                 <input
                   type="text"
                   placeholder="City"
-                  value={senderCity}
+                  value={editInvoiceModal.senderAddress.city}
                   onChange={(e) => {
-                    setSenderCity(e.target.value);
+                    setEditInvoiceModal({
+                      ...editInvoiceModal,
+                      senderAddress: {
+                        ...editInvoiceModal.senderAddress,
+                        city: e.target.value,
+                      },
+                    });
                   }}
                 />
               </div>
@@ -132,9 +130,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                 <input
                   type="text"
                   placeholder="Post Code"
-                  value={senderPostcode}
+                  value={editInvoiceModal.senderAddress.postcode}
                   onChange={(e) => {
-                    setSenderPostcode(e.target.value);
+                    setEditInvoiceModal({
+                      ...editInvoiceModal,
+                      senderAddress: {
+                        ...editInvoiceModal.senderAddress,
+                        postcode: e.target.value,
+                      },
+                    });
                   }}
                 />
               </div>
@@ -143,9 +147,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                 <input
                   type="text"
                   placeholder="country"
-                  value={senderCountry}
+                  value={editInvoiceModal.senderAddress.country}
                   onChange={(e) => {
-                    setSenderCountry(e.target.value);
+                    setEditInvoiceModal({
+                      ...editInvoiceModal,
+                      senderAddress: {
+                        ...editInvoiceModal.senderAddress,
+                        country: e.target.value,
+                      },
+                    });
                   }}
                 />
               </div>
@@ -160,9 +170,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
               <input
                 type="text"
                 placeholder="Client's Name"
-                value={clientName}
+                value={editInvoiceModal.clientInfo.clientName}
                 onChange={(e) => {
-                  setClientName(e.target.value);
+                  setEditInvoiceModal({
+                    ...editInvoiceModal,
+                    clientInfo: {
+                      ...editInvoiceModal.clientInfo,
+                      clientName: e.target.value,
+                    },
+                  });
                 }}
               />
             </div>
@@ -171,9 +187,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
               <input
                 type="text"
                 placeholder="Client's Email"
-                value={clientEmail}
+                value={editInvoiceModal.clientInfo.clientEmail}
                 onChange={(e) => {
-                  setClientEmail(e.target.value);
+                  setEditInvoiceModal({
+                    ...editInvoiceModal,
+                    clientInfo: {
+                      ...editInvoiceModal.clientInfo,
+                      clientEmail: e.target.value,
+                    },
+                  });
                 }}
               />
             </div>
@@ -182,9 +204,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
               <input
                 type="text"
                 placeholder="Street Address"
-                value={clientStreetAddress}
+                value={editInvoiceModal.clientAddress.street}
                 onChange={(e) => {
-                  setClientStreetAddress(e.target.value);
+                  setEditInvoiceModal({
+                    ...editInvoiceModal,
+                    clientAddress: {
+                      ...editInvoiceModal.clientAddress,
+                      street: e.target.value,
+                    },
+                  });
                 }}
               />
             </div>
@@ -194,9 +222,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                 <input
                   type="text"
                   placeholder="City"
-                  value={clientCity}
+                  value={editInvoiceModal.clientAddress.city}
                   onChange={(e) => {
-                    setClientCity(e.target.value);
+                    setEditInvoiceModal({
+                      ...editInvoiceModal,
+                      clientAddress: {
+                        ...editInvoiceModal.clientAddress,
+                        city: e.target.value,
+                      },
+                    });
                   }}
                 />
               </div>
@@ -205,9 +239,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                 <input
                   type="text"
                   placeholder="Post Code"
-                  value={clientPostcode}
+                  value={editInvoiceModal.clientAddress.postcode}
                   onChange={(e) => {
-                    setClientPostcode(e.target.value);
+                    setEditInvoiceModal({
+                      ...editInvoiceModal,
+                      clientAddress: {
+                        ...editInvoiceModal.clientAddress,
+                        postcode: e.target.value,
+                      },
+                    });
                   }}
                 />
               </div>
@@ -216,9 +256,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                 <input
                   type="text"
                   placeholder="country"
-                  value={clientCountry}
+                  value={editInvoiceModal.clientAddress.country}
                   onChange={(e) => {
-                    setClientCountry(e.target.value);
+                    setEditInvoiceModal({
+                      ...editInvoiceModal,
+                      clientAddress: {
+                        ...editInvoiceModal.clientAddress,
+                        country: e.target.value,
+                      },
+                    });
                   }}
                 />
               </div>
@@ -247,16 +293,27 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                 className="mantine-date-picker"
                 placeholder="Pick date"
                 label="Invoice date"
-                value={invoiceDate}
+                value={editInvoiceModal.invoiceDate}
                 onChange={(e) => {
-                  setInvoiceDate(e);
+                  setEditInvoiceModal({
+                    ...editInvoiceModal,
+                    invoiceDate: e,
+                  });
                 }}
               />
               <div className="payment-terms-container">
                 <label>Payment Terms</label>
                 <div className="payment-terms-select-box">
                   <div className="options-container">
-                    <div className="option" onClick={() => setPaymentTerms(1)}>
+                    <div
+                      className="option"
+                      onClick={() =>
+                        setEditInvoiceModal({
+                          ...editInvoiceModal,
+                          paymentTerms: 1,
+                        })
+                      }
+                    >
                       <input
                         type="radio"
                         className="payment-terms-radio"
@@ -266,7 +323,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                       />
                       <label htmlFor="net-1-day">Net 1 Day</label>
                     </div>
-                    <div className="option" onClick={() => setPaymentTerms(7)}>
+                    <div
+                      className="option"
+                      onClick={() =>
+                        setEditInvoiceModal({
+                          ...editInvoiceModal,
+                          paymentTerms: 7,
+                        })
+                      }
+                    >
                       <input
                         type="radio"
                         className="payment-terms-radio"
@@ -276,7 +341,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                       />
                       <label htmlFor="net-7-days">Net 7 Days</label>
                     </div>
-                    <div className="option" onClick={() => setPaymentTerms(14)}>
+                    <div
+                      className="option"
+                      onClick={() =>
+                        setEditInvoiceModal({
+                          ...editInvoiceModal,
+                          paymentTerms: 14,
+                        })
+                      }
+                    >
                       <input
                         type="radio"
                         className="payment-terms-radio"
@@ -286,7 +359,15 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                       />
                       <label htmlFor="net-14-days">Net 14 Days</label>
                     </div>
-                    <div className="option" onClick={() => setPaymentTerms(30)}>
+                    <div
+                      className="option"
+                      onClick={() =>
+                        setEditInvoiceModal({
+                          ...editInvoiceModal,
+                          paymentTerms: 30,
+                        })
+                      }
+                    >
                       <input
                         type="radio"
                         className="payment-terms-radio"
@@ -311,8 +392,13 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
               <input
                 type="text"
                 placeholder="Project Description"
-                value={projectDescription}
-                onChange={(e) => setProjectDescription(e.target.value)}
+                value={editInvoiceModal.description}
+                onChange={(e) => {
+                  setEditInvoiceModal({
+                    ...editInvoiceModal,
+                    description: e.target.value,
+                  });
+                }}
               />
             </div>
           </div>
