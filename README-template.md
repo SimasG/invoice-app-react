@@ -17,3 +17,9 @@ BAD: Not as proper/uniform
 
 1. How properly am I using uuids?
 2. How to set state to an array of items that are being mapped?
+
+//
+//
+Item List
+
+- Maybe, it is super difficult to add state to pre-made items and the best way to approach this is to just create items from scratch.

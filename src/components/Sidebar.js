@@ -1,10 +1,16 @@
 import { StyledSidebar } from "../styles/Sidebar.styled";
+import { FiLogIn } from "react-icons/fi";
 
 const Sidebar = () => {
   return (
     <StyledSidebar>
       <div className="logo-container">
         <img src="/assets/logo.svg" alt="" />
+      </div>
+      <div className="login-container">
+        <button>
+          <FiLogIn className="login-icon" />
+        </button>
       </div>
       <div>
         <div className="theme-toggle-container">

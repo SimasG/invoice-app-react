@@ -6,6 +6,11 @@ import { v4 as uuidv4 } from "uuid";
 
 // import customParseFormat from "dayjs/plugin/customParseFormat";
 
+// TODO: Add state to every object in the array of objects
+// TODO: Allow editing each item's properties (change state)
+// TODO: Allow adding new items (& add state to them)
+// TODO: Allow to delete items
+
 const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
   const [editInvoiceModal, setEditInvoiceModal] = useState({
     senderAddress: {
@@ -29,13 +34,43 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
     description: selectedInvoice.description,
   });
 
+  const [items, setItems] = useState([
+    {
+      id: uuidv4(),
+      name: "",
+      quantity: "",
+      price: "",
+      total: "",
+    },
+  ]);
+
+  console.log(items);
+
+  // creating state to know which item is being updated
+  const [currentItem, setCurrentItem] = useState({});
+
+  const handleNameInputChange = (item, e) => {
+    setCurrentItem({ ...item, name: e.target.value });
+    // console.log(currentItem.id);
+    // handleEditName(currentItem.id, currentItem);
+  };
+
+  const handleEditName = (id, updatedItem) => {
+    const updatedObject = items.map((item) =>
+      // console.log(`item.id: ${item.id}`);
+      // console.log(`id: ${id}`);
+      item.id === id ? updatedItem : item
+    );
+    // console.log(updatedObject);
+
+    setItems(updatedObject);
+  };
+
   // Utterly useless atm
   const [itemName, setItemName] = useState(null);
   const [itemQuantity, setItemQuantity] = useState(null);
   const [itemPrice, setItemPrice] = useState(null);
   const [itemTotal, setItemTotal] = useState(null);
-
-  console.log(editInvoiceModal);
 
   // Pre-filling Payment Terms Dropdown
   useEffect(() => {
@@ -421,25 +456,67 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                       type="text"
                       placeholder="Item Name"
                       value={item.name}
-                      onChange={(e) => setItemName(e.target.value)}
+                      onChange={(e) => {
+                        handleNameInputChange(item, e);
+                      }}
+                      // value={item.name}
+                      // onChange={(e) =>
+                      //   setItems([
+                      //     ...items,
+                      //     {
+                      //       ...item,
+                      //       name: e.target.value,
+                      //     },
+                      //   ])
+                      // }
                     />
                     <input
                       type="number"
                       placeholder="Qty."
+                      // value={item.quantity}
+                      // onChange={(e) => setItemQuantity(e.target.value)}
                       value={item.quantity}
-                      onChange={(e) => setItemQuantity(e.target.value)}
+                      onChange={(e) =>
+                        setItems([
+                          ...items,
+                          {
+                            ...item,
+                            quantity: e.target.value,
+                          },
+                        ])
+                      }
                     />
                     <input
                       type="number"
                       placeholder="Price"
+                      // value={item.price}
+                      // onChange={(e) => setItemPrice(e.target.value)}
                       value={item.price}
-                      onChange={(e) => setItemPrice(e.target.value)}
+                      onChange={(e) =>
+                        setItems([
+                          ...items,
+                          {
+                            ...item,
+                            price: e.target.value,
+                          },
+                        ])
+                      }
                     />
                     <input
                       type="number"
                       placeholder="total"
-                      value={item.total}
-                      onChange={(e) => setItemTotal(e.target.value)}
+                      // value={item.total}
+                      // onChange={(e) => setItemTotal(e.target.value)}
+                      value={item.price}
+                      onChange={(e) =>
+                        setItems([
+                          ...items,
+                          {
+                            ...item,
+                            price: e.target.value,
+                          },
+                        ])
+                      }
                     />
                     <img
                       className="delete-item-btn"
@@ -449,17 +526,6 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
                   </div>
                 );
               })}
-              {/* <div className="item-list-input">
-                <input type="text" placeholder="Item Name" />
-                <input type="number" placeholder="Qty." />
-                <input type="number" placeholder="Price" />
-                <input type="number" placeholder="total" />
-                <img
-                  className="delete-item-btn"
-                  src="/assets/icon-delete.svg"
-                  alt="delete item"
-                />
-              </div> */}
             </div>
           </div>
           <button className="add-new-item-btn">+ Add New Item</button>

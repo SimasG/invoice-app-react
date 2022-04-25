@@ -18,6 +18,24 @@ export const StyledSidebar = styled.nav`
     background-color: ${(props) => props.theme.colors.cornflowerBlue};
     padding: 3.75rem;
   }
+  .login-container {
+    margin-top: 3rem;
+    margin-bottom: auto;
+    cursor: pointer;
+    border-radius: 8px;
+    :hover {
+      background-color: ${(props) => props.theme.colors.shipCove};
+    }
+    button {
+      height: 6rem;
+      width: 6rem;
+      .login-icon {
+        height: 3rem;
+        width: 3rem;
+        color: #fff;
+      }
+    }
+  }
   div {
     .theme-toggle-container {
       .theme-toggle {
