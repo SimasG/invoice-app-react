@@ -6,6 +6,7 @@ import Invoice from "./components/Invoice";
 import NewInvoiceModal from "./components/NewInvoiceModal";
 import DeleteInvoiceModal from "./components/DeleteInvoiceModal";
 import { Routes, Route } from "react-router-dom";
+import AuthModal from "./components/AuthModal";
 
 const theme = {
   colors: {
@@ -42,6 +43,7 @@ function App() {
           }
         />
       </Routes>
+      <AuthModal />
       {/* <NewInvoiceModal /> */}
       {/* <DeleteInvoiceModal /> */}
     </ThemeProvider>

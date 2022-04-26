@@ -7,7 +7,13 @@ const Sidebar = () => {
       <div className="logo-container">
         <img src="/assets/logo.svg" alt="" />
       </div>
-      <div className="login-container">
+      <div
+        className="login-container"
+        onClick={() => {
+          document.querySelector(".auth-modal-container").style.display =
+            "flex";
+        }}
+      >
         <button>
           <FiLogIn className="login-icon" />
         </button>
