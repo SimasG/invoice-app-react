@@ -7,6 +7,8 @@ import NewInvoiceModal from "./components/NewInvoiceModal";
 import DeleteInvoiceModal from "./components/DeleteInvoiceModal";
 import { Routes, Route } from "react-router-dom";
 import AuthModal from "./components/AuthModal";
+import { useContext } from "react";
+import { AuthContext } from "./contexts/AuthContext";
 
 const theme = {
   colors: {
@@ -26,6 +28,9 @@ const theme = {
 };
 
 function App() {
+  const { currentUser } = useContext(AuthContext);
+  console.log(currentUser);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />

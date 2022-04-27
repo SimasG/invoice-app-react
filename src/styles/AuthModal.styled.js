@@ -38,16 +38,17 @@ export const StyledAuthModal = styled.section`
         font-size: 2rem;
       }
     }
-
-    .email-input {
-      margin-top: 3rem;
-      outline: none;
-      width: 100%;
-      height: 5rem;
-      border-radius: 8px;
-      font-size: 1.6rem;
-      padding: 1rem;
-      font-family: "Roboto", sans-serif;
+    form {
+      .email-input {
+        margin-top: 3rem;
+        outline: none;
+        width: 100%;
+        height: 5rem;
+        border-radius: 8px;
+        font-size: 1.6rem;
+        padding: 1rem;
+        font-family: "Roboto", sans-serif;
+      }
     }
   }
 `;

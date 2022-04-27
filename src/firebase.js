@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup } from "firebase/auth";
 
 const firebaseConfig = {
-  //   apiKey: process.env.FIREBASE_API_KEY,
+  // apiKey: process.env.FIREBASE_API_KEY,
   apiKey: "AIzaSyCn9o1PVzDBg0tLLuxqHJJs5-tpJ8LYFWo",
   authDomain: "invoice-app-2fced.firebaseapp.com",
   projectId: "invoice-app-2fced",
@@ -17,13 +17,3 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 export const auth = getAuth();
-
-// Google sign up/in
-const provider = new GoogleAuthProvider();
-signInWithPopup(auth, provider)
-  .then((result) => {
-    console.log(result.user);
-  })
-  .catch((error) => {
-    console.log(error.message);
-  });
