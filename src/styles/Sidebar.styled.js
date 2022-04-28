@@ -19,6 +19,10 @@ export const StyledSidebar = styled.nav`
     padding: 3.75rem;
   }
   .login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-top: 3rem;
     margin-bottom: auto;
     cursor: pointer;
@@ -34,6 +38,34 @@ export const StyledSidebar = styled.nav`
         width: 3rem;
         color: #fff;
       }
+    }
+    span {
+      color: #fff;
+    }
+  }
+  .logout-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+    margin-bottom: auto;
+    cursor: pointer;
+    border-radius: 8px;
+    :hover {
+      background-color: ${(props) => props.theme.colors.shipCove};
+    }
+    button {
+      height: 6rem;
+      width: 6rem;
+      .logout-icon {
+        height: 3rem;
+        width: 3rem;
+        color: #fff;
+      }
+    }
+    span {
+      color: #fff;
     }
   }
   div {

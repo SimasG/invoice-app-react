@@ -27,30 +27,20 @@ export const StyledNewInvoiceModal = styled.div`
         margin-bottom: 1.5rem;
       }
       .from-address-container {
-        .street-address {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        div:first-child {
           margin-bottom: 1.5rem;
+          width: 100%;
           input {
             width: 100%;
           }
         }
-        .from-address-subcontainer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          .city {
-            input {
-              width: 15.2rem;
-            }
-          }
-          .post-code {
-            input {
-              width: 15.2rem;
-            }
-          }
-          .country {
-            input {
-              width: 15.2rem;
-            }
+        div {
+          input {
+            width: 15.2rem;
           }
         }
       }
@@ -62,43 +52,16 @@ export const StyledNewInvoiceModal = styled.div`
         margin-bottom: 1.5rem;
       }
       .client-info-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
         margin-bottom: 3rem;
-        .client-name {
+        div:nth-child(-n + 3) {
+          width: 100%;
           input {
             width: 100%;
             margin-bottom: 1.5rem;
-          }
-        }
-        .client-email {
-          input {
-            width: 100%;
-            margin-bottom: 1.5rem;
-          }
-        }
-        .client-street-address {
-          margin-bottom: 1.5rem;
-          input {
-            width: 100%;
-          }
-        }
-        .to-address-subcontainer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          .to-city {
-            input {
-              width: 15.2rem;
-            }
-          }
-          .to-post-code {
-            input {
-              width: 15.2rem;
-            }
-          }
-          .to-country {
-            input {
-              width: 15.2rem;
-            }
           }
         }
       }
@@ -185,17 +148,11 @@ export const StyledNewInvoiceModal = styled.div`
       }
       .item-list-input-table {
         margin-bottom: 2rem;
-        .item-list-title-container {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .item-list-input-container {
-          .item-list-input {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        img {
+          align-self: flex-end;
         }
       }
       .add-new-item-btn {

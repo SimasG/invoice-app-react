@@ -19,7 +19,7 @@ const Homepage = () => {
           </div>
           <div className="new-invoice-container">
             <img src="/assets/icon-plus.svg" alt="" />
-            <Link to="/newInvoice/:id">
+            <Link to="/newInvoice">
               <button>New Invoice</button>
             </Link>
           </div>

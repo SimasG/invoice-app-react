@@ -9,6 +9,7 @@ import { Routes, Route } from "react-router-dom";
 import AuthModal from "./components/AuthModal";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
+import { Toaster } from "react-hot-toast";
 
 const theme = {
   colors: {
@@ -38,7 +39,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Homepage />} />
         <Route path="/:clientName/:id" element={<Invoice />}></Route>
-        {/* <Route path="/newInvoice/:id" element={<NewInvoiceModal />}></Route> */}
+        <Route path="/newInvoice" element={<NewInvoiceModal />}></Route>
         <Route
           path="*"
           element={
@@ -49,6 +50,7 @@ function App() {
         />
       </Routes>
       <AuthModal />
+      <Toaster />
       {/* <NewInvoiceModal /> */}
       {/* <DeleteInvoiceModal /> */}
     </ThemeProvider>

@@ -1,10 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore";
-import { getAuth, signInWithPopup } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  // apiKey: process.env.FIREBASE_API_KEY,
-  apiKey: "AIzaSyCn9o1PVzDBg0tLLuxqHJJs5-tpJ8LYFWo",
+  apiKey: process.env.REACT_APP_FIREBASE_KEY,
   authDomain: "invoice-app-2fced.firebaseapp.com",
   projectId: "invoice-app-2fced",
   storageBucket: "invoice-app-2fced.appspot.com",
