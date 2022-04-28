@@ -1,6 +1,6 @@
 import { StyledNewInvoiceModal } from "../styles/NewInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import toast from "react-hot-toast";
 import {
@@ -9,6 +9,7 @@ import {
   paymentTermsInputs,
   itemListInputs,
 } from "../formSource";
+import { useState } from "react";
 
 const NewInvoiceModal = () => {
   document.querySelectorAll(".option").forEach((option) => {
@@ -19,9 +20,51 @@ const NewInvoiceModal = () => {
     });
   });
 
-  const handleAddNewInvoice = async () => {
-    // await addDoc(collection(db, "invoices"));
+  // Sub-states
+  const [fromData, setFromData] = useState();
+  const [toData, setToData] = useState();
+  const [invoiceDate, setInvoiceDate] = useState();
 
+  // Main state
+  const [data, setData] = useState();
+
+  const handleFromInput = (e) => {
+    const id = e.target.id;
+    const value = e.target.value;
+    // Interesting "[id]" syntax. Instead of specifying a new key with the name of "id" (in the case of "id: value"),
+    // it takes the id of the currently active element and assigns the onChange value to it.
+    setFromData({ ...fromData, [id]: value });
+    setData({
+      fromData: { ...fromData },
+      toData: { ...toData },
+      ...invoiceDate,
+    });
+  };
+
+  const handleToInput = (e) => {
+    const id = e.target.id;
+    const value = e.target.value;
+
+    setToData({ ...toData, [id]: value });
+    setData({
+      fromData: { ...fromData },
+      toData: { ...toData },
+      ...invoiceDate,
+    });
+  };
+
+  const handleInvoiceDateInput = (e) => {
+    setInvoiceDate({ invoiceDate: e });
+    setData({
+      fromData: { ...fromData },
+      toData: { ...toData },
+      ...invoiceDate,
+    });
+  };
+
+  console.log(data);
+
+  const handleAddNewInvoice = async () => {
     toast.success("New invoice supposedly created!");
   };
 
@@ -35,7 +78,12 @@ const NewInvoiceModal = () => {
             {fromAddressInputs.map((input) => (
               <div key={input.id}>
                 <label>{input.label}</label>
-                <input type={input.type} placeholder={input.placeholder} />
+                <input
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  id={input.id}
+                  onChange={handleFromInput}
+                />
               </div>
             ))}
           </div>
@@ -46,7 +94,12 @@ const NewInvoiceModal = () => {
             {toAddressinputs.map((input) => (
               <div key={input.id}>
                 <label>{input.label}</label>
-                <input type={input.type} placeholder={input.placeholder} />
+                <input
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  id={input.id}
+                  onChange={handleToInput}
+                />
               </div>
             ))}
           </div>
@@ -72,6 +125,8 @@ const NewInvoiceModal = () => {
               className="mantine-date-picker"
               placeholder="Pick date"
               label="Invoice date"
+              id="invoice-date"
+              onChange={handleInvoiceDateInput}
             />
             <div className="payment-terms-container">
               <label>Payment Terms</label>
@@ -113,21 +168,6 @@ const NewInvoiceModal = () => {
               </div>
             ))}
             <img src="/assets/icon-delete.svg" alt="delete item" />
-            {/* <div className="item-list-title-container">
-              <label>Item Name</label>
-              <label>Qty.</label>
-              <label>Price</label>
-              <label>Total</label>
-            </div>
-            <div className="item-list-input-container">
-              <div className="item-list-input">
-                <input type="text" placeholder="Item Name" />
-                <input type="number" placeholder="Qty." />
-                <input type="number" placeholder="Price" />
-                <input type="number" placeholder="total" />
-                <img src="/assets/icon-delete.svg" alt="delete item" />
-              </div>
-            </div> */}
           </div>
           <button className="add-new-item-btn">+ Add New Item</button>
         </section>

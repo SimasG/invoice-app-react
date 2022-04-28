@@ -1,24 +1,24 @@
 export const fromAddressInputs = [
   {
-    id: 1,
+    id: "street-address",
     label: "Street Address",
     type: "text",
     placeholder: "Street Address",
   },
   {
-    id: 2,
+    id: "city",
     label: "City",
     type: "text",
     placeholder: "City",
   },
   {
-    id: 3,
+    id: "post-code",
     label: "Post Code",
     type: "text",
     placeholder: "Post Code",
   },
   {
-    id: 4,
+    id: "country",
     label: "Country",
     type: "text",
     placeholder: "Country",
@@ -27,37 +27,37 @@ export const fromAddressInputs = [
 
 export const toAddressinputs = [
   {
-    id: 1,
+    id: "client-name",
     label: "Client's Name",
     type: "text",
     placeholder: "Client's Name",
   },
   {
-    id: 2,
+    id: "client-email",
     label: "Client's Email",
     type: "email",
     placeholder: "Client's Email",
   },
   {
-    id: 3,
+    id: "street-address",
     label: "Street Address",
     type: "text",
     placeholder: "Street Address",
   },
   {
-    id: 4,
+    id: "city",
     label: "City",
     type: "text",
     placeholder: "City",
   },
   {
-    id: 5,
+    id: "post-code",
     label: "Post Code",
     type: "text",
     placeholder: "Post Code",
   },
   {
-    id: 6,
+    id: "country",
     label: "Country",
     type: "text",
     placeholder: "Country",

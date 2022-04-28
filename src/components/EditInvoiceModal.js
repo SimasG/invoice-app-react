@@ -44,7 +44,7 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
     },
   ]);
 
-  console.log(items);
+  console.log(editInvoiceModal.invoiceDate);
 
   // creating state to know which item is being updated
   const [currentItem, setCurrentItem] = useState({});
@@ -100,7 +100,6 @@ const EditInvoiceModal = ({ setEditOpen, selectedInvoice }) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
         option.querySelector("label").innerHTML;
-      console.log(option.querySelector("label"));
       document.querySelector(".options-container").classList.remove("active");
       document.querySelector(".selected").classList.remove("margin-bottom");
     });

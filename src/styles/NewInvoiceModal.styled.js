@@ -159,6 +159,9 @@ export const StyledNewInvoiceModal = styled.div`
         background-color: #f9fafe;
         color: ${(props) => props.theme.colors.shipCove};
         width: 100%;
+        :hover {
+          background-color: ${(props) => props.theme.colors.selago};
+        }
       }
     }
     .new-invoice-btn-container {
