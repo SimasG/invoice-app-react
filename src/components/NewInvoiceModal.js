@@ -24,9 +24,21 @@ const NewInvoiceModal = () => {
   const [fromData, setFromData] = useState();
   const [toData, setToData] = useState();
   const [invoiceDate, setInvoiceDate] = useState();
+  const [paymentTerms, setPaymentTerms] = useState();
+  const [itemList, setItemList] = useState();
 
   // Main state
   const [data, setData] = useState();
+
+  const handleSetData = () => {
+    setData({
+      fromData: { ...fromData },
+      toData: { ...toData },
+      ...invoiceDate,
+      ...paymentTerms,
+      itemList: { ...itemList },
+    });
+  };
 
   const handleFromInput = (e) => {
     const id = e.target.id;
@@ -34,11 +46,7 @@ const NewInvoiceModal = () => {
     // Interesting "[id]" syntax. Instead of specifying a new key with the name of "id" (in the case of "id: value"),
     // it takes the id of the currently active element and assigns the onChange value to it.
     setFromData({ ...fromData, [id]: value });
-    setData({
-      fromData: { ...fromData },
-      toData: { ...toData },
-      ...invoiceDate,
-    });
+    handleSetData();
   };
 
   const handleToInput = (e) => {
@@ -46,20 +54,24 @@ const NewInvoiceModal = () => {
     const value = e.target.value;
 
     setToData({ ...toData, [id]: value });
-    setData({
-      fromData: { ...fromData },
-      toData: { ...toData },
-      ...invoiceDate,
-    });
+    handleSetData();
   };
 
   const handleInvoiceDateInput = (e) => {
     setInvoiceDate({ invoiceDate: e });
-    setData({
-      fromData: { ...fromData },
-      toData: { ...toData },
-      ...invoiceDate,
-    });
+    handleSetData();
+  };
+
+  const handlePaymentTermInput = (e) => {
+    setPaymentTerms({ paymentTerms: e.target.innerText });
+    handleSetData();
+  };
+
+  const handleItemListInput = (e) => {
+    const id = e.target.id;
+    const value = e.target.value;
+    setItemList({ ...itemList, [id]: value });
+    handleSetData();
   };
 
   console.log(data);
@@ -133,7 +145,11 @@ const NewInvoiceModal = () => {
               <div className="payment-terms-select-box">
                 <div className="options-container">
                   {paymentTermsInputs.map((input) => (
-                    <div className="option" key={input.id}>
+                    <div
+                      className="option"
+                      key={input.id}
+                      onClick={handlePaymentTermInput}
+                    >
                       <input
                         type={input.type}
                         className={input.className}
@@ -164,7 +180,12 @@ const NewInvoiceModal = () => {
             {itemListInputs.map((input) => (
               <div key={input.id}>
                 <label>{input.label}</label>
-                <input type={input.type} placeholder={input.placeholder} />
+                <input
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  id={input.id}
+                  onChange={handleItemListInput}
+                />
               </div>
             ))}
             <img src="/assets/icon-delete.svg" alt="delete item" />

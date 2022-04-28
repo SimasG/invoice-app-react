@@ -97,25 +97,25 @@ export const paymentTermsInputs = [
 
 export const itemListInputs = [
   {
-    id: 1,
+    id: "item-name",
     label: "Item Name",
     type: "text",
     placeholder: "Item Name",
   },
   {
-    id: 2,
+    id: "qty",
     label: "Qty.",
     type: "number",
     placeholder: "Qty.",
   },
   {
-    id: 3,
+    id: "price",
     label: "Price",
     type: "number",
     placeholder: "Price",
   },
   {
-    id: 4,
+    id: "total",
     label: "Total",
     type: "number",
     placeholder: "Total",
