@@ -46,6 +46,7 @@ export const StyledNewInvoiceModal = styled.div`
       }
     }
     .bill-to-container {
+      margin-bottom: 2rem;
       .bill-to-parapgrah {
         color: ${(props) => props.theme.colors.cornflowerBlue};
         font-weight: 700;
@@ -116,7 +117,6 @@ export const StyledNewInvoiceModal = styled.div`
               padding: 1.55rem 2.4rem;
               border-radius: 8px;
               border: 1px solid ${(props) => props.theme.colors.selago};
-              margin-bottom: 2.4rem;
               position: relative;
               order: 0;
               ::after {
@@ -137,7 +137,15 @@ export const StyledNewInvoiceModal = styled.div`
                   ${(props) => props.theme.colors.cornflowerBlue};
               }
             }
+            .selected.margin-bottom {
+              margin-bottom: 2.4rem;
+            }
           }
+        }
+      }
+      .project-description-container {
+        input {
+          width: 100%;
         }
       }
     }
@@ -147,12 +155,37 @@ export const StyledNewInvoiceModal = styled.div`
         font-size: 1.8rem;
       }
       .item-list-input-table {
-        margin-bottom: 2rem;
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        img {
-          align-self: flex-end;
+        margin-bottom: 2rem;
+        .item-list-input-table-subcontainer {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          margin-bottom: 0.5rem;
+          .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            div {
+              width: 11rem;
+              label {
+                width: 11rem;
+              }
+              input {
+                width: 11rem;
+              }
+            }
+            img {
+              align-self: flex-end;
+            }
+          }
         }
       }
       .add-new-item-btn {

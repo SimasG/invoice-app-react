@@ -7,9 +7,12 @@ import {
   fromAddressInputs,
   toAddressinputs,
   paymentTermsInputs,
-  itemListInputs,
+  // itemListInputs,
 } from "../formSource";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
+// TODO: Add additional list items to the main state
 
 const NewInvoiceModal = () => {
   document.querySelectorAll(".option").forEach((option) => {
@@ -20,26 +23,90 @@ const NewInvoiceModal = () => {
     });
   });
 
+  const handleSelectedPaymentTermBtn = () => {
+    document.querySelector(".options-container").classList.toggle("active");
+    if (
+      document.querySelector(".options-container").classList.contains("active")
+    ) {
+      document.querySelector(".selected").classList.add("margin-bottom");
+    } else {
+      document.querySelector(".selected").classList.remove("margin-bottom");
+    }
+  };
+
   // Sub-states
   const [fromData, setFromData] = useState();
   const [toData, setToData] = useState();
   const [invoiceDate, setInvoiceDate] = useState();
   const [paymentTerms, setPaymentTerms] = useState();
-  const [itemList, setItemList] = useState();
+  const [itemList, setItemList] = useState([
+    {
+      uid: uuidv4(),
+      itemName: "",
+      price: 0,
+      qty: 0,
+      total: 0,
+    },
+    {
+      uid: uuidv4(),
+      itemName: "",
+      price: 0,
+      qty: 0,
+      total: 0,
+    },
+    {
+      uid: uuidv4(),
+      itemName: "",
+      price: 0,
+      qty: 0,
+      total: 0,
+    },
+  ]);
+  const [description, setDescription] = useState();
 
   // Main state
   const [data, setData] = useState();
 
+  const itemListInputs = [
+    {
+      id: "item-name",
+      label: "Item Name",
+      type: "text",
+      placeholder: "Item Name",
+    },
+    {
+      id: "qty",
+      label: "Qty.",
+      type: "number",
+      placeholder: "Qty.",
+    },
+    {
+      id: "price",
+      label: "Price",
+      type: "number",
+      placeholder: "Price",
+    },
+    {
+      id: "total",
+      label: "Total",
+      type: "number",
+      placeholder: "Total",
+    },
+  ];
+
+  // AGGREGATING SUB-STATES INTO MAIN STATE
   const handleSetData = () => {
     setData({
       fromData: { ...fromData },
       toData: { ...toData },
       ...invoiceDate,
       ...paymentTerms,
+      ...description,
       itemList: { ...itemList },
     });
   };
 
+  // HANDLING DIFFERENT INPUTS
   const handleFromInput = (e) => {
     const id = e.target.id;
     const value = e.target.value;
@@ -67,6 +134,11 @@ const NewInvoiceModal = () => {
     handleSetData();
   };
 
+  const handleDescriptionInput = (e) => {
+    setDescription({ description: e.target.value });
+    handleSetData();
+  };
+
   const handleItemListInput = (e) => {
     const id = e.target.id;
     const value = e.target.value;
@@ -74,11 +146,44 @@ const NewInvoiceModal = () => {
     handleSetData();
   };
 
-  console.log(data);
+  const testArrayOfObjects = [
+    {
+      0: {
+        0: {
+          0: {
+            "item-name": 1,
+          },
+          qty: 2,
+        },
+        price: 3,
+      },
+      total: 4,
+    },
+  ];
+
+  // HANDLING ADDING NEW ITEMS
+  const handleAddNewItem = () => {
+    // const updatedItemList = [
+    //   itemList,
+    //   {
+    //     "item-name": "yay",
+    //     price: "1",
+    //     qty: "11",
+    //     total: "111",
+    //   },
+    // ];
+    // console.log(updatedItemList);
+    // setItemList(updatedItemList);
+  };
+
+  console.log(itemList);
 
   const handleAddNewInvoice = async () => {
     toast.success("New invoice supposedly created!");
   };
+
+  // Counter for mapped items (cancer)
+  let n = 0;
 
   return (
     <StyledNewInvoiceModal className="new-invoice-modal-overlay">
@@ -162,35 +267,51 @@ const NewInvoiceModal = () => {
                 </div>
                 <div
                   className="selected"
-                  onClick={() => {
-                    document
-                      .querySelector(".options-container")
-                      .classList.toggle("active");
-                  }}
+                  onClick={() => handleSelectedPaymentTermBtn()}
                 >
                   <h4>Select Payment Terms</h4>
                 </div>
               </div>
             </div>
           </div>
+          <div className="project-description-container">
+            <label>Project Description</label>
+            <input
+              type="text"
+              placeholder="Project Description"
+              onChange={handleDescriptionInput}
+            />
+          </div>
         </section>
         <section className="item-list-container">
           <h2>Item List</h2>
           <div className="item-list-input-table">
-            {itemListInputs.map((input) => (
-              <div key={input.id}>
-                <label>{input.label}</label>
-                <input
-                  type={input.type}
-                  placeholder={input.placeholder}
-                  id={input.id}
-                  onChange={handleItemListInput}
-                />
-              </div>
-            ))}
-            <img src="/assets/icon-delete.svg" alt="delete item" />
+            <div className="item-list-input-table-subcontainer">
+              {itemList.map((item) => {
+                // Cancer
+                n += 1;
+                return (
+                  <div className="item" key={item.uid}>
+                    {itemListInputs.map((input) => (
+                      <div key={input.id}>
+                        {n <= 1 && <label>{input.label}</label>}
+                        <input
+                          type={input.type}
+                          placeholder={input.placeholder}
+                          id={input.id}
+                          onChange={handleItemListInput}
+                        />
+                      </div>
+                    ))}
+                    <img src="/assets/icon-delete.svg" alt="delete item" />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <button className="add-new-item-btn">+ Add New Item</button>
+          <button className="add-new-item-btn" onClick={handleAddNewItem}>
+            + Add New Item
+          </button>
         </section>
         <section className="new-invoice-btn-container">
           <button className="discard-btn">Discard</button>
