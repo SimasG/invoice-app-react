@@ -7,12 +7,9 @@ import {
   fromAddressInputs,
   toAddressinputs,
   paymentTermsInputs,
-  // itemListInputs,
 } from "../formSource";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-// TODO: Add additional list items to the main state
 
 const NewInvoiceModal = () => {
   document.querySelectorAll(".option").forEach((option) => {
@@ -47,20 +44,6 @@ const NewInvoiceModal = () => {
       qty: 0,
       total: 0,
     },
-    {
-      uid: uuidv4(),
-      itemName: "",
-      price: 0,
-      qty: 0,
-      total: 0,
-    },
-    {
-      uid: uuidv4(),
-      itemName: "",
-      price: 0,
-      qty: 0,
-      total: 0,
-    },
   ]);
   const [description, setDescription] = useState();
 
@@ -69,7 +52,7 @@ const NewInvoiceModal = () => {
 
   const itemListInputs = [
     {
-      id: "item-name",
+      id: "itemName",
       label: "Item Name",
       type: "text",
       placeholder: "Item Name",
@@ -139,47 +122,36 @@ const NewInvoiceModal = () => {
     handleSetData();
   };
 
-  const handleItemListInput = (e) => {
-    const id = e.target.id;
-    const value = e.target.value;
-    setItemList({ ...itemList, [id]: value });
-    handleSetData();
+  const handleUpdateItem = (uid, e) => {
+    // const id = e.target.id;
+    // const value = e.target.value;
+    // setItemList({ ...itemList, [id]: value });
+    // handleSetData();
+    // console.log(itemList);
   };
-
-  const testArrayOfObjects = [
-    {
-      0: {
-        0: {
-          0: {
-            "item-name": 1,
-          },
-          qty: 2,
-        },
-        price: 3,
-      },
-      total: 4,
-    },
-  ];
+  console.log(itemList);
 
   // HANDLING ADDING NEW ITEMS
   const handleAddNewItem = () => {
-    // const updatedItemList = [
-    //   itemList,
-    //   {
-    //     "item-name": "yay",
-    //     price: "1",
-    //     qty: "11",
-    //     total: "111",
-    //   },
-    // ];
-    // console.log(updatedItemList);
-    // setItemList(updatedItemList);
+    const updatedItemList = [
+      ...itemList,
+      {
+        uid: uuidv4(),
+        itemName: "yay",
+        price: "1",
+        qty: "11",
+        total: "111",
+      },
+    ];
+    setItemList(updatedItemList);
   };
-
-  console.log(itemList);
 
   const handleAddNewInvoice = async () => {
     toast.success("New invoice supposedly created!");
+  };
+
+  const handleDeleteItem = (uid) => {
+    setItemList(itemList.filter((item) => uid !== item.uid));
   };
 
   // Counter for mapped items (cancer)
@@ -292,6 +264,7 @@ const NewInvoiceModal = () => {
                 n += 1;
                 return (
                   <div className="item" key={item.uid}>
+                    {/* Recreated "itemListInputs" array in this file cuz wasn't able to access it from "formSource.js" for some reason */}
                     {itemListInputs.map((input) => (
                       <div key={input.id}>
                         {n <= 1 && <label>{input.label}</label>}
@@ -299,11 +272,23 @@ const NewInvoiceModal = () => {
                           type={input.type}
                           placeholder={input.placeholder}
                           id={input.id}
-                          onChange={handleItemListInput}
+                          onChange={(e) => {
+                            setItemList(
+                              itemList.map((i) =>
+                                i.uid === item.uid
+                                  ? { ...i, [input.id]: e.target.value }
+                                  : i
+                              )
+                            );
+                          }}
                         />
                       </div>
                     ))}
-                    <img src="/assets/icon-delete.svg" alt="delete item" />
+                    <img
+                      src="/assets/icon-delete.svg"
+                      alt="delete item"
+                      onClick={() => handleDeleteItem(item.uid)}
+                    />
                   </div>
                 );
               })}

@@ -94,30 +94,3 @@ export const paymentTermsInputs = [
     label: "Net 30 Days",
   },
 ];
-
-export const itemListInputs = [
-  {
-    id: "item-name",
-    label: "Item Name",
-    type: "text",
-    placeholder: "Item Name",
-  },
-  {
-    id: "qty",
-    label: "Qty.",
-    type: "number",
-    placeholder: "Qty.",
-  },
-  {
-    id: "price",
-    label: "Price",
-    type: "number",
-    placeholder: "Price",
-  },
-  {
-    id: "total",
-    label: "Total",
-    type: "number",
-    placeholder: "Total",
-  },
-];

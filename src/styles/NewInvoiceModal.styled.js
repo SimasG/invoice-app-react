@@ -12,6 +12,7 @@ export const StyledNewInvoiceModal = styled.div`
     width: 61.6rem;
     height: 100vh;
     padding: 5.6rem;
+    overflow-y: scroll;
     h1 {
       margin-bottom: 4rem;
       span {
@@ -184,6 +185,7 @@ export const StyledNewInvoiceModal = styled.div`
             }
             img {
               align-self: flex-end;
+              cursor: pointer;
             }
           }
         }
