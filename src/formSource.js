@@ -1,6 +1,6 @@
 export const fromAddressInputs = [
   {
-    id: "street-address",
+    id: "streetAddress",
     label: "Street Address",
     type: "text",
     placeholder: "Street Address",
@@ -12,7 +12,7 @@ export const fromAddressInputs = [
     placeholder: "City",
   },
   {
-    id: "post-code",
+    id: "postCode",
     label: "Post Code",
     type: "text",
     placeholder: "Post Code",
@@ -27,19 +27,19 @@ export const fromAddressInputs = [
 
 export const toAddressinputs = [
   {
-    id: "client-name",
+    id: "clientName",
     label: "Client's Name",
     type: "text",
     placeholder: "Client's Name",
   },
   {
-    id: "client-email",
+    id: "clientEmail",
     label: "Client's Email",
     type: "email",
     placeholder: "Client's Email",
   },
   {
-    id: "street-address",
+    id: "streetAddress",
     label: "Street Address",
     type: "text",
     placeholder: "Street Address",
@@ -51,7 +51,7 @@ export const toAddressinputs = [
     placeholder: "City",
   },
   {
-    id: "post-code",
+    id: "postCode",
     label: "Post Code",
     type: "text",
     placeholder: "Post Code",
@@ -66,28 +66,28 @@ export const toAddressinputs = [
 
 export const paymentTermsInputs = [
   {
-    id: "net-1-day",
+    id: "net1Day",
     type: "radio",
     className: "radio",
     name: "payment-term-date",
     label: "Net 1 Day",
   },
   {
-    id: "net-7-days",
+    id: "net7Days",
     type: "radio",
     className: "radio",
     name: "payment-term-date",
     label: "Net 7 Days",
   },
   {
-    id: "net-14-days",
+    id: "net14Days",
     type: "radio",
     className: "radio",
     name: "payment-term-date",
     label: "Net 14 Days",
   },
   {
-    id: "net-30-days",
+    id: "net30Days",
     type: "radio",
     className: "radio",
     name: "payment-term-date",

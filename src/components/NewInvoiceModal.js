@@ -1,6 +1,6 @@
 import { StyledNewInvoiceModal } from "../styles/NewInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import toast from "react-hot-toast";
 import {
@@ -11,6 +11,7 @@ import {
 import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const itemListInputs = [
   {
@@ -41,25 +42,7 @@ const itemListInputs = [
 
 const NewInvoiceModal = () => {
   const { currentUser } = useContext(AuthContext);
-
-  document.querySelectorAll(".option").forEach((option) => {
-    option.addEventListener("click", () => {
-      document.querySelector(".selected").innerHTML =
-        option.querySelector("label").innerHTML;
-      document.querySelector(".options-container").classList.remove("active");
-    });
-  });
-
-  const handleSelectedPaymentTermBtn = () => {
-    document.querySelector(".options-container").classList.toggle("active");
-    if (
-      document.querySelector(".options-container").classList.contains("active")
-    ) {
-      document.querySelector(".selected").classList.add("margin-bottom");
-    } else {
-      document.querySelector(".selected").classList.remove("margin-bottom");
-    }
-  };
+  let navigate = useNavigate();
 
   // Sub-states
   const [fromData, setFromData] = useState();
@@ -90,6 +73,25 @@ const NewInvoiceModal = () => {
       ...description,
       itemList: { ...itemList },
     });
+  };
+
+  document.querySelectorAll(".option").forEach((option) => {
+    option.addEventListener("click", () => {
+      document.querySelector(".selected").innerHTML =
+        option.querySelector("label").innerHTML;
+      document.querySelector(".options-container").classList.remove("active");
+    });
+  });
+
+  const handleSelectedPaymentTermBtn = () => {
+    document.querySelector(".options-container").classList.toggle("active");
+    if (
+      document.querySelector(".options-container").classList.contains("active")
+    ) {
+      document.querySelector(".selected").classList.add("margin-bottom");
+    } else {
+      document.querySelector(".selected").classList.remove("margin-bottom");
+    }
   };
 
   // HANDLING DIFFERENT INPUTS
@@ -139,7 +141,7 @@ const NewInvoiceModal = () => {
     setItemList(updatedItemList);
   };
 
-  // Storing main state in a db
+  // CRUD -> C: Storing main state in a db
   const handleAddNewInvoice = async () => {
     // Declaring the reference to a particular document in Firebase (the variable name is a bit misleading)
     const invoicesCollectionRef = doc(
@@ -151,8 +153,10 @@ const NewInvoiceModal = () => {
     );
     await setDoc(invoicesCollectionRef, {
       ...data,
+      updatedAt: Timestamp.fromDate(new Date()),
     });
     toast.success("New invoice supposedly created!");
+    navigate("/");
   };
 
   const handleDeleteItem = (uid) => {
