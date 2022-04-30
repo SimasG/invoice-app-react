@@ -8,8 +8,9 @@ import {
   toAddressinputs,
   paymentTermsInputs,
 } from "../formSource";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { AuthContext } from "../contexts/AuthContext";
 
 const itemListInputs = [
   {
@@ -39,6 +40,8 @@ const itemListInputs = [
 ];
 
 const NewInvoiceModal = () => {
+  const { currentUser } = useContext(AuthContext);
+
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
@@ -76,7 +79,6 @@ const NewInvoiceModal = () => {
 
   // Main state
   const [data, setData] = useState();
-  console.log(itemList);
 
   // AGGREGATING SUB-STATES INTO MAIN STATE
   const handleSetData = () => {
@@ -136,7 +138,20 @@ const NewInvoiceModal = () => {
     ];
     setItemList(updatedItemList);
   };
+
+  // Storing main state in a db
   const handleAddNewInvoice = async () => {
+    // Declaring the reference to a particular document in Firebase (the variable name is a bit misleading)
+    const invoicesCollectionRef = doc(
+      db,
+      "users",
+      currentUser.uid,
+      "invoices",
+      uuidv4()
+    );
+    await setDoc(invoicesCollectionRef, {
+      ...data,
+    });
     toast.success("New invoice supposedly created!");
   };
 
@@ -152,7 +167,7 @@ const NewInvoiceModal = () => {
     <StyledNewInvoiceModal className="new-invoice-modal-overlay">
       <main className="new-invoice-modal-container">
         <h1>New Invoice</h1>
-        <section className="bill-from-containe">
+        <section className="bill-from-container">
           <p className="bill-from-parapgrah">Bill From</p>
           <div className="from-address-container">
             {fromAddressInputs.map((input) => (

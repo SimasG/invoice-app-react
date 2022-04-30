@@ -59,8 +59,6 @@ function App() {
     }
   });
 
-  console.log(currentUser);
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />

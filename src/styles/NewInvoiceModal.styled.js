@@ -83,7 +83,6 @@ export const StyledNewInvoiceModal = styled.div`
               max-height: 0;
               opacity: 0;
               background-color: #c8c5c5;
-              /* transition: all 0.4s; */
               border-radius: 8px;
               overflow: hidden;
               order: 1;

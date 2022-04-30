@@ -33,11 +33,19 @@ const Sidebar = () => {
       )}
       <div>
         <div className="theme-toggle-container">
-          <img className="theme-toggle" src="/assets/icon-moon.svg" alt="" />
+          <img
+            className="theme-toggle"
+            src="/assets/icon-moon.svg"
+            alt="theme toggle"
+          />
         </div>
         <div className="gray-line"></div>
         {currentUser && (
-          <img className="profile-pic" src={currentUser.photoURL} alt="" />
+          <img
+            className="profile-pic"
+            src={currentUser.photoURL}
+            alt="profile"
+          />
         )}
       </div>
     </StyledSidebar>
