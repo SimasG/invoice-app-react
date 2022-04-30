@@ -30,14 +30,6 @@ const Homepage = () => {
     fetchData();
   }, [currentUser.uid]);
 
-  // if (data) {
-  //   console.log("data is here");
-  //   console.log(data);
-  // const parsedDate = dayjs.unix(data[0].invoiceDate.seconds);
-  // const parsedDate2 = dayjs(parsedDate.toDate(), "DD/MMM/YYYY");
-  // console.log(parsedDate);
-  // }
-
   return (
     <>
       <StyledHomepage>
@@ -60,6 +52,31 @@ const Homepage = () => {
           </div>
         </header>
         <section className="invoices-container">
+          {data.length > 0 &&
+            data.map((item) => (
+              <Link
+                to={`${item.toData.clientName}/${item.id}`}
+                className="invoice-container"
+                key={item.id}
+              >
+                <h3>
+                  <span className="hashtag">#</span>
+                  {item.id}
+                </h3>
+                <p>
+                  Due{" "}
+                  {dayjs.unix(item.invoiceDate.seconds).format("DD MMM YYYY")}
+                </p>
+                <p>{item.toData.clientName}</p>
+                <p>{item.itemList[0].total}</p>
+                <div className="status-container">
+                  <div className="circle"></div>
+                  <p>{item.paymentTerms}</p>
+                </div>
+                <img src="/assets/icon-arrow-right.svg" alt="" />
+              </Link>
+            ))}
+
           {/* {data.map((item) => (
             <Link
               to={`${item.toData.clientName}/${item.id}`}
