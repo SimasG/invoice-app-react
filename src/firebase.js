@@ -16,3 +16,10 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 export const auth = getAuth();
+
+// Passwordless auth set up
+export const actionCodeSettings = {
+  // http://localhost:3000
+  url: `${window.location.origin}`,
+  handleCodeInApp: true,
+};

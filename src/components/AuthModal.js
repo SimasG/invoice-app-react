@@ -2,15 +2,17 @@ import { useContext, useState } from "react";
 import { StyledAuthModal } from "../styles/AuthModal.styled";
 import { MdOutlineEmail } from "react-icons/md";
 import { BsGoogle } from "react-icons/bs";
-import { auth } from "../firebase";
+import { auth, actionCodeSettings, db } from "../firebase";
 import {
+  // Google auth
   GoogleAuthProvider,
   signInWithPopup,
-  //   sendSignInLinkToEmail,
-  //   isSignInWithEmailLink,
-  //   signInWithEmailLink,
+  // Passwordless auth
+  sendSignInLinkToEmail,
 } from "firebase/auth";
 import { AuthContext } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 function AuthModal() {
   const [userEmail, setUserEmail] = useState("");
@@ -18,31 +20,44 @@ function AuthModal() {
 
   const { dispatch } = useContext(AuthContext);
 
-  const handleGoogleLogin = () => {
-    // Google sign up/in
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        // Don't understand the payload bit here. Does it pass in the "user" value from here to "currentUser"
-        // in the "INITIAL_STATE"?
-        dispatch({ type: "LOGIN", payload: user });
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
-
   const removeModal = () => {
     document.querySelector(".auth-modal-container").style.display = "none";
     setEmailLogin(false);
     setUserEmail("");
   };
 
-  //   const signInWithEmail = () => {
-  //     emailMagicLink(userEmail);
-  //     document.querySelector(".email-input").value = "";
-  //   };
+  // Google auth
+  const handleGoogleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const user = result.user;
+        // Don't understand the payload bit here. Does it pass in the "user" value from here to "currentUser"
+        // in the "INITIAL_STATE"?
+        dispatch({ type: "LOGIN", payload: user });
+        await setDoc(doc(db, "users", result.user.uid), {
+          email: result.user.email,
+          timeStamp: serverTimestamp(),
+        });
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  // Passwordless auth
+  const handleSignInWithEmail = (e) => {
+    e.preventDefault();
+    sendSignInLinkToEmail(auth, userEmail, actionCodeSettings)
+      .then(() => {
+        toast.success("Email sent! Check your inbox.");
+        window.localStorage.setItem("emailForSignIn", userEmail);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    document.querySelector(".email-input").value = "";
+  };
 
   return (
     <StyledAuthModal onClick={removeModal} className="auth-modal-container">
@@ -73,11 +88,10 @@ function AuthModal() {
               className="email-input"
               type="email"
               placeholder="Email"
-              required
             />
             <button
               type="submit"
-              //   onClick={signInWithEmail}
+              onClick={handleSignInWithEmail}
               className="auth-btn send-email-link-btn"
             >
               Send Link

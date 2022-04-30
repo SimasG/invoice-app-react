@@ -11,6 +11,33 @@ import {
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+const itemListInputs = [
+  {
+    id: "itemName",
+    label: "Item Name",
+    type: "text",
+    placeholder: "Item Name",
+  },
+  {
+    id: "qty",
+    label: "Qty.",
+    type: "number",
+    placeholder: "Qty.",
+  },
+  {
+    id: "price",
+    label: "Price",
+    type: "number",
+    placeholder: "Price",
+  },
+  {
+    id: "total",
+    label: "Total",
+    type: "number",
+    placeholder: "Total",
+  },
+];
+
 const NewInvoiceModal = () => {
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
@@ -49,33 +76,7 @@ const NewInvoiceModal = () => {
 
   // Main state
   const [data, setData] = useState();
-
-  const itemListInputs = [
-    {
-      id: "itemName",
-      label: "Item Name",
-      type: "text",
-      placeholder: "Item Name",
-    },
-    {
-      id: "qty",
-      label: "Qty.",
-      type: "number",
-      placeholder: "Qty.",
-    },
-    {
-      id: "price",
-      label: "Price",
-      type: "number",
-      placeholder: "Price",
-    },
-    {
-      id: "total",
-      label: "Total",
-      type: "number",
-      placeholder: "Total",
-    },
-  ];
+  console.log(itemList);
 
   // AGGREGATING SUB-STATES INTO MAIN STATE
   const handleSetData = () => {
@@ -102,7 +103,6 @@ const NewInvoiceModal = () => {
   const handleToInput = (e) => {
     const id = e.target.id;
     const value = e.target.value;
-
     setToData({ ...toData, [id]: value });
     handleSetData();
   };
@@ -122,36 +122,27 @@ const NewInvoiceModal = () => {
     handleSetData();
   };
 
-  const handleUpdateItem = (uid, e) => {
-    // const id = e.target.id;
-    // const value = e.target.value;
-    // setItemList({ ...itemList, [id]: value });
-    // handleSetData();
-    // console.log(itemList);
-  };
-  console.log(itemList);
-
-  // HANDLING ADDING NEW ITEMS
+  // HANDLING ADDING & DELETING NEW ITEMS
   const handleAddNewItem = () => {
     const updatedItemList = [
       ...itemList,
       {
         uid: uuidv4(),
-        itemName: "yay",
-        price: "1",
-        qty: "11",
-        total: "111",
+        itemName: "",
+        price: 0,
+        qty: 0,
+        total: 0,
       },
     ];
     setItemList(updatedItemList);
   };
-
   const handleAddNewInvoice = async () => {
     toast.success("New invoice supposedly created!");
   };
 
   const handleDeleteItem = (uid) => {
     setItemList(itemList.filter((item) => uid !== item.uid));
+    toast.success("Item deleted");
   };
 
   // Counter for mapped items (cancer)
@@ -161,7 +152,7 @@ const NewInvoiceModal = () => {
     <StyledNewInvoiceModal className="new-invoice-modal-overlay">
       <main className="new-invoice-modal-container">
         <h1>New Invoice</h1>
-        <section className="bill-from-container">
+        <section className="bill-from-containe">
           <p className="bill-from-parapgrah">Bill From</p>
           <div className="from-address-container">
             {fromAddressInputs.map((input) => (
@@ -265,6 +256,7 @@ const NewInvoiceModal = () => {
                 return (
                   <div className="item" key={item.uid}>
                     {/* Recreated "itemListInputs" array in this file cuz wasn't able to access it from "formSource.js" for some reason */}
+                    {/* Ideally would not write logic in JSX but had trouble accessing multiple arguments in the callback otherwise */}
                     {itemListInputs.map((input) => (
                       <div key={input.id}>
                         {n <= 1 && <label>{input.label}</label>}
@@ -272,6 +264,7 @@ const NewInvoiceModal = () => {
                           type={input.type}
                           placeholder={input.placeholder}
                           id={input.id}
+                          // Handle updating items
                           onChange={(e) => {
                             setItemList(
                               itemList.map((i) =>
@@ -280,6 +273,7 @@ const NewInvoiceModal = () => {
                                   : i
                               )
                             );
+                            handleSetData();
                           }}
                         />
                       </div>

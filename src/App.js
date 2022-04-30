@@ -5,11 +5,14 @@ import Sidebar from "./components/Sidebar";
 import Invoice from "./components/Invoice";
 import NewInvoiceModal from "./components/NewInvoiceModal";
 import DeleteInvoiceModal from "./components/DeleteInvoiceModal";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthModal from "./components/AuthModal";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { auth, db } from "./firebase";
+import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const theme = {
   colors: {
@@ -29,27 +32,57 @@ const theme = {
 };
 
 function App() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, dispatch } = useContext(AuthContext);
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      let email = window.localStorage.getItem("emailForSignIn");
+      if (!email) {
+        email = window.prompt("Please provide your email for confirmation");
+      }
+      signInWithEmailLink(auth, email, window.location.href)
+        .then(async (result) => {
+          const user = result.user;
+          dispatch({ type: "LOGIN", payload: user });
+          await setDoc(doc(db, "users", result.user.uid), {
+            email: result.user.email,
+            timeStamp: serverTimestamp(),
+          });
+          // window.localStorage.removeItem("emailForSignIn");
+          toast.success("Logged in!");
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  });
+
   console.log(currentUser);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <Sidebar />
-      <Routes>
-        <Route exact path="/" element={<Homepage />} />
-        <Route path="/:clientName/:id" element={<Invoice />}></Route>
-        <Route path="/newInvoice" element={<NewInvoiceModal />}></Route>
-        <Route
-          path="*"
-          element={
-            <main style={{ padding: "5rem 5rem 5rem 15rem" }}>
-              <h1 style={{ fontSize: "4rem" }}>There's nothing here!</h1>
-            </main>
-          }
-        />
-      </Routes>
-      <AuthModal />
+      {currentUser && (
+        <>
+          <Sidebar />
+          <Routes>
+            <Route exact path="/" element={<Homepage />} />
+            <Route path="/:clientName/:id" element={<Invoice />}></Route>
+            <Route path="/newInvoice" element={<NewInvoiceModal />}></Route>
+            <Route
+              path="*"
+              element={
+                <main style={{ padding: "5rem 5rem 5rem 15rem" }}>
+                  <h1 style={{ fontSize: "4rem" }}>There's nothing here!</h1>
+                </main>
+              }
+            />
+          </Routes>
+        </>
+      )}
+      {!currentUser && <AuthModal />}
       <Toaster />
       {/* <NewInvoiceModal /> */}
       {/* <DeleteInvoiceModal /> */}

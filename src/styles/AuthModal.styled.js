@@ -7,7 +7,7 @@ export const StyledAuthModal = styled.section`
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.75);
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   .auth-modal {
