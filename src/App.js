@@ -13,6 +13,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { auth, db } from "./firebase";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import EditInvoiceModal from "./components/EditInvoiceModal";
 
 const theme = {
   colors: {
@@ -67,8 +68,12 @@ function App() {
           <Sidebar />
           <Routes>
             <Route exact path="/" element={<Homepage />} />
-            <Route path="/:clientName/:id" element={<Invoice />}></Route>
-            <Route path="/newInvoice" element={<NewInvoiceModal />}></Route>
+            <Route path="/:clientName/:id" element={<Invoice />} />
+            <Route path="/newInvoice" element={<NewInvoiceModal />} />
+            {/* <Route
+              path="/:clientName/:id/edit"
+              element={<EditInvoiceModal />}
+            /> */}
             <Route
               path="*"
               element={

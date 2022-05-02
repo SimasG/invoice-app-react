@@ -8,10 +8,11 @@ import {
   toAddressinputs,
   paymentTermsInputs,
 } from "../formSource";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { createRandomLetters, createRandomNumbers } from "../misc/idGenerator";
 
 const itemListInputs = [
   {
@@ -141,6 +142,11 @@ const NewInvoiceModal = () => {
     setItemList(updatedItemList);
   };
 
+  const handleDeleteItem = (uid) => {
+    setItemList(itemList.filter((item) => uid !== item.uid));
+    toast.success("Item deleted");
+  };
+
   // CRUD -> C: Storing main state in a db
   const handleAddNewInvoice = async () => {
     // Declaring the reference to a particular document in Firebase (the variable name is a bit misleading)
@@ -153,15 +159,11 @@ const NewInvoiceModal = () => {
     );
     await setDoc(invoicesCollectionRef, {
       ...data,
+      id: `${createRandomLetters(2)}${createRandomNumbers(4)}`,
       updatedAt: Timestamp.fromDate(new Date()),
     });
-    toast.success("New invoice supposedly created!");
+    toast.success("New invoice created!");
     navigate("/");
-  };
-
-  const handleDeleteItem = (uid) => {
-    setItemList(itemList.filter((item) => uid !== item.uid));
-    toast.success("Item deleted");
   };
 
   // Counter for mapped items (cancer)

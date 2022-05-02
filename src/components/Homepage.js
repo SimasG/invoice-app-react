@@ -1,11 +1,12 @@
 import { StyledHomepage } from "../styles/Homepage.styled";
-// import invoices from "../data.json";
 import { Link, Outlet } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import dayjs from "dayjs";
+import { createRandomLetters, createRandomNumbers } from "../misc/idGenerator";
+import useFetchInvoices from "../hooks/useFetchInvoices";
 
 const Homepage = () => {
   const { currentUser } = useContext(AuthContext);
@@ -13,22 +14,27 @@ const Homepage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let list = [];
       try {
-        const querySnapshot = await getDocs(
-          collection(db, "users", currentUser.uid, "invoices")
-        );
-        querySnapshot.forEach((doc) => {
-          // weird that we have access to doc.id but it isn't part of doc.data
-          list.push({ id: doc.id, ...doc.data() });
+        const ref = collection(db, "users", currentUser.uid, "invoices");
+        const unsub = onSnapshot(ref, (querySnapshot) => {
+          let list = [];
+          querySnapshot.forEach((doc) => {
+            // weird that we have access to doc.id but it isn't part of doc.data
+            // creating a custom id for each invoice to follow the project guidelines
+            list.push({
+              id: `${createRandomLetters(2)}${createRandomNumbers(4)}`,
+              ...doc.data(),
+            });
+          });
+          setData(list);
         });
-        setData(list);
+        return () => unsub();
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, [currentUser.uid]);
+  }, []);
 
   return (
     <>
@@ -55,7 +61,7 @@ const Homepage = () => {
           {data.length > 0 &&
             data.map((item) => (
               <Link
-                to={`${item.toData.clientName}/${item.id}`}
+                to={`/${item.toData.clientName}/${item.id}`}
                 className="invoice-container"
                 key={item.id}
               >
@@ -68,7 +74,12 @@ const Homepage = () => {
                   {dayjs.unix(item.invoiceDate.seconds).format("DD MMM YYYY")}
                 </p>
                 <p>{item.toData.clientName}</p>
-                <p>{item.itemList[0].total}</p>
+                <p>
+                  {parseInt(item.itemList[0].total).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "GBP",
+                  })}
+                </p>
                 <div className="status-container">
                   <div className="circle"></div>
                   <p>{item.paymentTerms}</p>

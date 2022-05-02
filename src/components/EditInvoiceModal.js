@@ -3,7 +3,6 @@ import { DatePicker } from "@mantine/dates";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
-
 // import customParseFormat from "dayjs/plugin/customParseFormat";
 
 // TODO: Add state to every object in the array of objects
