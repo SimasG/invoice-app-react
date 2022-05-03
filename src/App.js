@@ -68,12 +68,12 @@ function App() {
           <Sidebar />
           <Routes>
             <Route exact path="/" element={<Homepage />} />
-            <Route path="/:clientName/:id" element={<Invoice />} />
             <Route path="/newInvoice" element={<NewInvoiceModal />} />
-            {/* <Route
+            <Route path="/:clientName/:id" element={<Invoice />} />
+            <Route
               path="/:clientName/:id/edit"
               element={<EditInvoiceModal />}
-            /> */}
+            />
             <Route
               path="*"
               element={

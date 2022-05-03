@@ -12,6 +12,8 @@ const Homepage = () => {
   const { currentUser } = useContext(AuthContext);
   const [data, setData] = useState([]);
 
+  console.log(data);
+
   // REPLACE THIS WITH A CUSTOM HOOK
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +38,14 @@ const Homepage = () => {
     };
     fetchData();
   }, []);
+
+  const getTotal = (selectedItem) => {
+    let total = 0;
+    selectedItem.map((item) => {
+      return (total += parseInt(item.total));
+    });
+    return total;
+  };
 
   return (
     <>
@@ -76,7 +86,7 @@ const Homepage = () => {
                 </p>
                 <p>{item.toData.clientName}</p>
                 <p>
-                  {parseInt(item.itemList[0].total).toLocaleString("en-US", {
+                  {getTotal(item.itemList).toLocaleString("en-US", {
                     style: "currency",
                     currency: "GBP",
                   })}

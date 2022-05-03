@@ -206,6 +206,9 @@ export const StyledNewInvoiceModal = styled.div`
         background-color: #f9fafe;
         color: ${(props) => props.theme.colors.shipCove};
         padding: 0 2.5rem;
+        :hover {
+          background-color: ${(props) => props.theme.colors.selago};
+        }
       }
       .save-btn-container {
         display: flex;

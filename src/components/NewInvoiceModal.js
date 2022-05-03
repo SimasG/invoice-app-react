@@ -170,8 +170,16 @@ const NewInvoiceModal = () => {
   let n = 0;
 
   return (
-    <StyledNewInvoiceModal className="new-invoice-modal-overlay">
-      <main className="new-invoice-modal-container">
+    <StyledNewInvoiceModal
+      className="new-invoice-modal-overlay"
+      onClick={() => {
+        navigate("/");
+      }}
+    >
+      <main
+        className="new-invoice-modal-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h1>New Invoice</h1>
         <section className="bill-from-container">
           <p className="bill-from-parapgrah">Bill From</p>
@@ -314,7 +322,14 @@ const NewInvoiceModal = () => {
           </button>
         </section>
         <section className="new-invoice-btn-container">
-          <button className="discard-btn">Discard</button>
+          <button
+            className="discard-btn"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Discard
+          </button>
           <div className="save-btn-container">
             <button className="save-draft-btn">Save as Draft</button>
             <button onClick={handleAddNewInvoice} className="save-send-btn">

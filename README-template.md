@@ -17,6 +17,7 @@ BAD: Not as proper/uniform
 
 1. How properly am I using uuids?
 2. How to include more complex logic in state, like math (e.g. if qty = 2 & price = 300, then total should automatically be 2 x 300 = 600)
+3. How to pre-fill invoice data in the EditInvoiceModal? Curveball: pre-filling the data for mapped items.
 
 //
 //

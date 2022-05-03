@@ -41,6 +41,9 @@ export const StyledInvoice = styled.main`
       justify-content: center;
       align-items: center;
       gap: 0.8rem;
+      a {
+        font-size: 2rem;
+      }
     }
   }
   .invoice-content-container {
