@@ -8,7 +8,7 @@ import {
   toAddressinputs,
   paymentTermsInputs,
 } from "../formSource";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -75,6 +75,8 @@ const NewInvoiceModal = () => {
       itemList,
     });
   };
+
+  console.log(data);
 
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
