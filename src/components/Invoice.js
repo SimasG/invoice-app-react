@@ -8,7 +8,7 @@ import { InvoicesContext } from "../contexts/InvoicesContext";
 import dayjs from "dayjs";
 
 const Invoice = () => {
-  const [editOpen, setEditOpen] = useState(false);
+  // const [editOpen, setEditOpen] = useState(false);
   const invoices = useContext(InvoicesContext);
   let params = useParams();
 

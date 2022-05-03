@@ -14,6 +14,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { createRandomLetters, createRandomNumbers } from "../misc/idGenerator";
 import { InvoicesContext } from "../contexts/InvoicesContext";
+import dayjs from "dayjs";
 
 const itemListInputs = [
   {
@@ -42,6 +43,8 @@ const itemListInputs = [
   },
 ];
 
+// TODO: Finish pre-filling invoice data (left off at itemList)
+
 const NewInvoiceModal = () => {
   const { currentUser } = useContext(AuthContext);
   const invoices = useContext(InvoicesContext);
@@ -60,6 +63,7 @@ const NewInvoiceModal = () => {
   const [toData, setToData] = useState();
   const [invoiceDate, setInvoiceDate] = useState();
   const [paymentTerms, setPaymentTerms] = useState();
+  const [description, setDescription] = useState();
   const [itemList, setItemList] = useState([
     {
       uid: uuidv4(),
@@ -69,7 +73,6 @@ const NewInvoiceModal = () => {
       total: 0,
     },
   ]);
-  const [description, setDescription] = useState();
 
   // Main state
   const [data, setData] = useState();
@@ -78,10 +81,17 @@ const NewInvoiceModal = () => {
     if (!selectedInvoice) return;
     setFromData(selectedInvoice.fromData);
     setToData(selectedInvoice.toData);
-    // setInvoiceDate(selectedInvoice.)
+    setInvoiceDate({
+      invoiceDate: new Date(
+        dayjs.unix(selectedInvoice.invoiceDate.seconds).format("DD-MMM-YYYY")
+      ),
+    });
+    setPaymentTerms({ paymentTerms: selectedInvoice.paymentTerms });
+    setDescription({ description: selectedInvoice.description });
+    setItemList(selectedInvoice.itemList);
   }, [selectedInvoice]);
 
-  console.log(selectedInvoice);
+  console.log(itemList);
 
   // AGGREGATING SUB-STATES INTO MAIN STATE
   const handleSetData = () => {
@@ -95,6 +105,7 @@ const NewInvoiceModal = () => {
     });
   };
 
+  //   Adding event listeners to each paymentTerms option
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
@@ -187,6 +198,7 @@ const NewInvoiceModal = () => {
 
   // Counter for mapped items (cancer)
   let n = 0;
+  let m = -1;
 
   return (
     <>
@@ -236,67 +248,74 @@ const NewInvoiceModal = () => {
                     </div>
                   ))}
               </div>
-              <div className="invoice-info-container">
-                <DatePicker
-                  styles={{
-                    wrapper: {
-                      width: "24rem",
-                    },
-                    calendarHeader: {
-                      width: "22rem",
-                    },
-                    month: {
-                      width: "21.5rem",
-                    },
-                    dropdown: {
-                      width: "24rem",
-                    },
-                    arrow: {
-                      color: "green",
-                    },
-                  }}
-                  className="mantine-date-picker"
-                  placeholder="Pick date"
-                  label="Invoice date"
-                  id="invoice-date"
-                  onChange={handleInvoiceDateInput}
-                />
-                <div className="payment-terms-container">
-                  <label>Payment Terms</label>
-                  <div className="payment-terms-select-box">
-                    <div className="options-container">
-                      {paymentTermsInputs.map((input) => (
-                        <div
-                          className="option"
-                          key={input.id}
-                          onClick={handlePaymentTermInput}
-                        >
-                          <input
-                            type={input.type}
-                            className={input.className}
-                            id={input.id}
-                            name={input.name}
-                          />
-                          <label htmlFor={input.id}>{input.label}</label>
-                        </div>
-                      ))}
-                    </div>
-                    <div
-                      className="selected"
-                      onClick={() => handleSelectedPaymentTermBtn()}
-                    >
-                      <h4>Select Payment Terms</h4>
+              {invoiceDate && (
+                <div className="invoice-info-container">
+                  <DatePicker
+                    styles={{
+                      wrapper: {
+                        width: "24rem",
+                      },
+                      calendarHeader: {
+                        width: "22rem",
+                      },
+                      month: {
+                        width: "21.5rem",
+                      },
+                      dropdown: {
+                        width: "24rem",
+                      },
+                      arrow: {
+                        color: "green",
+                      },
+                    }}
+                    className="mantine-date-picker"
+                    placeholder="Pick date"
+                    label="Invoice date"
+                    id="invoice-date"
+                    value={invoiceDate.invoiceDate}
+                    onChange={handleInvoiceDateInput}
+                  />
+                  <div className="payment-terms-container">
+                    <label>Payment Terms</label>
+                    <div className="payment-terms-select-box">
+                      <div className="options-container">
+                        {paymentTerms &&
+                          paymentTermsInputs.map((input) => (
+                            <div
+                              className="option"
+                              key={input.id}
+                              onClick={handlePaymentTermInput}
+                            >
+                              <input
+                                type={input.type}
+                                className={input.className}
+                                id={input.id}
+                                name={input.name}
+                              />
+                              <label htmlFor={input.id}>{input.label}</label>
+                            </div>
+                          ))}
+                      </div>
+                      <div
+                        className="selected"
+                        onClick={() => handleSelectedPaymentTermBtn()}
+                      >
+                        <h4>{paymentTerms.paymentTerms}</h4>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
               <div className="project-description-container">
                 <label>Project Description</label>
-                <input
-                  type="text"
-                  placeholder="Project Description"
-                  onChange={handleDescriptionInput}
-                />
+                {description && (
+                  <input
+                    type="text"
+                    placeholder="Project Description"
+                    value={description.description}
+                    onChange={handleDescriptionInput}
+                  />
+                )}
               </div>
             </section>
             <section className="item-list-container">
@@ -304,8 +323,9 @@ const NewInvoiceModal = () => {
               <div className="item-list-input-table">
                 <div className="item-list-input-table-subcontainer">
                   {itemList.map((item) => {
-                    // Cancer
+                    // PURE CANCER
                     n += 1;
+                    m += 1;
                     return (
                       <div className="item" key={item.uid}>
                         {/* Recreated "itemListInputs" array in this file cuz wasn't able to access it from "formSource.js" for some reason */}
@@ -318,6 +338,7 @@ const NewInvoiceModal = () => {
                               placeholder={input.placeholder}
                               id={input.id}
                               // Handle updating items
+                              value={itemList[m][input.id]}
                               onChange={(e) => {
                                 setItemList(
                                   itemList.map((i) =>
