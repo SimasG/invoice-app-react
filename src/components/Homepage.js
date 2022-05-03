@@ -12,6 +12,7 @@ const Homepage = () => {
   const { currentUser } = useContext(AuthContext);
   const [data, setData] = useState([]);
 
+  // REPLACE THIS WITH A CUSTOM HOOK
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -72,7 +72,7 @@ const NewInvoiceModal = () => {
       ...invoiceDate,
       ...paymentTerms,
       ...description,
-      itemList: { ...itemList },
+      itemList,
     });
   };
 

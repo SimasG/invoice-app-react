@@ -31,7 +31,7 @@ const useFetchInvoices = () => {
       }
     };
     fetchData();
-  }, [currentUser.uid]);
+  }, []);
 
   return data;
 };
