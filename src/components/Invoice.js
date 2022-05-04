@@ -1,21 +1,34 @@
 import { useContext, useState } from "react";
 import { StyledInvoice } from "../styles/Invoice.styled";
 // import invoices from "../data.json";
-import { Link, useParams, Outlet } from "react-router-dom";
+import { Link, useParams, Outlet, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import EditInvoiceModal from "./EditInvoiceModal";
 import { InvoicesContext } from "../contexts/InvoicesContext";
 import dayjs from "dayjs";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
+import { AuthContext } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const Invoice = () => {
   // const [editOpen, setEditOpen] = useState(false);
+  const { currentUser } = useContext(AuthContext);
   const invoices = useContext(InvoicesContext);
   let params = useParams();
+  let navigate = useNavigate();
 
   const getInvoice = (id) => {
     return invoices.find((invoice) => invoice.id === id);
   };
   const selectedInvoice = getInvoice(params.id);
+
+  const deleteInvoice = async (id) => {
+    const invoiceDocRef = doc(db, "users", currentUser.uid, "invoices", id);
+    await deleteDoc(invoiceDocRef);
+    toast.success("Invoice has been deleted!");
+    navigate("/");
+  };
 
   const getTotal = () => {
     if (selectedInvoice) {
@@ -49,7 +62,9 @@ const Invoice = () => {
               >
                 Edit
               </Link>
-              <button>Delete</button>
+              <button onClick={() => deleteInvoice(selectedInvoice.id)}>
+                Delete
+              </button>
               <button>Mark as Paid</button>
             </div>
           </section>

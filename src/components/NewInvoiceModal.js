@@ -152,16 +152,18 @@ const NewInvoiceModal = () => {
   // CRUD -> C: Storing main state in a db
   const handleAddNewInvoice = async () => {
     // Declaring the reference to a particular document in Firebase (the variable name is a bit misleading)
+    const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
+
     const invoicesCollectionRef = doc(
       db,
       "users",
       currentUser.uid,
       "invoices",
-      uuidv4()
+      id
     );
     await setDoc(invoicesCollectionRef, {
       ...data,
-      id: `${createRandomLetters(2)}${createRandomNumbers(4)}`,
+      id: id,
       updatedAt: Timestamp.fromDate(new Date()),
     });
     toast.success("New invoice created!");

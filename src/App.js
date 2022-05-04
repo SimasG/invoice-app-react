@@ -36,6 +36,7 @@ function App() {
   const { currentUser, dispatch } = useContext(AuthContext);
   let navigate = useNavigate();
 
+  // Checking if user entered the app via the magic link
   useEffect(() => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
       let email = window.localStorage.getItem("emailForSignIn");

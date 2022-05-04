@@ -1,6 +1,6 @@
 import { StyledNewInvoiceModal } from "../styles/NewInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import toast from "react-hot-toast";
 import {
@@ -12,7 +12,6 @@ import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { createRandomLetters, createRandomNumbers } from "../misc/idGenerator";
 import { InvoicesContext } from "../contexts/InvoicesContext";
 import dayjs from "dayjs";
 
@@ -43,7 +42,9 @@ const itemListInputs = [
   },
 ];
 
-// TODO: Finish pre-filling invoice data (left off at itemList)
+// TODO: Ensure every value is captured when updating (currently missing last updated letter) -> WIP
+// TODO: Make sure changes are reflected in the frontend -> DONE
+// TODO: Make sure the specific doc is updated and not a clone of it created -> DONE
 
 const NewInvoiceModal = () => {
   const { currentUser } = useContext(AuthContext);
@@ -77,6 +78,7 @@ const NewInvoiceModal = () => {
   // Main state
   const [data, setData] = useState();
 
+  //   Populating the sub-states with selected invoice data
   useEffect(() => {
     if (!selectedInvoice) return;
     setFromData(selectedInvoice.fromData);
@@ -89,9 +91,8 @@ const NewInvoiceModal = () => {
     setPaymentTerms({ paymentTerms: selectedInvoice.paymentTerms });
     setDescription({ description: selectedInvoice.description });
     setItemList(selectedInvoice.itemList);
+    setData(selectedInvoice);
   }, [selectedInvoice]);
-
-  console.log(itemList);
 
   // AGGREGATING SUB-STATES INTO MAIN STATE
   const handleSetData = () => {
@@ -177,19 +178,13 @@ const NewInvoiceModal = () => {
     toast.success("Item deleted");
   };
 
-  // CRUD -> C: Storing main state in a db
-  const handleAddNewInvoice = async () => {
-    // Declaring the reference to a particular document in Firebase (the variable name is a bit misleading)
-    const invoicesCollectionRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "invoices",
-      uuidv4()
-    );
-    await setDoc(invoicesCollectionRef, {
+  // CRUD -> U: Updating main state in a db
+  const handleUpdateInvoice = async (id) => {
+    const invoicesDocRef = doc(db, "users", currentUser.uid, "invoices", id);
+    // Tbh, could also have done the same things with setDoc
+    await updateDoc(invoicesDocRef, {
       ...data,
-      id: `${createRandomLetters(2)}${createRandomNumbers(4)}`,
+      id: selectedInvoice.id,
       updatedAt: Timestamp.fromDate(new Date()),
     });
     toast.success("New invoice created!");
@@ -371,7 +366,10 @@ const NewInvoiceModal = () => {
                 Cancel
               </button>
               <div className="save-btn-container">
-                <button onClick={handleAddNewInvoice} className="save-send-btn">
+                <button
+                  onClick={() => handleUpdateInvoice(selectedInvoice.id)}
+                  className="save-send-btn"
+                >
                   Save Changes
                 </button>
               </div>
