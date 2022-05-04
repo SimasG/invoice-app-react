@@ -6,10 +6,12 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import dayjs from "dayjs";
 import { createRandomLetters, createRandomNumbers } from "../misc/idGenerator";
-import useFetchInvoices from "../hooks/useFetchInvoices";
+import { InvoicesContext } from "../contexts/InvoicesContext";
 
 const Homepage = () => {
   const { currentUser } = useContext(AuthContext);
+  // Using invoices object to display invoice status
+  // const invoices = useContext(InvoicesContext);
   const [data, setData] = useState([]);
 
   // REPLACE THIS WITH A CUSTOM HOOK

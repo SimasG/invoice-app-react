@@ -18,6 +18,7 @@ const useFetchInvoices = () => {
             // weird that we have access to doc.id but it isn't part of doc.data
             // list.push({ id: doc.id, ...doc.data() });
             // creating a custom id for each invoice to follow the project guidelines
+            // console.log(doc.data());
             list.push({
               id: `${createRandomLetters(2)}${createRandomNumbers(4)}`,
               ...doc.data(),

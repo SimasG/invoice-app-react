@@ -15,6 +15,13 @@ export const StyledHomepage = styled.main`
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
+      cursor: pointer;
+      h3 {
+        cursor: pointer;
+      }
+      select {
+        cursor: pointer;
+      }
     }
     .new-invoice-container {
       display: flex;

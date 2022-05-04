@@ -47,6 +47,7 @@ const itemListInputs = [
 // TODO: Make sure the specific doc is updated and not a clone of it created -> DONE
 
 const NewInvoiceModal = () => {
+  // Why am I importing currentUser in an object again?
   const { currentUser } = useContext(AuthContext);
   const invoices = useContext(InvoicesContext);
   let navigate = useNavigate();
