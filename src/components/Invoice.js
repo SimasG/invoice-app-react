@@ -3,7 +3,7 @@ import { StyledInvoice } from "../styles/Invoice.styled";
 // import invoices from "../data.json";
 import { Link, useParams, Outlet, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import EditInvoiceModal from "./EditInvoiceModal";
+import EditInvoiceModal from "./modals/EditInvoiceModal";
 import { InvoicesContext } from "../contexts/InvoicesContext";
 import dayjs from "dayjs";
 import { deleteDoc, doc } from "firebase/firestore";

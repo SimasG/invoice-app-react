@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
-import { StyledAuthModal } from "../styles/AuthModal.styled";
+import { StyledAuthModal } from "../../styles/modals/AuthModal.styled";
 import { MdOutlineEmail } from "react-icons/md";
 import { BsGoogle } from "react-icons/bs";
-import { auth, actionCodeSettings, db } from "../firebase";
+import { auth, actionCodeSettings, db } from "../../firebase";
 import {
   // Google auth
   GoogleAuthProvider,
@@ -10,7 +10,7 @@ import {
   // Passwordless auth
   sendSignInLinkToEmail,
 } from "firebase/auth";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 

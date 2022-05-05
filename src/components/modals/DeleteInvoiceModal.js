@@ -1,4 +1,4 @@
-import { StyledDeleteInvoiceModal } from "../styles/DeleteInvoiceModal.styled";
+import { StyledDeleteInvoiceModal } from "../../styles/modals/DeleteInvoiceModal.styled";
 
 const DeleteInvoiceModal = () => {
   return (

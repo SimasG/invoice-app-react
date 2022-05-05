@@ -1,4 +1,4 @@
-import { StyledEditInvoiceModal } from "../styles/EditInvoiceModal.styled";
+import { StyledEditInvoiceModal } from "../../styles/modals/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";

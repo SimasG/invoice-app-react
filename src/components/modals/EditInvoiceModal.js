@@ -1,18 +1,18 @@
-import { StyledNewInvoiceModal } from "../styles/NewInvoiceModal.styled";
+import { StyledNewInvoiceModal } from "../../styles/modals/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
 import { doc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import toast from "react-hot-toast";
 import {
   fromAddressInputs,
   toAddressinputs,
   paymentTermsInputs,
-} from "../formSource";
+} from "../../formSource";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { InvoicesContext } from "../contexts/InvoicesContext";
+import { InvoicesContext } from "../../contexts/InvoicesContext";
 import dayjs from "dayjs";
 
 const itemListInputs = [

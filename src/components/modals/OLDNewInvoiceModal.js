@@ -1,18 +1,21 @@
-import { StyledNewInvoiceModal } from "../styles/NewInvoiceModal.styled";
+import { StyledNewInvoiceModal } from "../../styles/modals/NewInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import toast from "react-hot-toast";
 import {
   fromAddressInputs,
   toAddressinputs,
   paymentTermsInputs,
-} from "../formSource";
-import { useContext, useState } from "react";
+} from "../../formSource";
+import { useContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { createRandomLetters, createRandomNumbers } from "../misc/idGenerator";
+import {
+  createRandomLetters,
+  createRandomNumbers,
+} from "../../misc/idGenerator";
 
 const itemListInputs = [
   {
@@ -58,6 +61,7 @@ const NewInvoiceModal = () => {
   const [toData, setToData] = useState();
   const [invoiceDate, setInvoiceDate] = useState();
   const [paymentTerms, setPaymentTerms] = useState();
+  const [description, setDescription] = useState();
   const [itemList, setItemList] = useState([
     {
       uid: uuidv4(),
@@ -67,7 +71,6 @@ const NewInvoiceModal = () => {
       total: 0,
     },
   ]);
-  const [description, setDescription] = useState();
 
   // Form main state
   const [data, setData] = useState();
@@ -82,6 +85,7 @@ const NewInvoiceModal = () => {
       ...description,
       itemList,
     });
+    handleAddNewInvoice();
   };
 
   document.querySelectorAll(".option").forEach((option) => {
@@ -157,45 +161,58 @@ const NewInvoiceModal = () => {
 
   // Form helper states
   const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
 
   // CRUD -> C: Storing main state in a db
-  const handleAddNewInvoice = async (e) => {
-    e.preventDefault();
-    handleSetData();
-    // setFormErrors(validate(data));
+  const handleAddNewInvoice = async () => {
+    // Since I'm setting state in the same func I'm using it, it is always one key stroke behind.
+    // Solution likely includes mergin sub-states and the main state
+    setFormErrors(validate(data));
+    setIsSubmit(true);
 
     // Declaring the reference to a particular document in Firebase (the variable name is a bit misleading)
-    // const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
+    const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
 
-    // const invoicesCollectionRef = doc(
-    //   db,
-    //   "users",
-    //   currentUser.uid,
-    //   "invoices",
-    //   id
-    // );
-    // await setDoc(invoicesCollectionRef, {
-    //   ...data,
-    //   id: id,
-    //   updatedAt: Timestamp.fromDate(new Date()),
-    // });
-    // toast.success("New invoice created!");
-    // navigate("/");
+    const invoicesCollectionRef = doc(
+      db,
+      "users",
+      currentUser.uid,
+      "invoices",
+      id
+    );
+    await setDoc(invoicesCollectionRef, {
+      ...data,
+      id: id,
+      updatedAt: Timestamp.fromDate(new Date()),
+    });
+    toast.success("New invoice created!");
+    navigate("/");
   };
 
-  // const validate = (data) => {
-  //   const errors = {};
-  //   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+  const validate = (data) => {
+    const errors = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
-  //   if (!data.fromData.streetAddress) {
-  //     errors.streetAddress = "Street Address is required!";
-  //   }
-  //   return errors;
-  // };
+    if (!data.fromData.streetAddress) {
+      errors.streetAddress = "Street Address is required!";
+    }
+    if (!data.fromData.city) {
+      errors.streetAddress = "City is required!";
+    }
+    if (!data.fromData.postCode) {
+      errors.streetAddress = "Post Code is required!";
+    }
+    if (!data.fromData.country) {
+      errors.streetAddress = "Country is required!";
+    }
+    return errors;
+  };
 
-  // console.log("data.fromData:", data.fromData);
-  // console.log("fromData:", fromData);
-  console.log(data);
+  useEffect(() => {
+    console.log(formErrors);
+  }, [formErrors]);
+
+  // console.log(Object.keys(formErrors).length);
 
   // Counter for mapped items (cancer)
   let n = 0;
@@ -212,7 +229,7 @@ const NewInvoiceModal = () => {
         onClick={(e) => e.stopPropagation()}
       >
         <h1>New Invoice</h1>
-        <form onSubmit={handleAddNewInvoice}>
+        <form>
           <section className="bill-from-container">
             <p className="bill-from-parapgrah">Bill From</p>
             <div className="from-address-container">
@@ -366,20 +383,22 @@ const NewInvoiceModal = () => {
             </button>
             <div className="save-btn-container">
               <button
-                type="submit"
+                // type="submit"
                 className="save-draft-btn"
-                // onClick={() => {
-                //   handleAddNewInvoice();
-                // }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSetData();
+                }}
               >
                 Save as Draft
               </button>
               <button
-                // onClick={() => {
-                //   handleAddNewInvoice();
-                // }}
-                type="submit"
+                // type="submit"
                 className="save-send-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSetData();
+                }}
               >
                 Save & Send
               </button>

@@ -3,17 +3,17 @@ import { ThemeProvider } from "styled-components";
 import Homepage from "./components/Homepage";
 import Sidebar from "./components/Sidebar";
 import Invoice from "./components/Invoice";
-import NewInvoiceModal from "./components/NewInvoiceModal";
-import DeleteInvoiceModal from "./components/DeleteInvoiceModal";
+import NewInvoiceModal from "./components/modals/NewInvoiceModal";
+import DeleteInvoiceModal from "./components/modals/DeleteInvoiceModal";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import AuthModal from "./components/AuthModal";
+import AuthModal from "./components/modals/AuthModal";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { auth, db } from "./firebase";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import EditInvoiceModal from "./components/EditInvoiceModal";
+import EditInvoiceModal from "./components/modals/EditInvoiceModal";
 
 const theme = {
   colors: {

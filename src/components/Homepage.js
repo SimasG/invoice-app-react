@@ -1,43 +1,13 @@
 import { StyledHomepage } from "../styles/Homepage.styled";
 import { Link, Outlet } from "react-router-dom";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../contexts/AuthContext";
 import dayjs from "dayjs";
-import { createRandomLetters, createRandomNumbers } from "../misc/idGenerator";
-import { InvoicesContext } from "../contexts/InvoicesContext";
+import useFetchInvoices from "../hooks/useFetchInvoices";
 
 const Homepage = () => {
-  const { currentUser } = useContext(AuthContext);
+  const invoices = useFetchInvoices();
+
   // Using invoices object to display invoice status
   // const invoices = useContext(InvoicesContext);
-  const [data, setData] = useState([]);
-
-  // REPLACE THIS WITH A CUSTOM HOOK
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const ref = collection(db, "users", currentUser.uid, "invoices");
-        const unsub = onSnapshot(ref, (querySnapshot) => {
-          let list = [];
-          querySnapshot.forEach((doc) => {
-            // weird that we have access to doc.id but it isn't part of doc.data
-            // creating a custom id for each invoice to follow the project guidelines
-            list.push({
-              id: `${createRandomLetters(2)}${createRandomNumbers(4)}`,
-              ...doc.data(),
-            });
-          });
-          setData(list);
-        });
-        return () => unsub();
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, []);
 
   const getTotal = (selectedItem) => {
     let total = 0;
@@ -69,8 +39,8 @@ const Homepage = () => {
           </div>
         </header>
         <section className="invoices-container">
-          {data.length > 0 &&
-            data.map((item) => (
+          {invoices.length > 0 &&
+            invoices.map((item) => (
               <Link
                 to={`/${item.toData.clientName}/${item.id}`}
                 className="invoice-container"
