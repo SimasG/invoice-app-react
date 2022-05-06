@@ -63,49 +63,22 @@ const NewInvoiceModal = () => {
       postCode: "",
       country: "",
     },
+    invoiceDate: "",
+    paymentTerms: "",
+    description: "",
+    itemList: [
+      {
+        uid: uuidv4(),
+        itemName: "",
+        price: 0,
+        qty: 0,
+        total: 0,
+      },
+    ],
   });
-
-  console.log(testData);
-
-  // Form sub-states
-
-  // If I didn't set the default state an object with a truthy value, I couldn't map over the inputs
-  // because they're initially empty.
-  // const [fromData, setFromData] = useState({
-  //   streetAddress: "",
-  //   city: "",
-  //   postCode: "",
-  //   country: "",
-  // });
-  const [toData, setToData] = useState();
-  const [invoiceDate, setInvoiceDate] = useState();
-  const [paymentTerms, setPaymentTerms] = useState();
-  const [description, setDescription] = useState();
-  const [itemList, setItemList] = useState([
-    {
-      uid: uuidv4(),
-      itemName: "",
-      price: 0,
-      qty: 0,
-      total: 0,
-    },
-  ]);
 
   // Form main state
   const [data, setData] = useState();
-
-  // AGGREGATING SUB-STATES INTO MAIN STATE
-  const handleSetData = () => {
-    setData({
-      // fromData: { ...fromData },
-      toData: { ...toData },
-      ...invoiceDate,
-      ...paymentTerms,
-      ...description,
-      itemList,
-    });
-    handleAddNewInvoice();
-  };
 
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
@@ -126,54 +99,30 @@ const NewInvoiceModal = () => {
     }
   };
 
-  // HANDLING DIFFERENT INPUTS
-  // const handleFromInput = (e) => {
-  //   const id = e.target.id;
-  //   const value = e.target.value;
-  //   setFromData({ ...fromData, [id]: value });
-  //   // handleSetData();
-  // };
-
-  const handleToInput = (e) => {
-    const id = e.target.id;
-    const value = e.target.value;
-    setToData({ ...toData, [id]: value });
-    // handleSetData();
-  };
-
-  const handleInvoiceDateInput = (e) => {
-    setInvoiceDate({ invoiceDate: e });
-    // handleSetData();
-  };
-
-  const handlePaymentTermInput = (e) => {
-    setPaymentTerms({ paymentTerms: e.target.innerText });
-    // handleSetData();
-  };
-
-  const handleDescriptionInput = (e) => {
-    setDescription({ description: e.target.value });
-    // handleSetData();
-  };
-
   // HANDLING ADDING & DELETING NEW ITEMS
-  const handleAddNewItem = () => {
-    const updatedItemList = [
-      ...itemList,
-      {
-        uid: uuidv4(),
-        itemName: "",
-        price: 0,
-        qty: 0,
-        total: 0,
-      },
-    ];
-    setItemList(updatedItemList);
+  const handleAddNewItem = (e) => {
+    e.preventDefault();
+    const updatedTestData = {
+      ...testData,
+      itemList: [
+        ...testData.itemList,
+        {
+          uid: uuidv4(),
+          itemName: "",
+          price: 0,
+          qty: 0,
+          total: 0,
+        },
+      ],
+    };
+    setTestData(updatedTestData);
   };
+
+  // TODO: Merge itemList state with the main state -> WIP
 
   const handleDeleteItem = (uid) => {
-    setItemList(itemList.filter((item) => uid !== item.uid));
-    toast.success("Item deleted");
+    // setItemList(itemList.filter((item) => uid !== item.uid));
+    // toast.success("Item deleted");
   };
 
   // CRUD -> C: Storing main state in a db
@@ -198,6 +147,9 @@ const NewInvoiceModal = () => {
 
   // Counter for mapped items (cancer)
   let n = 0;
+  let m = -1;
+
+  console.log(testData);
 
   return (
     <>
@@ -330,12 +282,12 @@ const NewInvoiceModal = () => {
                       }}
                     />
                   </div>
-                  <div key="streetAddress">
+                  <div key="toStreetAddress">
                     <label>Street Address</label>
                     <input
                       type="text"
                       placeholder="Street Address"
-                      id="streetAddress"
+                      id="toStreetAddress"
                       value={testData.toData.streetAddress}
                       onChange={(e) => {
                         setTestData({
@@ -348,12 +300,12 @@ const NewInvoiceModal = () => {
                       }}
                     />
                   </div>
-                  <div key="city">
+                  <div key="toCity">
                     <label>City</label>
                     <input
                       type="text"
                       placeholder="City"
-                      id="city"
+                      id="toCity"
                       value={testData.toData.city}
                       onChange={(e) => {
                         setTestData({
@@ -366,12 +318,12 @@ const NewInvoiceModal = () => {
                       }}
                     />
                   </div>
-                  <div key="postCode">
+                  <div key="toPostCode">
                     <label>Post Code</label>
                     <input
                       type="text"
                       placeholder="Post Code"
-                      id="postCode"
+                      id="toPostCode"
                       value={testData.toData.postCode}
                       onChange={(e) => {
                         setTestData({
@@ -384,12 +336,12 @@ const NewInvoiceModal = () => {
                       }}
                     />
                   </div>
-                  <div key="country">
+                  <div key="toCountry">
                     <label>Country</label>
                     <input
                       type="text"
                       placeholder="Country"
-                      id="country"
+                      id="toCountry"
                       value={testData.toData.country}
                       onChange={(e) => {
                         setTestData({
@@ -426,27 +378,94 @@ const NewInvoiceModal = () => {
                     placeholder="Pick date"
                     label="Invoice date"
                     id="invoice-date"
-                    onChange={handleInvoiceDateInput}
+                    value={testData.invoiceDate}
+                    onChange={(e) => {
+                      setTestData({
+                        ...testData,
+                        invoiceDate: e,
+                      });
+                    }}
                   />
                   <div className="payment-terms-container">
                     <label>Payment Terms</label>
                     <div className="payment-terms-select-box">
                       <div className="options-container">
-                        {paymentTermsInputs.map((input) => (
-                          <div
-                            className="option"
-                            key={input.id}
-                            onClick={handlePaymentTermInput}
-                          >
-                            <input
-                              type={input.type}
-                              className={input.className}
-                              id={input.id}
-                              name={input.name}
-                            />
-                            <label htmlFor={input.id}>{input.label}</label>
-                          </div>
-                        ))}
+                        <div
+                          className="option"
+                          key="net1Day"
+                          value={testData.paymentTerms}
+                          onClick={() =>
+                            setTestData({
+                              ...testData,
+                              paymentTerms: "Net 1 Day",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net1Day"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net1Day">Net 1 Day</label>
+                        </div>
+                        <div
+                          className="option"
+                          key="net7Days"
+                          value={testData.paymentTerms}
+                          onClick={() =>
+                            setTestData({
+                              ...testData,
+                              paymentTerms: "Net 7 Days",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net7Days"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net7Days">Net 7 Days</label>
+                        </div>
+                        <div
+                          className="option"
+                          key="net14Days"
+                          value={testData.paymentTerms}
+                          onClick={() =>
+                            setTestData({
+                              ...testData,
+                              paymentTerms: "Net 14 Days",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net14Days"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net14Days">Net 14 Days</label>
+                        </div>
+                        <div
+                          className="option"
+                          key="net30Days"
+                          value={testData.paymentTerms}
+                          onClick={() =>
+                            setTestData({
+                              ...testData,
+                              paymentTerms: "Net 30 Days",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net30Days"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net30Days">Net 30 Days</label>
+                        </div>
                       </div>
                       <div
                         className="selected"
@@ -462,7 +481,13 @@ const NewInvoiceModal = () => {
                   <input
                     type="text"
                     placeholder="Project Description"
-                    onChange={handleDescriptionInput}
+                    value={testData.description}
+                    onChange={(e) => {
+                      setTestData({
+                        ...testData,
+                        description: e.target.value,
+                      });
+                    }}
                   />
                 </div>
               </section>
@@ -470,13 +495,12 @@ const NewInvoiceModal = () => {
                 <h2>Item List</h2>
                 <div className="item-list-input-table">
                   <div className="item-list-input-table-subcontainer">
-                    {itemList.map((item) => {
+                    {testData.itemList.map((item) => {
                       // Cancer
                       n += 1;
+                      m += 1;
                       return (
                         <div className="item" key={item.uid}>
-                          {/* Recreated "itemListInputs" array in this file cuz wasn't able to access it from "formSource.js" for some reason */}
-                          {/* Ideally would not write logic in JSX but had trouble accessing multiple arguments in the callback otherwise */}
                           {itemListInputs.map((input) => (
                             <div key={input.id}>
                               {n <= 1 && <label>{input.label}</label>}
@@ -484,16 +508,18 @@ const NewInvoiceModal = () => {
                                 type={input.type}
                                 placeholder={input.placeholder}
                                 id={input.id}
-                                // Handle updating items
+                                value={testData.itemList[m][input.id]}
                                 onChange={(e) => {
-                                  setItemList(
-                                    itemList.map((i) =>
+                                  setTestData({
+                                    ...testData,
+                                    // Mapped items are automatically stored in an array you are mapping through.
+                                    // If I specify an array here, it'll become an increasingly nested array of arrays - no bueno.
+                                    itemList: testData.itemList.map((i) =>
                                       i.uid === item.uid
                                         ? { ...i, [input.id]: e.target.value }
                                         : i
-                                    )
-                                  );
-                                  // handleSetData();
+                                    ),
+                                  });
                                 }}
                               />
                             </div>
@@ -508,7 +534,10 @@ const NewInvoiceModal = () => {
                     })}
                   </div>
                 </div>
-                <button className="add-new-item-btn" onClick={handleAddNewItem}>
+                <button
+                  className="add-new-item-btn"
+                  onClick={(e) => handleAddNewItem(e)}
+                >
                   + Add New Item
                 </button>
               </section>
@@ -527,7 +556,6 @@ const NewInvoiceModal = () => {
                     className="save-draft-btn"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleSetData();
                     }}
                   >
                     Save as Draft
@@ -537,7 +565,6 @@ const NewInvoiceModal = () => {
                     className="save-send-btn"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleSetData();
                     }}
                   >
                     Save & Send
