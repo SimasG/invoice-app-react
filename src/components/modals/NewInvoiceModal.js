@@ -3,12 +3,7 @@ import { DatePicker } from "@mantine/dates";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import toast from "react-hot-toast";
-import {
-  fromAddressInputs,
-  toAddressinputs,
-  paymentTermsInputs,
-} from "../../formSource";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -44,41 +39,9 @@ const itemListInputs = [
   },
 ];
 
-const NewInvoiceModal = () => {
+const NewInvoiceModal = ({ data, setData }) => {
   const { currentUser } = useContext(AuthContext);
   let navigate = useNavigate();
-
-  const [testData, setTestData] = useState({
-    fromData: {
-      streetAddress: "",
-      city: "",
-      postCode: "",
-      country: "",
-    },
-    toData: {
-      clientName: "",
-      clientEmail: "",
-      streetAddress: "",
-      city: "",
-      postCode: "",
-      country: "",
-    },
-    invoiceDate: "",
-    paymentTerms: "",
-    description: "",
-    itemList: [
-      {
-        uid: uuidv4(),
-        itemName: "",
-        price: 0,
-        qty: 0,
-        total: 0,
-      },
-    ],
-  });
-
-  // Form main state
-  const [data, setData] = useState();
 
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
@@ -102,31 +65,32 @@ const NewInvoiceModal = () => {
   // HANDLING ADDING & DELETING NEW ITEMS
   const handleAddNewItem = (e) => {
     e.preventDefault();
-    const updatedTestData = {
-      ...testData,
+    const updatedData = {
+      ...data,
       itemList: [
-        ...testData.itemList,
+        ...data.itemList,
         {
           uid: uuidv4(),
           itemName: "",
-          price: 0,
-          qty: 0,
-          total: 0,
+          price: "",
+          qty: "",
+          total: "",
         },
       ],
     };
-    setTestData(updatedTestData);
+    setData(updatedData);
   };
 
-  // TODO: Merge itemList state with the main state -> WIP
-
   const handleDeleteItem = (uid) => {
-    // setItemList(itemList.filter((item) => uid !== item.uid));
-    // toast.success("Item deleted");
+    setData({
+      ...data,
+      itemList: data.itemList.filter((item) => uid !== item.uid),
+    });
+    toast.success("Item deleted");
   };
 
   // CRUD -> C: Storing main state in a db
-  const handleAddNewInvoice = async () => {
+  const handleAddNewInvoice = async (invoiceStatus) => {
     const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
 
     const invoicesCollectionRef = doc(
@@ -138,6 +102,7 @@ const NewInvoiceModal = () => {
     );
     await setDoc(invoicesCollectionRef, {
       ...data,
+      status: invoiceStatus,
       id: id,
       updatedAt: Timestamp.fromDate(new Date()),
     });
@@ -149,11 +114,9 @@ const NewInvoiceModal = () => {
   let n = 0;
   let m = -1;
 
-  console.log(testData);
-
   return (
     <>
-      {testData && (
+      {data && (
         <StyledNewInvoiceModal
           className="new-invoice-modal-overlay"
           onClick={() => {
@@ -175,12 +138,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Street Address"
                       id="streetAddress"
-                      value={testData.fromData.streetAddress}
+                      value={data.fromData.streetAddress}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           fromData: {
-                            ...testData.fromData,
+                            ...data.fromData,
                             streetAddress: e.target.value,
                           },
                         });
@@ -193,12 +156,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="City"
                       id="city"
-                      value={testData.fromData.city}
+                      value={data.fromData.city}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           fromData: {
-                            ...testData.fromData,
+                            ...data.fromData,
                             city: e.target.value,
                           },
                         });
@@ -211,12 +174,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Post Code"
                       id="postCode"
-                      value={testData.fromData.postCode}
+                      value={data.fromData.postCode}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           fromData: {
-                            ...testData.fromData,
+                            ...data.fromData,
                             postCode: e.target.value,
                           },
                         });
@@ -229,12 +192,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Country"
                       id="country"
-                      value={testData.fromData.country}
+                      value={data.fromData.country}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           fromData: {
-                            ...testData.fromData,
+                            ...data.fromData,
                             country: e.target.value,
                           },
                         });
@@ -252,12 +215,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Client's Name"
                       id="clientName"
-                      value={testData.toData.clientName}
+                      value={data.toData.clientName}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           toData: {
-                            ...testData.toData,
+                            ...data.toData,
                             clientName: e.target.value,
                           },
                         });
@@ -270,12 +233,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Client's Email"
                       id="clientEmail"
-                      value={testData.toData.clientEmail}
+                      value={data.toData.clientEmail}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           toData: {
-                            ...testData.toData,
+                            ...data.toData,
                             clientEmail: e.target.value,
                           },
                         });
@@ -288,12 +251,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Street Address"
                       id="toStreetAddress"
-                      value={testData.toData.streetAddress}
+                      value={data.toData.streetAddress}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           toData: {
-                            ...testData.toData,
+                            ...data.toData,
                             streetAddress: e.target.value,
                           },
                         });
@@ -306,12 +269,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="City"
                       id="toCity"
-                      value={testData.toData.city}
+                      value={data.toData.city}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           toData: {
-                            ...testData.toData,
+                            ...data.toData,
                             city: e.target.value,
                           },
                         });
@@ -324,12 +287,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Post Code"
                       id="toPostCode"
-                      value={testData.toData.postCode}
+                      value={data.toData.postCode}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           toData: {
-                            ...testData.toData,
+                            ...data.toData,
                             postCode: e.target.value,
                           },
                         });
@@ -342,12 +305,12 @@ const NewInvoiceModal = () => {
                       type="text"
                       placeholder="Country"
                       id="toCountry"
-                      value={testData.toData.country}
+                      value={data.toData.country}
                       onChange={(e) => {
-                        setTestData({
-                          ...testData,
+                        setData({
+                          ...data,
                           toData: {
-                            ...testData.toData,
+                            ...data.toData,
                             country: e.target.value,
                           },
                         });
@@ -378,10 +341,10 @@ const NewInvoiceModal = () => {
                     placeholder="Pick date"
                     label="Invoice date"
                     id="invoice-date"
-                    value={testData.invoiceDate}
+                    value={data.invoiceDate}
                     onChange={(e) => {
-                      setTestData({
-                        ...testData,
+                      setData({
+                        ...data,
                         invoiceDate: e,
                       });
                     }}
@@ -393,10 +356,10 @@ const NewInvoiceModal = () => {
                         <div
                           className="option"
                           key="net1Day"
-                          value={testData.paymentTerms}
+                          value={data.paymentTerms}
                           onClick={() =>
-                            setTestData({
-                              ...testData,
+                            setData({
+                              ...data,
                               paymentTerms: "Net 1 Day",
                             })
                           }
@@ -412,10 +375,10 @@ const NewInvoiceModal = () => {
                         <div
                           className="option"
                           key="net7Days"
-                          value={testData.paymentTerms}
+                          value={data.paymentTerms}
                           onClick={() =>
-                            setTestData({
-                              ...testData,
+                            setData({
+                              ...data,
                               paymentTerms: "Net 7 Days",
                             })
                           }
@@ -431,10 +394,10 @@ const NewInvoiceModal = () => {
                         <div
                           className="option"
                           key="net14Days"
-                          value={testData.paymentTerms}
+                          value={data.paymentTerms}
                           onClick={() =>
-                            setTestData({
-                              ...testData,
+                            setData({
+                              ...data,
                               paymentTerms: "Net 14 Days",
                             })
                           }
@@ -450,10 +413,10 @@ const NewInvoiceModal = () => {
                         <div
                           className="option"
                           key="net30Days"
-                          value={testData.paymentTerms}
+                          value={data.paymentTerms}
                           onClick={() =>
-                            setTestData({
-                              ...testData,
+                            setData({
+                              ...data,
                               paymentTerms: "Net 30 Days",
                             })
                           }
@@ -481,10 +444,10 @@ const NewInvoiceModal = () => {
                   <input
                     type="text"
                     placeholder="Project Description"
-                    value={testData.description}
+                    value={data.description}
                     onChange={(e) => {
-                      setTestData({
-                        ...testData,
+                      setData({
+                        ...data,
                         description: e.target.value,
                       });
                     }}
@@ -495,7 +458,7 @@ const NewInvoiceModal = () => {
                 <h2>Item List</h2>
                 <div className="item-list-input-table">
                   <div className="item-list-input-table-subcontainer">
-                    {testData.itemList.map((item) => {
+                    {data.itemList.map((item) => {
                       // Cancer
                       n += 1;
                       m += 1;
@@ -508,13 +471,13 @@ const NewInvoiceModal = () => {
                                 type={input.type}
                                 placeholder={input.placeholder}
                                 id={input.id}
-                                value={testData.itemList[m][input.id]}
+                                value={data.itemList[m][input.id]}
                                 onChange={(e) => {
-                                  setTestData({
-                                    ...testData,
+                                  setData({
+                                    ...data,
                                     // Mapped items are automatically stored in an array you are mapping through.
                                     // If I specify an array here, it'll become an increasingly nested array of arrays - no bueno.
-                                    itemList: testData.itemList.map((i) =>
+                                    itemList: data.itemList.map((i) =>
                                       i.uid === item.uid
                                         ? { ...i, [input.id]: e.target.value }
                                         : i
@@ -552,19 +515,21 @@ const NewInvoiceModal = () => {
                 </button>
                 <div className="save-btn-container">
                   <button
-                    // type="submit"
                     className="save-draft-btn"
                     onClick={(e) => {
                       e.preventDefault();
+                      handleAddNewInvoice("Draft");
+                      navigate("/");
                     }}
                   >
                     Save as Draft
                   </button>
                   <button
-                    // type="submit"
                     className="save-send-btn"
                     onClick={(e) => {
                       e.preventDefault();
+                      handleAddNewInvoice("Pending");
+                      navigate("/");
                     }}
                   >
                     Save & Send

@@ -1,17 +1,12 @@
 import { StyledNewInvoiceModal } from "../../styles/modals/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
-import { doc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
+import { doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import toast from "react-hot-toast";
-import {
-  fromAddressInputs,
-  toAddressinputs,
-  paymentTermsInputs,
-} from "../../formSource";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { InvoicesContext } from "../../contexts/InvoicesContext";
 import dayjs from "dayjs";
 
@@ -42,11 +37,7 @@ const itemListInputs = [
   },
 ];
 
-// TODO: Ensure every value is captured when updating (currently missing last updated letter) -> WIP
-// TODO: Make sure changes are reflected in the frontend -> DONE
-// TODO: Make sure the specific doc is updated and not a clone of it created -> DONE
-
-const NewInvoiceModal = () => {
+const EditInvoiceModal = ({ data, setData }) => {
   // Why am I importing currentUser in an object again?
   const { currentUser } = useContext(AuthContext);
   const invoices = useContext(InvoicesContext);
@@ -60,54 +51,18 @@ const NewInvoiceModal = () => {
 
   const selectedInvoice = getInvoice(params.id);
 
-  // Sub-states
-  const [fromData, setFromData] = useState();
-  const [toData, setToData] = useState();
-  const [invoiceDate, setInvoiceDate] = useState();
-  const [paymentTerms, setPaymentTerms] = useState();
-  const [description, setDescription] = useState();
-  const [itemList, setItemList] = useState([
-    {
-      uid: uuidv4(),
-      itemName: "",
-      price: 0,
-      qty: 0,
-      total: 0,
-    },
-  ]);
-
-  // Main state
-  const [data, setData] = useState();
-
-  //   Populating the sub-states with selected invoice data
+  //   Populating the invoice state with selected invoice data
   useEffect(() => {
     if (!selectedInvoice) return;
-    setFromData(selectedInvoice.fromData);
-    setToData(selectedInvoice.toData);
-    setInvoiceDate({
+    setData({
+      ...selectedInvoice,
       invoiceDate: new Date(
         dayjs.unix(selectedInvoice.invoiceDate.seconds).format("DD-MMM-YYYY")
       ),
+      paymentTerms: selectedInvoice.paymentTerms,
     });
-    setPaymentTerms({ paymentTerms: selectedInvoice.paymentTerms });
-    setDescription({ description: selectedInvoice.description });
-    setItemList(selectedInvoice.itemList);
-    setData(selectedInvoice);
-  }, [selectedInvoice]);
+  }, [selectedInvoice, setData]);
 
-  // AGGREGATING SUB-STATES INTO MAIN STATE
-  const handleSetData = () => {
-    setData({
-      fromData: { ...fromData },
-      toData: { ...toData },
-      ...invoiceDate,
-      ...paymentTerms,
-      ...description,
-      itemList,
-    });
-  };
-
-  //   Adding event listeners to each paymentTerms option
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       document.querySelector(".selected").innerHTML =
@@ -127,55 +82,30 @@ const NewInvoiceModal = () => {
     }
   };
 
-  // HANDLING DIFFERENT INPUTS
-  const handleFromInput = (e) => {
-    const id = e.target.id;
-    const value = e.target.value;
-    // Interesting "[id]" syntax. Instead of specifying a new key with the name of "id" (in the case of "id: value"),
-    // it takes the id of the currently active element and assigns the onChange value to it.
-    setFromData({ ...fromData, [id]: value });
-    handleSetData();
-  };
-
-  const handleToInput = (e) => {
-    const id = e.target.id;
-    const value = e.target.value;
-    setToData({ ...toData, [id]: value });
-    handleSetData();
-  };
-
-  const handleInvoiceDateInput = (e) => {
-    setInvoiceDate({ invoiceDate: e });
-    handleSetData();
-  };
-
-  const handlePaymentTermInput = (e) => {
-    setPaymentTerms({ paymentTerms: e.target.innerText });
-    handleSetData();
-  };
-
-  const handleDescriptionInput = (e) => {
-    setDescription({ description: e.target.value });
-    handleSetData();
-  };
-
   // HANDLING ADDING & DELETING NEW ITEMS
-  const handleAddNewItem = () => {
-    const updatedItemList = [
-      ...itemList,
-      {
-        uid: uuidv4(),
-        itemName: "",
-        price: 0,
-        qty: 0,
-        total: 0,
-      },
-    ];
-    setItemList(updatedItemList);
+  const handleAddNewItem = (e) => {
+    e.preventDefault();
+    const updatedData = {
+      ...data,
+      itemList: [
+        ...data.itemList,
+        {
+          uid: uuidv4(),
+          itemName: "",
+          price: "",
+          qty: "",
+          total: "",
+        },
+      ],
+    };
+    setData(updatedData);
   };
 
   const handleDeleteItem = (uid) => {
-    setItemList(itemList.filter((item) => uid !== item.uid));
+    setData({
+      ...data,
+      itemList: data.itemList.filter((item) => uid !== item.uid),
+    });
     toast.success("Item deleted");
   };
 
@@ -198,53 +128,211 @@ const NewInvoiceModal = () => {
 
   return (
     <>
-      {selectedInvoice && (
+      {data && (
         <StyledNewInvoiceModal
           className="new-invoice-modal-overlay"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            navigate("/");
+          }}
         >
           <main
             className="new-invoice-modal-container"
             onClick={(e) => e.stopPropagation()}
           >
-            <h1>Edit Invoice</h1>
-            <section className="bill-from-container">
-              <p className="bill-from-parapgrah">Bill From</p>
-              <div className="from-address-container">
-                {/* Weird that I have that "fromData" doesn't change immediately once "selectedInvoice" is fetched */}
-                {fromData &&
-                  fromAddressInputs.map((input) => (
-                    <div key={input.id}>
-                      <label>{input.label}</label>
-                      <input
-                        type={input.type}
-                        placeholder={input.placeholder}
-                        id={input.id}
-                        value={fromData[input.id]}
-                        onChange={handleFromInput}
-                      />
-                    </div>
-                  ))}
-              </div>
-            </section>
-            <section className="bill-to-container">
-              <p className="bill-to-parapgrah">Bill To</p>
-              <div className="client-info-container">
-                {toData &&
-                  toAddressinputs.map((input) => (
-                    <div key={input.id}>
-                      <label>{input.label}</label>
-                      <input
-                        type={input.type}
-                        placeholder={input.placeholder}
-                        id={input.id}
-                        value={toData[input.id]}
-                        onChange={handleToInput}
-                      />
-                    </div>
-                  ))}
-              </div>
-              {invoiceDate && (
+            <h1>
+              Edit <span>#</span>
+              {data.id}
+            </h1>
+            <form>
+              <section className="bill-from-container">
+                <p className="bill-from-parapgrah">Bill From</p>
+                <div className="from-address-container">
+                  <div key="streetAddress">
+                    <label>Street Address</label>
+                    <input
+                      type="text"
+                      placeholder="Street Address"
+                      id="streetAddress"
+                      value={data.fromData.streetAddress}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            streetAddress: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="city">
+                    <label>City</label>
+                    <input
+                      type="text"
+                      placeholder="City"
+                      id="city"
+                      value={data.fromData.city}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            city: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="postCode">
+                    <label>Post Code</label>
+                    <input
+                      type="text"
+                      placeholder="Post Code"
+                      id="postCode"
+                      value={data.fromData.postCode}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            postCode: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="country">
+                    <label>Country</label>
+                    <input
+                      type="text"
+                      placeholder="Country"
+                      id="country"
+                      value={data.fromData.country}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            country: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              </section>
+              <section className="bill-to-container">
+                <p className="bill-to-parapgrah">Bill To</p>
+                <div className="client-info-container">
+                  <div key="clientName">
+                    <label>Client's Name</label>
+                    <input
+                      type="text"
+                      placeholder="Client's Name"
+                      id="clientName"
+                      value={data.toData.clientName}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            clientName: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="clientEmail">
+                    <label>Client's Email</label>
+                    <input
+                      type="text"
+                      placeholder="Client's Email"
+                      id="clientEmail"
+                      value={data.toData.clientEmail}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            clientEmail: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="toStreetAddress">
+                    <label>Street Address</label>
+                    <input
+                      type="text"
+                      placeholder="Street Address"
+                      id="toStreetAddress"
+                      value={data.toData.streetAddress}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            streetAddress: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="toCity">
+                    <label>City</label>
+                    <input
+                      type="text"
+                      placeholder="City"
+                      id="toCity"
+                      value={data.toData.city}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            city: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="toPostCode">
+                    <label>Post Code</label>
+                    <input
+                      type="text"
+                      placeholder="Post Code"
+                      id="toPostCode"
+                      value={data.toData.postCode}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            postCode: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div key="toCountry">
+                    <label>Country</label>
+                    <input
+                      type="text"
+                      placeholder="Country"
+                      id="toCountry"
+                      value={data.toData.country}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            country: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
                 <div className="invoice-info-container">
                   <DatePicker
                     styles={{
@@ -268,113 +356,189 @@ const NewInvoiceModal = () => {
                     placeholder="Pick date"
                     label="Invoice date"
                     id="invoice-date"
-                    value={invoiceDate.invoiceDate}
-                    onChange={handleInvoiceDateInput}
+                    value={data.invoiceDate}
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        invoiceDate: e,
+                      });
+                    }}
                   />
                   <div className="payment-terms-container">
                     <label>Payment Terms</label>
                     <div className="payment-terms-select-box">
                       <div className="options-container">
-                        {paymentTerms &&
-                          paymentTermsInputs.map((input) => (
-                            <div
-                              className="option"
-                              key={input.id}
-                              onClick={handlePaymentTermInput}
-                            >
-                              <input
-                                type={input.type}
-                                className={input.className}
-                                id={input.id}
-                                name={input.name}
-                              />
-                              <label htmlFor={input.id}>{input.label}</label>
-                            </div>
-                          ))}
+                        <div
+                          className="option"
+                          key="net1Day"
+                          value={data.paymentTerms}
+                          onClick={() =>
+                            setData({
+                              ...data,
+                              paymentTerms: "Net 1 Day",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net1Day"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net1Day">Net 1 Day</label>
+                        </div>
+                        <div
+                          className="option"
+                          key="net7Days"
+                          value={data.paymentTerms}
+                          onClick={() =>
+                            setData({
+                              ...data,
+                              paymentTerms: "Net 7 Days",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net7Days"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net7Days">Net 7 Days</label>
+                        </div>
+                        <div
+                          className="option"
+                          key="net14Days"
+                          value={data.paymentTerms}
+                          onClick={() =>
+                            setData({
+                              ...data,
+                              paymentTerms: "Net 14 Days",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net14Days"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net14Days">Net 14 Days</label>
+                        </div>
+                        <div
+                          className="option"
+                          key="net30Days"
+                          value={data.paymentTerms}
+                          onClick={() =>
+                            setData({
+                              ...data,
+                              paymentTerms: "Net 30 Days",
+                            })
+                          }
+                        >
+                          <input
+                            type="radio"
+                            className="radio"
+                            id="net30Days"
+                            name="payment-term-date"
+                          />
+                          <label htmlFor="net30Days">Net 30 Days</label>
+                        </div>
                       </div>
                       <div
                         className="selected"
                         onClick={() => handleSelectedPaymentTermBtn()}
                       >
-                        <h4>{paymentTerms.paymentTerms}</h4>
+                        <h4>Select Payment Terms</h4>
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
-              <div className="project-description-container">
-                <label>Project Description</label>
-                {description && (
+                <div className="project-description-container">
+                  <label>Project Description</label>
                   <input
                     type="text"
                     placeholder="Project Description"
-                    value={description.description}
-                    onChange={handleDescriptionInput}
+                    value={data.description}
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        description: e.target.value,
+                      });
+                    }}
                   />
-                )}
-              </div>
-            </section>
-            <section className="item-list-container">
-              <h2>Item List</h2>
-              <div className="item-list-input-table">
-                <div className="item-list-input-table-subcontainer">
-                  {itemList.map((item) => {
-                    // PURE CANCER
-                    n += 1;
-                    m += 1;
-                    return (
-                      <div className="item" key={item.uid}>
-                        {/* Recreated "itemListInputs" array in this file cuz wasn't able to access it from "formSource.js" for some reason */}
-                        {/* Ideally would not write logic in JSX but had trouble accessing multiple arguments in the callback otherwise */}
-                        {itemListInputs.map((input) => (
-                          <div key={input.id}>
-                            {n <= 1 && <label>{input.label}</label>}
-                            <input
-                              type={input.type}
-                              placeholder={input.placeholder}
-                              id={input.id}
-                              // Handle updating items
-                              value={itemList[m][input.id]}
-                              onChange={(e) => {
-                                setItemList(
-                                  itemList.map((i) =>
-                                    i.uid === item.uid
-                                      ? { ...i, [input.id]: e.target.value }
-                                      : i
-                                  )
-                                );
-                                handleSetData();
-                              }}
-                            />
-                          </div>
-                        ))}
-                        <img
-                          src="/assets/icon-delete.svg"
-                          alt="delete item"
-                          onClick={() => handleDeleteItem(item.uid)}
-                        />
-                      </div>
-                    );
-                  })}
                 </div>
-              </div>
-              <button className="add-new-item-btn" onClick={handleAddNewItem}>
-                + Add New Item
-              </button>
-            </section>
-            <section className="new-invoice-btn-container">
-              <button className="discard-btn" onClick={() => navigate(-1)}>
-                Cancel
-              </button>
-              <div className="save-btn-container">
+              </section>
+              <section className="item-list-container">
+                <h2>Item List</h2>
+                <div className="item-list-input-table">
+                  <div className="item-list-input-table-subcontainer">
+                    {data.itemList.map((item) => {
+                      // Cancer
+                      n += 1;
+                      m += 1;
+                      return (
+                        <div className="item" key={item.uid}>
+                          {itemListInputs.map((input) => (
+                            <div key={input.id}>
+                              {n <= 1 && <label>{input.label}</label>}
+                              <input
+                                type={input.type}
+                                placeholder={input.placeholder}
+                                id={input.id}
+                                value={data.itemList[m][input.id]}
+                                onChange={(e) => {
+                                  setData({
+                                    ...data,
+                                    // Mapped items are automatically stored in an array you are mapping through.
+                                    // If I specify an array here, it'll become an increasingly nested array of arrays - no bueno.
+                                    itemList: data.itemList.map((i) =>
+                                      i.uid === item.uid
+                                        ? { ...i, [input.id]: e.target.value }
+                                        : i
+                                    ),
+                                  });
+                                }}
+                              />
+                            </div>
+                          ))}
+                          <img
+                            src="/assets/icon-delete.svg"
+                            alt="delete item"
+                            onClick={() => handleDeleteItem(item.uid)}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
                 <button
-                  onClick={() => handleUpdateInvoice(selectedInvoice.id)}
-                  className="save-send-btn"
+                  className="add-new-item-btn"
+                  onClick={(e) => handleAddNewItem(e)}
                 >
-                  Save Changes
+                  + Add New Item
                 </button>
-              </div>
-            </section>
+              </section>
+              <section className="new-invoice-btn-container">
+                <Link
+                  className="discard-btn"
+                  to={`/${selectedInvoice.toData.clientName}/${selectedInvoice.id}`}
+                >
+                  Cancel
+                </Link>
+                <div className="save-btn-container">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleUpdateInvoice(selectedInvoice.id);
+                    }}
+                    className="save-send-btn"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </section>
+            </form>
           </main>
         </StyledNewInvoiceModal>
       )}
@@ -382,4 +546,4 @@ const NewInvoiceModal = () => {
   );
 };
 
-export default NewInvoiceModal;
+export default EditInvoiceModal;

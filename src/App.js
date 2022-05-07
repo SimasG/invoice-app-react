@@ -7,13 +7,14 @@ import NewInvoiceModal from "./components/modals/NewInvoiceModal";
 import DeleteInvoiceModal from "./components/modals/DeleteInvoiceModal";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthModal from "./components/modals/AuthModal";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { auth, db } from "./firebase";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import EditInvoiceModal from "./components/modals/EditInvoiceModal";
+import { v4 as uuidv4 } from "uuid";
 
 const theme = {
   colors: {
@@ -61,6 +62,36 @@ function App() {
     }
   });
 
+  // Moving invoice state up
+  const [data, setData] = useState({
+    fromData: {
+      streetAddress: "",
+      city: "",
+      postCode: "",
+      country: "",
+    },
+    toData: {
+      clientName: "",
+      clientEmail: "",
+      streetAddress: "",
+      city: "",
+      postCode: "",
+      country: "",
+    },
+    invoiceDate: "",
+    paymentTerms: "",
+    description: "",
+    itemList: [
+      {
+        uid: uuidv4(),
+        itemName: "",
+        price: "",
+        qty: "",
+        total: "",
+      },
+    ],
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
@@ -69,11 +100,14 @@ function App() {
           <Sidebar />
           <Routes>
             <Route exact path="/" element={<Homepage />} />
-            <Route path="/newInvoice" element={<NewInvoiceModal />} />
+            <Route
+              path="/newInvoice"
+              element={<NewInvoiceModal data={data} setData={setData} />}
+            />
             <Route path="/:clientName/:id" element={<Invoice />} />
             <Route
               path="/:clientName/:id/edit"
-              element={<EditInvoiceModal />}
+              element={<EditInvoiceModal data={data} setData={setData} />}
             />
             <Route
               path="*"
