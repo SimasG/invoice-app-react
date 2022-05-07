@@ -104,7 +104,10 @@ function App() {
               path="/newInvoice"
               element={<NewInvoiceModal data={data} setData={setData} />}
             />
-            <Route path="/:clientName/:id" element={<Invoice />} />
+            <Route
+              path="/:clientName/:id"
+              element={<Invoice data={data} setData={setData} />}
+            />
             <Route
               path="/:clientName/:id/edit"
               element={<EditInvoiceModal data={data} setData={setData} />}

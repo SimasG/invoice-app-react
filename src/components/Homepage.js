@@ -61,10 +61,8 @@ const Homepage = () => {
                     currency: "GBP",
                   })}
                 </p>
-                <div className="status-container">
-                  <div className="circle"></div>
-                  <p>{item.paymentTerms}</p>
-                </div>
+                <p>{item.status}</p>
+                <p>{item.paymentTerms}</p>
                 <img src="/assets/icon-arrow-right.svg" alt="" />
               </Link>
             ))}

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyledInvoice } from "../styles/Invoice.styled";
 // import invoices from "../data.json";
 import { Link, useParams, Outlet, useNavigate } from "react-router-dom";
@@ -6,12 +6,12 @@ import { v4 as uuidv4 } from "uuid";
 import EditInvoiceModal from "./modals/EditInvoiceModal";
 import { InvoicesContext } from "../contexts/InvoicesContext";
 import dayjs from "dayjs";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 
-const Invoice = () => {
+const Invoice = ({ data, setData }) => {
   // const [editOpen, setEditOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const invoices = useContext(InvoicesContext);
@@ -21,7 +21,13 @@ const Invoice = () => {
   const getInvoice = (id) => {
     return invoices.find((invoice) => invoice.id === id);
   };
+
   const selectedInvoice = getInvoice(params.id);
+
+  useEffect(() => {
+    if (!selectedInvoice) return;
+    setData(selectedInvoice);
+  }, [selectedInvoice, setData]);
 
   const deleteInvoice = async (id) => {
     const invoiceDocRef = doc(db, "users", currentUser.uid, "invoices", id);
@@ -40,6 +46,20 @@ const Invoice = () => {
     }
   };
 
+  // CRUD -> U: Updating main state in a db
+  const handlePaidInvoice = async (id) => {
+    const invoicesDocRef = doc(db, "users", currentUser.uid, "invoices", id);
+    // Tbh, could also have done the same things with setDoc
+    await updateDoc(invoicesDocRef, {
+      ...data,
+      status: "Paid",
+      id: selectedInvoice.id,
+      updatedAt: Timestamp.fromDate(new Date()),
+    });
+    toast.success("New invoice created!");
+    navigate("/");
+  };
+
   return (
     <>
       {selectedInvoice && (
@@ -52,7 +72,7 @@ const Invoice = () => {
             <div className="status-subcontainer">
               <p>Status</p>
               <div className="status">
-                <p>status</p>
+                <p>{selectedInvoice.status}</p>
               </div>
             </div>
             <div className="invoice-control-subcontainer">
@@ -65,7 +85,9 @@ const Invoice = () => {
               <button onClick={() => deleteInvoice(selectedInvoice.id)}>
                 Delete
               </button>
-              <button>Mark as Paid</button>
+              <button onClick={() => handlePaidInvoice(selectedInvoice.id)}>
+                Mark as Paid
+              </button>
             </div>
           </section>
           <section className="invoice-content-container">

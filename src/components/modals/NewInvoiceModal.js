@@ -3,7 +3,7 @@ import { DatePicker } from "@mantine/dates";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import toast from "react-hot-toast";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,38 @@ const itemListInputs = [
 const NewInvoiceModal = ({ data, setData }) => {
   const { currentUser } = useContext(AuthContext);
   let navigate = useNavigate();
+
+  // Resetting the data on the first render
+  useEffect(() => {
+    setData({
+      fromData: {
+        streetAddress: "",
+        city: "",
+        postCode: "",
+        country: "",
+      },
+      toData: {
+        clientName: "",
+        clientEmail: "",
+        streetAddress: "",
+        city: "",
+        postCode: "",
+        country: "",
+      },
+      invoiceDate: "",
+      paymentTerms: "",
+      description: "",
+      itemList: [
+        {
+          uid: uuidv4(),
+          itemName: "",
+          price: "",
+          qty: "",
+          total: "",
+        },
+      ],
+    });
+  }, []);
 
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
