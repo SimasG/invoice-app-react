@@ -6,15 +6,18 @@ import useFetchInvoices from "../hooks/useFetchInvoices";
 const Homepage = () => {
   const invoices = useFetchInvoices();
 
-  // Using invoices object to display invoice status
-  // const invoices = useContext(InvoicesContext);
-
   const getTotal = (selectedItem) => {
     let total = 0;
     selectedItem.map((item) => {
       return (total += parseInt(item.total));
     });
     return total;
+  };
+
+  const openFilterOptions = () => {
+    document
+      .querySelector(".filter-option-container")
+      .classList.toggle("active");
   };
 
   return (
@@ -26,10 +29,24 @@ const Homepage = () => {
             <p>There are total invoices</p>
           </div>
           <div className="filter-container">
-            <h3>Filter by status</h3>
-            <select name="status-filter" id="">
-              Status filter
-            </select>
+            <div className="filter-title-container" onClick={openFilterOptions}>
+              <h3>Filter by status</h3>
+              <img src="/assets/icon-arrow-down.svg" alt="" />
+            </div>
+            <div className="filter-option-container">
+              <div className="filter-option">
+                <input type="checkbox" id="draft" />
+                <label htmlFor="draft">Draft</label>
+              </div>
+              <div className="filter-option">
+                <input type="checkbox" id="pending" />
+                <label htmlFor="pending">Pending</label>
+              </div>
+              <div className="filter-option">
+                <input type="checkbox" id="paid" />
+                <label htmlFor="paid">Paid</label>
+              </div>
+            </div>
           </div>
           <div className="new-invoice-container">
             <img src="/assets/icon-plus.svg" alt="" />

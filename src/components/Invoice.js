@@ -1,20 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { StyledInvoice } from "../styles/Invoice.styled";
-// import invoices from "../data.json";
 import { Link, useParams, Outlet, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import EditInvoiceModal from "./modals/EditInvoiceModal";
-import { InvoicesContext } from "../contexts/InvoicesContext";
 import dayjs from "dayjs";
 import { deleteDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
+import useFetchInvoices from "../hooks/useFetchInvoices";
 
 const Invoice = ({ data, setData }) => {
-  // const [editOpen, setEditOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
-  const invoices = useContext(InvoicesContext);
+  const invoices = useFetchInvoices();
   let params = useParams();
   let navigate = useNavigate();
 
@@ -184,12 +182,6 @@ const Invoice = ({ data, setData }) => {
           </section>
         </StyledInvoice>
       )}
-      {/* {editOpen && (
-        <EditInvoiceModal
-          setEditOpen={setEditOpen}
-          // selectedInvoice={selectedInvoice}
-        />
-      )} */}
       <Outlet />
     </>
   );

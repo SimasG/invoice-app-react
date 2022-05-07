@@ -7,8 +7,8 @@ import { useContext, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { InvoicesContext } from "../../contexts/InvoicesContext";
 import dayjs from "dayjs";
+import useFetchInvoices from "../../hooks/useFetchInvoices";
 
 const itemListInputs = [
   {
@@ -40,7 +40,8 @@ const itemListInputs = [
 const EditInvoiceModal = ({ data, setData }) => {
   // Why am I importing currentUser in an object again?
   const { currentUser } = useContext(AuthContext);
-  const invoices = useContext(InvoicesContext);
+  const invoices = useFetchInvoices();
+
   let navigate = useNavigate();
 
   const params = useParams();
@@ -522,7 +523,7 @@ const EditInvoiceModal = ({ data, setData }) => {
               <section className="new-invoice-btn-container">
                 <Link
                   className="discard-btn"
-                  to={`/${selectedInvoice.toData.clientName}/${selectedInvoice.id}`}
+                  to={`/${data.toData.clientName}/${data.id}`}
                 >
                   Cancel
                 </Link>
@@ -530,7 +531,7 @@ const EditInvoiceModal = ({ data, setData }) => {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      handleUpdateInvoice(selectedInvoice.id);
+                      handleUpdateInvoice(data.id);
                     }}
                     className="save-send-btn"
                   >
