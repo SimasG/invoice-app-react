@@ -2,9 +2,16 @@ import { StyledHomepage } from "../styles/Homepage.styled";
 import { Link, Outlet } from "react-router-dom";
 import dayjs from "dayjs";
 import useFetchInvoices from "../hooks/useFetchInvoices";
+import { useState, useEffect } from "react";
 
 const Homepage = () => {
   const invoices = useFetchInvoices();
+  const [checkedState, setCheckedState] = useState([]);
+
+  useEffect(() => {
+    if (!invoices) return;
+    setCheckedState(new Array(invoices.length).fill(false));
+  }, [invoices]);
 
   const getTotal = (selectedItem) => {
     let total = 0;
@@ -34,16 +41,17 @@ const Homepage = () => {
               <img src="/assets/icon-arrow-down.svg" alt="" />
             </div>
             <div className="filter-option-container">
+              {/* Create an object with values for each filter option and map through them here */}
               <div className="filter-option">
-                <input type="checkbox" id="draft" />
+                <input type="checkbox" id="draft" value="Draft" />
                 <label htmlFor="draft">Draft</label>
               </div>
               <div className="filter-option">
-                <input type="checkbox" id="pending" />
+                <input type="checkbox" id="pending" value="Pending" />
                 <label htmlFor="pending">Pending</label>
               </div>
               <div className="filter-option">
-                <input type="checkbox" id="paid" />
+                <input type="checkbox" id="paid" value="Paid" />
                 <label htmlFor="paid">Paid</label>
               </div>
             </div>
@@ -83,47 +91,6 @@ const Homepage = () => {
                 <img src="/assets/icon-arrow-right.svg" alt="" />
               </Link>
             ))}
-
-          {/* {data.map((item) => (
-            <Link
-              to={`${item.toData.clientName}/${item.id}`}
-              className="invoice-container"
-              key={item.id}
-            >
-              <h3>
-                <span className="hashtag">#</span>
-                {item.id}
-              </h3>
-              <p>Due {item.invoiceDate}</p>
-              <p>{item.toData.clientName}</p>
-              <p>{item.itemList[0].total}</p>
-              <div className="status-container">
-                <div className="circle"></div>
-                <p>{item.paymentTerms}</p>
-              </div>
-              <img src="/assets/icon-arrow-right.svg" alt="" />
-            </Link>
-          ))} */}
-          {/* {invoices.map((invoice) => (
-            <Link
-              to={`${invoice.clientName}/${invoice.id}`}
-              className="invoice-container"
-              key={invoice.id}
-            >
-              <h3>
-                <span className="hashtag">#</span>
-                {invoice.id}
-              </h3>
-              <p>Due {invoice.paymentDue}</p>
-              <p>{invoice.clientName}</p>
-              <p>{invoice.total}</p>
-              <div className="status-container">
-                <div className="circle"></div>
-                <p>{invoice.status}</p>
-              </div>
-              <img src="/assets/icon-arrow-right.svg" alt="" />
-            </Link>
-          ))} */}
         </section>
       </StyledHomepage>
       <Outlet />
