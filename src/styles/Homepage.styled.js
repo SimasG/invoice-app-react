@@ -36,8 +36,15 @@ export const StyledHomepage = styled.main`
           align-items: center;
           gap: 1rem;
           padding: 1rem 0 1rem 0;
+          cursor: pointer;
           :hover {
             background-color: ${(props) => props.theme.colors.baliHai};
+          }
+          input {
+            cursor: pointer;
+          }
+          label {
+            cursor: pointer;
           }
         }
       }

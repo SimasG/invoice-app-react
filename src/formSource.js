@@ -94,3 +94,9 @@ export const paymentTermsInputs = [
     label: "Net 30 Days",
   },
 ];
+
+export const statusFilterInputs = [
+  { index: 0, id: "draft", status: "Draft" },
+  { index: 1, id: "pending", status: "Pending" },
+  { index: 2, id: "paid", status: "Paid" },
+];

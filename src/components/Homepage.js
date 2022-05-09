@@ -2,16 +2,41 @@ import { StyledHomepage } from "../styles/Homepage.styled";
 import { Link, Outlet } from "react-router-dom";
 import dayjs from "dayjs";
 import useFetchInvoices from "../hooks/useFetchInvoices";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { statusFilterInputs } from "../formSource";
+
+// Filter Feature
+// TODO1: List checkbox data  in a template (mapping an object to get container with 'Draft', 'Pending', 'Paid' checkboxes) -> DONE
+// TODO2: Create onChange func -> DONE
+// TODO3:
 
 const Homepage = () => {
+  const [checkedState, setCheckedState] = useState([
+    "Draft",
+    "Pending",
+    "Paid",
+  ]);
+  const [data, setData] = useState([]);
+
   const invoices = useFetchInvoices();
-  const [checkedState, setCheckedState] = useState([]);
 
   useEffect(() => {
     if (!invoices) return;
-    setCheckedState(new Array(invoices.length).fill(false));
+    setData(invoices);
   }, [invoices]);
+
+  const handleCheckedState = (position, status) => {
+    const currentIndex = checkedState.indexOf(status);
+    const newCheckedState = [...checkedState];
+
+    if (currentIndex === -1) {
+      newCheckedState.push(status);
+    } else {
+      newCheckedState.splice(currentIndex, 1);
+    }
+
+    setCheckedState(newCheckedState);
+  };
 
   const getTotal = (selectedItem) => {
     let total = 0;
@@ -41,19 +66,23 @@ const Homepage = () => {
               <img src="/assets/icon-arrow-down.svg" alt="" />
             </div>
             <div className="filter-option-container">
-              {/* Create an object with values for each filter option and map through them here */}
-              <div className="filter-option">
-                <input type="checkbox" id="draft" value="Draft" />
-                <label htmlFor="draft">Draft</label>
-              </div>
-              <div className="filter-option">
-                <input type="checkbox" id="pending" value="Pending" />
-                <label htmlFor="pending">Pending</label>
-              </div>
-              <div className="filter-option">
-                <input type="checkbox" id="paid" value="Paid" />
-                <label htmlFor="paid">Paid</label>
-              </div>
+              {statusFilterInputs.map((input) => {
+                const { id, index, status } = input;
+                return (
+                  <div className="filter-option" key={id}>
+                    <input
+                      type="checkbox"
+                      id={id}
+                      value={status}
+                      checked={
+                        checkedState.indexOf(status) === -1 ? false : true
+                      }
+                      onChange={() => handleCheckedState(index, status)}
+                    />
+                    <label htmlFor="draft">{status}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="new-invoice-container">
@@ -64,8 +93,11 @@ const Homepage = () => {
           </div>
         </header>
         <section className="invoices-container">
-          {invoices.length > 0 &&
-            invoices.map((item) => (
+          {data
+            .filter((item) => {
+              return checkedState.includes(item.status);
+            })
+            .map((item) => (
               <Link
                 to={`/${item.toData.clientName}/${item.id}`}
                 className="invoice-container"
