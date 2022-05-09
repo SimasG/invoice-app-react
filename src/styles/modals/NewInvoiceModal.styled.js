@@ -44,6 +44,10 @@ export const StyledNewInvoiceModal = styled.div`
             input {
               width: 15.2rem;
             }
+            p {
+              color: red;
+              font-size: 1rem;
+            }
           }
         }
       }
@@ -60,11 +64,17 @@ export const StyledNewInvoiceModal = styled.div`
           align-items: center;
           flex-wrap: wrap;
           margin-bottom: 3rem;
+          div {
+            margin-bottom: 1.5rem;
+            p {
+              color: red;
+              font-size: 1rem;
+            }
+          }
           div:nth-child(-n + 3) {
             width: 100%;
             input {
               width: 100%;
-              margin-bottom: 1.5rem;
             }
           }
         }
@@ -72,7 +82,13 @@ export const StyledNewInvoiceModal = styled.div`
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          .mantine-date-picker {
+          .date-picker-container {
+            .mantine-date-picker {
+            }
+            p {
+              color: red;
+              font-size: 1rem;
+            }
           }
           .payment-terms-container {
             .payment-terms-select-box {
@@ -142,12 +158,20 @@ export const StyledNewInvoiceModal = styled.div`
               .selected.margin-bottom {
                 margin-bottom: 2.4rem;
               }
+              p {
+                color: red;
+                font-size: 1rem;
+              }
             }
           }
         }
         .project-description-container {
           input {
             width: 100%;
+          }
+          p {
+            color: red;
+            font-size: 1rem;
           }
         }
       }

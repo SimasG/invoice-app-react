@@ -40,6 +40,8 @@ const itemListInputs = [
 ];
 
 const NewInvoiceModal = ({ data, setData }) => {
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { currentUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
@@ -74,6 +76,13 @@ const NewInvoiceModal = ({ data, setData }) => {
       ],
     });
   }, []);
+
+  // Submitting the form once there's no errors
+  useEffect(() => {
+    if (Object.keys(formErrors).length === 0 && isSubmitted) {
+      console.log("Form would be submitted!");
+    }
+  }, [formErrors]);
 
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
@@ -123,23 +132,76 @@ const NewInvoiceModal = ({ data, setData }) => {
 
   // CRUD -> C: Storing main state in a db
   const handleAddNewInvoice = async (invoiceStatus) => {
-    const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
+    setFormErrors(validate(data));
+    setIsSubmitted(true);
 
-    const invoicesCollectionRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "invoices",
-      id
-    );
-    await setDoc(invoicesCollectionRef, {
-      ...data,
-      status: invoiceStatus,
-      id: id,
-      updatedAt: Timestamp.fromDate(new Date()),
-    });
-    toast.success("New invoice created!");
-    navigate("/");
+    // const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
+
+    // const invoicesCollectionRef = doc(
+    //   db,
+    //   "users",
+    //   currentUser.uid,
+    //   "invoices",
+    //   id
+    // );
+    // await setDoc(invoicesCollectionRef, {
+    //   ...data,
+    //   status: invoiceStatus,
+    //   id: id,
+    //   updatedAt: Timestamp.fromDate(new Date()),
+    // });
+    // toast.success("New invoice created!");
+    // navigate("/");
+  };
+
+  const validate = (formData) => {
+    const errors = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if (!formData.fromData.streetAddress) {
+      errors.fromDataStreetAddress = "Street Address is Required!";
+    }
+    if (!formData.fromData.city) {
+      errors.fromDataCity = "Country is Required!";
+    }
+    if (!formData.fromData.postCode) {
+      errors.fromDataPostCode = "Post code is Required!";
+    }
+    if (!formData.fromData.country) {
+      errors.fromDataCountry = "Country is Required!";
+    }
+    if (!formData.toData.clientName) {
+      errors.toDataClientName = "Client Name is Required!";
+    }
+    if (!formData.toData.clientEmail) {
+      errors.toDataClientEmail = "Client Email is Required!";
+    } else if (!regex.test(formData.toData.clientEmail)) {
+      errors.toDataClientEmail = "The Email Format is Incorrect!";
+    }
+    if (!formData.toData.streetAddress) {
+      errors.toDataStreetAddress = "Street Address is Required!";
+    }
+    if (!formData.toData.city) {
+      errors.toDataCity = "City is Required!";
+    }
+    if (!formData.toData.postCode) {
+      errors.toDataPostCode = "Post Code is Required!";
+    }
+    if (!formData.toData.country) {
+      errors.toDataCountry = "Country is Required!";
+    }
+    if (!formData.invoiceDate) {
+      errors.invoiceDate = "Invoice Date is Required!";
+    }
+    if (!formData.paymentTerms) {
+      errors.paymentTerms = "Payment Terms are Required!";
+    }
+    if (!formData.description) {
+      errors.description = "Project Description is Required!";
+    }
+    // if (!formData.itemList.itemName) {
+    //   errors.itemListItemName = "Name is Required!";
+    // }
+    return errors;
   };
 
   // Counter for mapped items (cancer)
@@ -181,6 +243,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.fromDataStreetAddress}</p>
                   </div>
                   <div key="city">
                     <label>City</label>
@@ -199,6 +262,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.fromDataCity}</p>
                   </div>
                   <div key="postCode">
                     <label>Post Code</label>
@@ -217,6 +281,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.fromDataPostCode}</p>
                   </div>
                   <div key="country">
                     <label>Country</label>
@@ -235,6 +300,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.fromDataCountry}</p>
                   </div>
                 </div>
               </section>
@@ -258,6 +324,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.toDataClientName}</p>
                   </div>
                   <div key="clientEmail">
                     <label>Client's Email</label>
@@ -276,6 +343,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.toDataClientEmail}</p>
                   </div>
                   <div key="toStreetAddress">
                     <label>Street Address</label>
@@ -294,6 +362,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.toDataStreetAddress}</p>
                   </div>
                   <div key="toCity">
                     <label>City</label>
@@ -312,6 +381,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.toDataCity}</p>
                   </div>
                   <div key="toPostCode">
                     <label>Post Code</label>
@@ -330,6 +400,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.toDataPostCode}</p>
                   </div>
                   <div key="toCountry">
                     <label>Country</label>
@@ -348,39 +419,43 @@ const NewInvoiceModal = ({ data, setData }) => {
                         });
                       }}
                     />
+                    <p>{formErrors.toDataCountry}</p>
                   </div>
                 </div>
                 <div className="invoice-info-container">
-                  <DatePicker
-                    styles={{
-                      wrapper: {
-                        width: "24rem",
-                      },
-                      calendarHeader: {
-                        width: "22rem",
-                      },
-                      month: {
-                        width: "21.5rem",
-                      },
-                      dropdown: {
-                        width: "24rem",
-                      },
-                      arrow: {
-                        color: "green",
-                      },
-                    }}
-                    className="mantine-date-picker"
-                    placeholder="Pick date"
-                    label="Invoice date"
-                    id="invoice-date"
-                    value={data.invoiceDate}
-                    onChange={(e) => {
-                      setData({
-                        ...data,
-                        invoiceDate: e,
-                      });
-                    }}
-                  />
+                  <div className="date-picker-container">
+                    <DatePicker
+                      styles={{
+                        wrapper: {
+                          width: "24rem",
+                        },
+                        calendarHeader: {
+                          width: "22rem",
+                        },
+                        month: {
+                          width: "21.5rem",
+                        },
+                        dropdown: {
+                          width: "24rem",
+                        },
+                        arrow: {
+                          color: "green",
+                        },
+                      }}
+                      className="mantine-date-picker"
+                      placeholder="Pick date"
+                      label="Invoice date"
+                      id="invoice-date"
+                      value={data.invoiceDate}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          invoiceDate: e,
+                        });
+                      }}
+                    />
+                    <p>{formErrors.invoiceDate}</p>
+                  </div>
                   <div className="payment-terms-container">
                     <label>Payment Terms</label>
                     <div className="payment-terms-select-box">
@@ -468,6 +543,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       >
                         <h4>Select Payment Terms</h4>
                       </div>
+                      <p>{formErrors.paymentTerms}</p>
                     </div>
                   </div>
                 </div>
@@ -484,6 +560,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       });
                     }}
                   />
+                  <p>{formErrors.description}</p>
                 </div>
               </section>
               <section className="item-list-container">
@@ -517,6 +594,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                                   });
                                 }}
                               />
+                              {/* <p>{formErrors.itemListItemName}</p> */}
                             </div>
                           ))}
                           <img
@@ -551,7 +629,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       handleAddNewInvoice("Draft");
-                      navigate("/");
+                      // navigate("/");
                     }}
                   >
                     Save as Draft
@@ -561,7 +639,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       handleAddNewInvoice("Pending");
-                      navigate("/");
+                      // navigate("/");
                     }}
                   >
                     Save & Send
