@@ -5,11 +5,6 @@ import useFetchInvoices from "../hooks/useFetchInvoices";
 import { useEffect, useState } from "react";
 import { statusFilterInputs } from "../formSource";
 
-// Filter Feature
-// TODO1: List checkbox data  in a template (mapping an object to get container with 'Draft', 'Pending', 'Paid' checkboxes) -> DONE
-// TODO2: Create onChange func -> DONE
-// TODO3:
-
 const Homepage = () => {
   const [checkedState, setCheckedState] = useState([
     "Draft",
@@ -52,13 +47,31 @@ const Homepage = () => {
       .classList.toggle("active");
   };
 
+  const countInvoices = () => {
+    let sum = 0;
+    data.filter((item) => {
+      if (checkedState.includes(item.status)) {
+        sum += 1;
+      }
+      // Why does the .filter method expect a return value here?
+      return sum;
+    });
+    return sum;
+  };
+
   return (
     <>
       <StyledHomepage>
         <header>
           <div className="invoice-container">
             <h1>Invoices</h1>
-            <p>There are total invoices</p>
+            {countInvoices() > 1 && (
+              <p>There are {countInvoices()} total invoices</p>
+            )}
+            {countInvoices() === 1 && (
+              <p>There is {countInvoices()} total invoice</p>
+            )}
+            {countInvoices() === 0 && <p>No invoices</p>}
           </div>
           <div className="filter-container">
             <div className="filter-title-container" onClick={openFilterOptions}>

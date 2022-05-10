@@ -98,7 +98,7 @@ const Invoice = ({ data, setData }) => {
                 <p>{selectedInvoice.description}</p>
               </div>
               <div className="sender-address-container">
-                <p>{selectedInvoice.fromData.street}</p>
+                <p>{selectedInvoice.fromData.streetAddress}</p>
                 <p>{selectedInvoice.fromData.city}</p>
                 <p>{selectedInvoice.fromData.postCode}</p>
                 <p>{selectedInvoice.fromData.country}</p>

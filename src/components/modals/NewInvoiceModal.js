@@ -40,10 +40,43 @@ const itemListInputs = [
 ];
 
 const NewInvoiceModal = ({ data, setData }) => {
-  const [formErrors, setFormErrors] = useState({});
+  // Pure cancer. Need to find a way to sync formErrors state when submitting the form.
+  const [formErrors, setFormErrors] = useState({ fromDataStreetAddress: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { currentUser } = useContext(AuthContext);
   let navigate = useNavigate();
+
+  const resetData = () => {
+    // Re-setting invoice data
+    setData({
+      fromData: {
+        streetAddress: "",
+        city: "",
+        postCode: "",
+        country: "",
+      },
+      toData: {
+        clientName: "",
+        clientEmail: "",
+        streetAddress: "",
+        city: "",
+        postCode: "",
+        country: "",
+      },
+      invoiceDate: "",
+      paymentTerms: "",
+      description: "",
+      itemList: [
+        {
+          uid: uuidv4(),
+          itemName: "",
+          price: "",
+          qty: "",
+          total: "",
+        },
+      ],
+    });
+  };
 
   // Resetting the data on the first render
   useEffect(() => {
@@ -78,11 +111,6 @@ const NewInvoiceModal = ({ data, setData }) => {
   }, []);
 
   // Submitting the form once there's no errors
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmitted) {
-      console.log("Form would be submitted!");
-    }
-  }, [formErrors]);
 
   document.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
@@ -135,23 +163,27 @@ const NewInvoiceModal = ({ data, setData }) => {
     setFormErrors(validate(data));
     setIsSubmitted(true);
 
-    // const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
+    if (Object.keys(formErrors).length === 0) {
+      const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
 
-    // const invoicesCollectionRef = doc(
-    //   db,
-    //   "users",
-    //   currentUser.uid,
-    //   "invoices",
-    //   id
-    // );
-    // await setDoc(invoicesCollectionRef, {
-    //   ...data,
-    //   status: invoiceStatus,
-    //   id: id,
-    //   updatedAt: Timestamp.fromDate(new Date()),
-    // });
-    // toast.success("New invoice created!");
-    // navigate("/");
+      const invoicesCollectionRef = doc(
+        db,
+        "users",
+        currentUser.uid,
+        "invoices",
+        id
+      );
+      await setDoc(invoicesCollectionRef, {
+        ...data,
+        status: invoiceStatus,
+        id: id,
+        updatedAt: Timestamp.fromDate(new Date()),
+      });
+      toast.success("New invoice created!");
+      navigate("/");
+
+      resetData();
+    }
   };
 
   const validate = (formData) => {
@@ -198,9 +230,13 @@ const NewInvoiceModal = ({ data, setData }) => {
     if (!formData.description) {
       errors.description = "Project Description is Required!";
     }
-    // if (!formData.itemList.itemName) {
-    //   errors.itemListItemName = "Name is Required!";
-    // }
+
+    formData.itemList.forEach((item) => {
+      if (!item.itemName) {
+        errors.itemName = "Name is Required!";
+      }
+    });
+
     return errors;
   };
 
@@ -584,8 +620,6 @@ const NewInvoiceModal = ({ data, setData }) => {
                                 onChange={(e) => {
                                   setData({
                                     ...data,
-                                    // Mapped items are automatically stored in an array you are mapping through.
-                                    // If I specify an array here, it'll become an increasingly nested array of arrays - no bueno.
                                     itemList: data.itemList.map((i) =>
                                       i.uid === item.uid
                                         ? { ...i, [input.id]: e.target.value }
@@ -594,7 +628,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                                   });
                                 }}
                               />
-                              {/* <p>{formErrors.itemListItemName}</p> */}
+                              {/* {formErrors.itemName && <p>Name is Required!</p>} */}
                             </div>
                           ))}
                           <img
@@ -618,6 +652,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                 <button
                   className="discard-btn"
                   onClick={() => {
+                    resetData();
                     navigate("/");
                   }}
                 >
@@ -629,7 +664,6 @@ const NewInvoiceModal = ({ data, setData }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       handleAddNewInvoice("Draft");
-                      // navigate("/");
                     }}
                   >
                     Save as Draft
@@ -639,7 +673,6 @@ const NewInvoiceModal = ({ data, setData }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       handleAddNewInvoice("Pending");
-                      // navigate("/");
                     }}
                   >
                     Save & Send

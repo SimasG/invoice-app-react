@@ -207,6 +207,10 @@ export const StyledNewInvoiceModal = styled.div`
                 input {
                   width: 11rem;
                 }
+                p {
+                  color: red;
+                  font-size: 1rem;
+                }
               }
               img {
                 align-self: flex-end;
