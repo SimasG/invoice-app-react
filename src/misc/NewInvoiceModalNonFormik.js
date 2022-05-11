@@ -1,17 +1,13 @@
-import { StyledNewInvoiceModal } from "../../styles/modals/NewInvoiceModal.styled";
+import { StyledNewInvoiceModal } from "../styles/modals/NewInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../firebase";
 import toast from "react-hot-toast";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import {
-  createRandomLetters,
-  createRandomNumbers,
-} from "../../misc/idGenerator";
-import { useFormik } from "formik";
+import { createRandomLetters, createRandomNumbers } from "./idGenerator";
 
 const itemListInputs = [
   {
@@ -46,35 +42,6 @@ const NewInvoiceModal = ({ data, setData }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { currentUser } = useContext(AuthContext);
   let navigate = useNavigate();
-
-  const formik = useFormik({
-    initialValues: {
-      fromStreetAddress: "",
-      fromCity: "",
-      fromPostCode: "",
-      fromCountry: "",
-      clientName: "",
-      clientEmail: "",
-      toStreetAddress: "",
-      toCity: "",
-      toPostCode: "",
-      toCountry: "",
-      description: "",
-      // invoiceDate: "",
-      // paymentTerms: "",
-      // itemList: [
-      //   {
-      //     uid: uuidv4(),
-      //     itemName: "",
-      //     price: "",
-      //     qty: "",
-      //     total: "",
-      //   },
-      // ],
-    },
-  });
-
-  console.log(formik.values);
 
   const resetData = () => {
     // Re-setting invoice data
@@ -293,50 +260,78 @@ const NewInvoiceModal = ({ data, setData }) => {
                 <p className="bill-from-parapgrah">Bill From</p>
                 <div className="from-address-container">
                   <div key="streetAddress">
-                    <label htmlFor="fromStreetAddress">Street Address</label>
+                    <label>Street Address</label>
                     <input
                       type="text"
                       placeholder="Street Address"
-                      id="fromStreetAddress"
-                      name="fromStreetAddress"
-                      onChange={formik.handleChange}
-                      value={formik.values.fromStreetAddress}
+                      id="streetAddress"
+                      value={data.fromData.streetAddress}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            streetAddress: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.fromDataStreetAddress}</p>
                   </div>
                   <div key="city">
-                    <label htmlFor="fromCity">City</label>
+                    <label>City</label>
                     <input
                       type="text"
                       placeholder="City"
-                      id="fromCity"
-                      name="fromCity"
-                      value={formik.values.fromCity}
-                      onChange={formik.handleChange}
+                      id="city"
+                      value={data.fromData.city}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            city: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.fromDataCity}</p>
                   </div>
                   <div key="postCode">
-                    <label htmlFor="fromPostCode">Post Code</label>
+                    <label>Post Code</label>
                     <input
                       type="text"
                       placeholder="Post Code"
-                      id="fromPostCode"
-                      name="fromPostCode"
-                      value={formik.values.fromPostCode}
-                      onChange={formik.handleChange}
+                      id="postCode"
+                      value={data.fromData.postCode}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            postCode: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.fromDataPostCode}</p>
                   </div>
                   <div key="country">
-                    <label htmlFor="fromCountry">Country</label>
+                    <label>Country</label>
                     <input
                       type="text"
                       placeholder="Country"
-                      id="fromCountry"
-                      name="fromCountry"
-                      value={formik.values.fromCountry}
-                      onChange={formik.handleChange}
+                      id="country"
+                      value={data.fromData.country}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          fromData: {
+                            ...data.fromData,
+                            country: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.fromDataCountry}</p>
                   </div>
@@ -346,62 +341,97 @@ const NewInvoiceModal = ({ data, setData }) => {
                 <p className="bill-to-parapgrah">Bill To</p>
                 <div className="client-info-container">
                   <div key="clientName">
-                    <label htmlFor="clientName">Client's Name</label>
+                    <label>Client's Name</label>
                     <input
                       type="text"
                       placeholder="Client's Name"
                       id="clientName"
-                      name="clientName"
-                      value={formik.values.clientName}
-                      onChange={formik.handleChange}
+                      value={data.toData.clientName}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            clientName: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.toDataClientName}</p>
                   </div>
                   <div key="clientEmail">
-                    <label htmlFor="clientEmail">Client's Email</label>
+                    <label>Client's Email</label>
                     <input
                       type="text"
                       placeholder="Client's Email"
                       id="clientEmail"
-                      name="clientEmail"
-                      value={formik.values.clientEmail}
-                      onChange={formik.handleChange}
+                      value={data.toData.clientEmail}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            clientEmail: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.toDataClientEmail}</p>
                   </div>
                   <div key="toStreetAddress">
-                    <label htmlFor="toStreetAddress">Street Address</label>
+                    <label>Street Address</label>
                     <input
                       type="text"
                       placeholder="Street Address"
                       id="toStreetAddress"
-                      name="toStreetAddress"
-                      value={formik.values.toStreetAddress}
-                      onChange={formik.handleChange}
+                      value={data.toData.streetAddress}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            streetAddress: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.toDataStreetAddress}</p>
                   </div>
                   <div key="toCity">
-                    <label htmlFor="toCity">City</label>
+                    <label>City</label>
                     <input
                       type="text"
                       placeholder="City"
                       id="toCity"
-                      name="toCity"
-                      value={formik.values.toCity}
-                      onChange={formik.handleChange}
+                      value={data.toData.city}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            city: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.toDataCity}</p>
                   </div>
                   <div key="toPostCode">
-                    <label htmlFor="toPostCode">Post Code</label>
+                    <label>Post Code</label>
                     <input
                       type="text"
                       placeholder="Post Code"
                       id="toPostCode"
-                      name="toPostCode"
-                      value={formik.values.toPostCode}
-                      onChange={formik.handleChange}
+                      value={data.toData.postCode}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            postCode: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.toDataPostCode}</p>
                   </div>
@@ -411,16 +441,22 @@ const NewInvoiceModal = ({ data, setData }) => {
                       type="text"
                       placeholder="Country"
                       id="toCountry"
-                      name="toCountry"
-                      value={formik.values.toCountry}
-                      onChange={formik.handleChange}
+                      value={data.toData.country}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          toData: {
+                            ...data.toData,
+                            country: e.target.value,
+                          },
+                        });
+                      }}
                     />
                     <p>{formErrors.toDataCountry}</p>
                   </div>
                 </div>
-                {/* <div className="invoice-info-container">
+                <div className="invoice-info-container">
                   <div className="date-picker-container">
-                    Need to figure out how to add "htmlFor" attribute to the DatePicker component
                     <DatePicker
                       styles={{
                         wrapper: {
@@ -443,6 +479,13 @@ const NewInvoiceModal = ({ data, setData }) => {
                       placeholder="Pick date"
                       label="Invoice date"
                       id="invoice-date"
+                      value={data.invoiceDate}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          invoiceDate: e,
+                        });
+                      }}
                     />
                     <p>{formErrors.invoiceDate}</p>
                   </div>
@@ -536,20 +579,24 @@ const NewInvoiceModal = ({ data, setData }) => {
                       <p>{formErrors.paymentTerms}</p>
                     </div>
                   </div>
-                </div> */}
+                </div>
                 <div className="project-description-container">
-                  <label htmlFor="description">Project Description</label>
+                  <label>Project Description</label>
                   <input
                     type="text"
                     placeholder="Project Description"
-                    name="description"
-                    value={formik.values.description}
-                    onChange={formik.handleChange}
+                    value={data.description}
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        description: e.target.value,
+                      });
+                    }}
                   />
                   <p>{formErrors.description}</p>
                 </div>
               </section>
-              {/* <section className="item-list-container">
+              <section className="item-list-container">
                 <h2>Item List</h2>
                 <div className="item-list-input-table">
                   <div className="item-list-input-table-subcontainer">
@@ -578,6 +625,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                                   });
                                 }}
                               />
+                              {/* {formErrors.itemName && <p>Name is Required!</p>} */}
                             </div>
                           ))}
                           <img
@@ -596,7 +644,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                 >
                   + Add New Item
                 </button>
-              </section> */}
+              </section>
               <section className="new-invoice-btn-container">
                 <button
                   className="discard-btn"
