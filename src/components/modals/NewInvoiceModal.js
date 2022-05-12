@@ -11,7 +11,7 @@ import {
   createRandomLetters,
   createRandomNumbers,
 } from "../../misc/idGenerator";
-import { useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
 const itemListInputs = [
   {
@@ -47,34 +47,81 @@ const NewInvoiceModal = ({ data, setData }) => {
   const { currentUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
-  const formik = useFormik({
-    initialValues: {
-      fromStreetAddress: "",
-      fromCity: "",
-      fromPostCode: "",
-      fromCountry: "",
-      clientName: "",
-      clientEmail: "",
-      toStreetAddress: "",
-      toCity: "",
-      toPostCode: "",
-      toCountry: "",
-      description: "",
-      // invoiceDate: "",
-      // paymentTerms: "",
-      // itemList: [
-      //   {
-      //     uid: uuidv4(),
-      //     itemName: "",
-      //     price: "",
-      //     qty: "",
-      //     total: "",
-      //   },
-      // ],
-    },
-  });
+  const initialValues = {
+    fromStreetAddress: "",
+    fromCity: "",
+    fromPostCode: "",
+    fromCountry: "",
+    clientName: "",
+    clientEmail: "",
+    toStreetAddress: "",
+    toCity: "",
+    toPostCode: "",
+    toCountry: "",
+    description: "",
+    // invoiceDate: "",
+    // paymentTerms: "",
+    // itemList: [
+    //   {
+    //     uid: uuidv4(),
+    //     itemName: "",
+    //     price: "",
+    //     qty: "",
+    //     total: "",
+    //   },
+    // ],
+  };
 
-  console.log(formik.values);
+  const validate = (values) => {
+    let errors = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if (!values.fromStreetAddress) {
+      errors.fromStreetAddress = "Street Address is Required!";
+    }
+    if (!values.fromCity) {
+      errors.fromCity = "Country is Required!";
+    }
+    if (!values.fromPostCode) {
+      errors.fromPostCode = "Post code is Required!";
+    }
+    if (!values.fromCountry) {
+      errors.fromCountry = "Country is Required!";
+    }
+    if (!values.clientName) {
+      errors.clientName = "Client Name is Required!";
+    }
+    if (!values.clientEmail) {
+      errors.clientEmail = "Client Email is Required!";
+    } else if (!regex.test(values.clientEmail)) {
+      errors.clientEmail = "The Email Format is Incorrect!";
+    }
+    if (!values.toStreetAddress) {
+      errors.toStreetAddress = "Street Address is Required!";
+    }
+    if (!values.toCity) {
+      errors.toCity = "City is Required!";
+    }
+    if (!values.toPostCode) {
+      errors.toPostCode = "Post Code is Required!";
+    }
+    if (!values.toCountry) {
+      errors.toCountry = "Country is Required!";
+    }
+    // if (!values.invoiceDate) {
+    //   errors.invoiceDate = "Invoice Date is Required!";
+    // }
+    // if (!values.paymentTerms) {
+    //   errors.paymentTerms = "Payment Terms are Required!";
+    // }
+    if (!values.description) {
+      errors.description = "Project Description is Required!";
+    }
+    return errors;
+  };
+
+  const onSubmit = (values) => {
+    console.log("Form Data", values);
+  };
 
   const resetData = () => {
     // Re-setting invoice data
@@ -190,7 +237,7 @@ const NewInvoiceModal = ({ data, setData }) => {
 
   // CRUD -> C: Storing main state in a db
   const handleAddNewInvoice = async (invoiceStatus) => {
-    setFormErrors(validate(data));
+    setFormErrors(validateOld(data));
     setIsSubmitted(true);
 
     if (Object.keys(formErrors).length === 0) {
@@ -216,7 +263,7 @@ const NewInvoiceModal = ({ data, setData }) => {
     }
   };
 
-  const validate = (formData) => {
+  const validateOld = (formData) => {
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!formData.fromData.streetAddress) {
@@ -277,68 +324,57 @@ const NewInvoiceModal = ({ data, setData }) => {
   return (
     <>
       {data && (
-        <StyledNewInvoiceModal
-          className="new-invoice-modal-overlay"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <main
+        <StyledNewInvoiceModal className="new-invoice-modal-overlay">
+          <Formik
             className="new-invoice-modal-container"
-            onClick={(e) => e.stopPropagation()}
+            initialValues={initialValues}
+            validate={validate}
+            onSubmit={onSubmit}
           >
-            <h1>New Invoice</h1>
-            <form>
+            <Form className="new-invoice-modal-container">
+              <h1 className="title">New Invoice</h1>
               <section className="bill-from-container">
                 <p className="bill-from-parapgrah">Bill From</p>
                 <div className="from-address-container">
                   <div key="streetAddress">
                     <label htmlFor="fromStreetAddress">Street Address</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Street Address"
                       id="fromStreetAddress"
                       name="fromStreetAddress"
-                      onChange={formik.handleChange}
-                      value={formik.values.fromStreetAddress}
                     />
-                    <p>{formErrors.fromDataStreetAddress}</p>
+                    <ErrorMessage name="fromStreetAddress" />
                   </div>
                   <div key="city">
                     <label htmlFor="fromCity">City</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="City"
                       id="fromCity"
                       name="fromCity"
-                      value={formik.values.fromCity}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.fromDataCity}</p>
+                    <ErrorMessage name="fromCity" />
                   </div>
                   <div key="postCode">
                     <label htmlFor="fromPostCode">Post Code</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Post Code"
                       id="fromPostCode"
                       name="fromPostCode"
-                      value={formik.values.fromPostCode}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.fromDataPostCode}</p>
+                    <ErrorMessage name="fromPostCode" />
                   </div>
                   <div key="country">
                     <label htmlFor="fromCountry">Country</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Country"
                       id="fromCountry"
                       name="fromCountry"
-                      value={formik.values.fromCountry}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.fromDataCountry}</p>
+                    <ErrorMessage name="fromCountry" />
                   </div>
                 </div>
               </section>
@@ -347,80 +383,68 @@ const NewInvoiceModal = ({ data, setData }) => {
                 <div className="client-info-container">
                   <div key="clientName">
                     <label htmlFor="clientName">Client's Name</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Client's Name"
                       id="clientName"
                       name="clientName"
-                      value={formik.values.clientName}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.toDataClientName}</p>
+                    <ErrorMessage name="clientName" />
                   </div>
                   <div key="clientEmail">
                     <label htmlFor="clientEmail">Client's Email</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Client's Email"
                       id="clientEmail"
                       name="clientEmail"
-                      value={formik.values.clientEmail}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.toDataClientEmail}</p>
+                    <ErrorMessage name="clientEmail" />
                   </div>
                   <div key="toStreetAddress">
                     <label htmlFor="toStreetAddress">Street Address</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Street Address"
                       id="toStreetAddress"
                       name="toStreetAddress"
-                      value={formik.values.toStreetAddress}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.toDataStreetAddress}</p>
+                    <ErrorMessage name="toStreetAddress" />
                   </div>
                   <div key="toCity">
                     <label htmlFor="toCity">City</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="City"
                       id="toCity"
                       name="toCity"
-                      value={formik.values.toCity}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.toDataCity}</p>
+                    <ErrorMessage name="toCity" />
                   </div>
                   <div key="toPostCode">
                     <label htmlFor="toPostCode">Post Code</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Post Code"
                       id="toPostCode"
                       name="toPostCode"
-                      value={formik.values.toPostCode}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.toDataPostCode}</p>
+                    <ErrorMessage name="toPostCode" />
                   </div>
                   <div key="toCountry">
                     <label>Country</label>
-                    <input
+                    <Field
                       type="text"
                       placeholder="Country"
                       id="toCountry"
                       name="toCountry"
-                      value={formik.values.toCountry}
-                      onChange={formik.handleChange}
                     />
-                    <p>{formErrors.toDataCountry}</p>
+                    <ErrorMessage name="toCountry" />
                   </div>
                 </div>
                 {/* <div className="invoice-info-container">
                   <div className="date-picker-container">
-                    Need to figure out how to add "htmlFor" attribute to the DatePicker component
+                    <label htmlFor="invoiceDate">Invoice Date</label>
                     <DatePicker
                       styles={{
                         wrapper: {
@@ -441,9 +465,9 @@ const NewInvoiceModal = ({ data, setData }) => {
                       }}
                       className="mantine-date-picker"
                       placeholder="Pick date"
-                      label="Invoice date"
                       id="invoice-date"
-                    />
+                      name="invoiceDate"
+                    ></DatePicker>
                     <p>{formErrors.invoiceDate}</p>
                   </div>
                   <div className="payment-terms-container">
@@ -539,14 +563,12 @@ const NewInvoiceModal = ({ data, setData }) => {
                 </div> */}
                 <div className="project-description-container">
                   <label htmlFor="description">Project Description</label>
-                  <input
+                  <Field
                     type="text"
                     placeholder="Project Description"
                     name="description"
-                    value={formik.values.description}
-                    onChange={formik.handleChange}
                   />
-                  <p>{formErrors.description}</p>
+                  <ErrorMessage name="description" />
                 </div>
               </section>
               {/* <section className="item-list-container">
@@ -609,27 +631,29 @@ const NewInvoiceModal = ({ data, setData }) => {
                 </button>
                 <div className="save-btn-container">
                   <button
+                    type="submit"
                     className="save-draft-btn"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAddNewInvoice("Draft");
-                    }}
+                    // onClick={(e) => {
+                    //   e.preventDefault();
+                    //   handleAddNewInvoice("Draft");
+                    // }}
                   >
                     Save as Draft
                   </button>
                   <button
+                    type="submit"
                     className="save-send-btn"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAddNewInvoice("Pending");
-                    }}
+                    // onClick={(e) => {
+                    //   e.preventDefault();
+                    //   handleAddNewInvoice("Pending");
+                    // }}
                   >
                     Save & Send
                   </button>
                 </div>
               </section>
-            </form>
-          </main>
+            </Form>
+          </Formik>
         </StyledNewInvoiceModal>
       )}
     </>
