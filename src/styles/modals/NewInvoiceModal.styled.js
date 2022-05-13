@@ -89,7 +89,23 @@ export const StyledNewInvoiceModal = styled.div`
             font-size: 1rem;
           }
         }
-        .payment-terms-container {
+        select {
+          display: block;
+          width: 24rem;
+          padding: 6px 12px;
+          font-size: 14px;
+          line-height: 1.42857143;
+          color: #555;
+          background-color: #fff;
+          background-image: none;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+        p {
+          font-size: 1rem;
+          color: red;
+        }
+        /* .payment-terms-container {
           .payment-terms-select-box {
             display: flex;
             flex-direction: column;
@@ -161,7 +177,7 @@ export const StyledNewInvoiceModal = styled.div`
               font-size: 1rem;
             }
           }
-        }
+        } */
       }
       .project-description-container {
         input {
@@ -247,11 +263,17 @@ export const StyledNewInvoiceModal = styled.div`
           background-color: #373b53;
           color: ${(props) => props.theme.colors.baliHai};
           padding: 0 2.5rem;
+          :disabled {
+            background-color: rgba(136, 142, 176, 0.5);
+          }
         }
         .save-send-btn {
           background-color: ${(props) => props.theme.colors.cornflowerBlue};
           color: #fff;
           padding: 0 2.5rem;
+          :disabled {
+            background-color: rgba(124, 93, 250, 0.5);
+          }
         }
       }
     }

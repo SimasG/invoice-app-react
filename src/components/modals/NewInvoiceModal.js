@@ -12,6 +12,7 @@ import {
   createRandomNumbers,
 } from "../../misc/idGenerator";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import FormikControl from "../form/FormikControl";
 
 const itemListInputs = [
   {
@@ -47,6 +48,14 @@ const NewInvoiceModal = ({ data, setData }) => {
   const { currentUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
+  const dropdownOptions = [
+    { key: "Select Payment Terms", value: "" },
+    { key: "Net 1 Day", value: "net1day" },
+    { key: "Net 7 Days", value: "net7days" },
+    { key: "Net 14 Days", value: "net14days" },
+    { key: "Net 30 Days", value: "net30days" },
+  ];
+
   const initialValues = {
     fromStreetAddress: "",
     fromCity: "",
@@ -60,7 +69,7 @@ const NewInvoiceModal = ({ data, setData }) => {
     toCountry: "",
     description: "",
     // invoiceDate: "",
-    // paymentTerms: "",
+    paymentTerms: "",
     itemList: [
       {
         uid: uuidv4(),
@@ -110,18 +119,30 @@ const NewInvoiceModal = ({ data, setData }) => {
     // if (!values.invoiceDate) {
     //   errors.invoiceDate = "Invoice Date is Required!";
     // }
-    // if (!values.paymentTerms) {
-    //   errors.paymentTerms = "Payment Terms are Required!";
-    // }
-
+    if (!values.paymentTerms) {
+      errors.paymentTerms = "Payment Terms are Required!";
+    }
     if (!values.description) {
       errors.description = "Project Description is Required!";
     }
+    // if (!values.itemList[0].itemName) {
+    //   errors.itemList[0].itemName = "Name is Required!";
+    // }
+
+    // values.itemList.forEach((item) => {
+    //   if (!item.itemName) {
+    //     errors.itemList[0].itemName = "Name is Required!";
+    //   }
+    // });
     return errors;
   };
 
-  const onSubmit = (values) => {
+  const onSubmit = (values, onSubmitProps) => {
     console.log("Form Data", values);
+    // Setting "isSubmitting" back to false once the form has been submitted. IRL, would be done after the server response.
+    onSubmitProps.setSubmitting(false);
+    onSubmitProps.resetForm();
+    toast.success("New invoice created!");
   };
 
   const resetData = () => {
@@ -331,381 +352,316 @@ const NewInvoiceModal = ({ data, setData }) => {
             validate={validate}
             onSubmit={onSubmit}
           >
-            <Form className="new-invoice-modal-container">
-              <h1 className="title">New Invoice</h1>
-              <section className="bill-from-container">
-                <p className="bill-from-parapgrah">Bill From</p>
-                <div className="from-address-container">
-                  <div key="streetAddress">
-                    <label htmlFor="fromStreetAddress">Street Address</label>
-                    <Field
-                      type="text"
-                      placeholder="Street Address"
-                      id="fromStreetAddress"
-                      name="fromStreetAddress"
-                    />
-                    <ErrorMessage name="fromStreetAddress" component="p" />
-                  </div>
-                  <div key="city">
-                    <label htmlFor="fromCity">City</label>
-                    <Field
-                      type="text"
-                      placeholder="City"
-                      id="fromCity"
-                      name="fromCity"
-                    />
-                    <ErrorMessage name="fromCity" component="p" />
-                  </div>
-                  <div key="postCode">
-                    <label htmlFor="fromPostCode">Post Code</label>
-                    <Field
-                      type="text"
-                      placeholder="Post Code"
-                      id="fromPostCode"
-                      name="fromPostCode"
-                    />
-                    <ErrorMessage name="fromPostCode" component="p" />
-                  </div>
-                  <div key="country">
-                    <label htmlFor="fromCountry">Country</label>
-                    <Field
-                      type="text"
-                      placeholder="Country"
-                      id="fromCountry"
-                      name="fromCountry"
-                    />
-                    <ErrorMessage name="fromCountry" component="p" />
-                  </div>
-                </div>
-              </section>
-              <section className="bill-to-container">
-                <p className="bill-to-parapgrah">Bill To</p>
-                <div className="client-info-container">
-                  <div key="clientName">
-                    <label htmlFor="clientName">Client's Name</label>
-                    <Field
-                      type="text"
-                      placeholder="Client's Name"
-                      id="clientName"
-                      name="clientName"
-                    />
-                    <ErrorMessage name="clientName" component="p" />
-                  </div>
-                  <div key="clientEmail">
-                    <label htmlFor="clientEmail">Client's Email</label>
-                    <Field
-                      type="text"
-                      placeholder="Client's Email"
-                      id="clientEmail"
-                      name="clientEmail"
-                    />
-                    <ErrorMessage name="clientEmail" component="p" />
-                  </div>
-                  <div key="toStreetAddress">
-                    <label htmlFor="toStreetAddress">Street Address</label>
-                    <Field
-                      type="text"
-                      placeholder="Street Address"
-                      id="toStreetAddress"
-                      name="toStreetAddress"
-                    />
-                    <ErrorMessage name="toStreetAddress" component="p" />
-                  </div>
-                  <div key="toCity">
-                    <label htmlFor="toCity">City</label>
-                    <Field
-                      type="text"
-                      placeholder="City"
-                      id="toCity"
-                      name="toCity"
-                    />
-                    <ErrorMessage name="toCity" component="p" />
-                  </div>
-                  <div key="toPostCode">
-                    <label htmlFor="toPostCode">Post Code</label>
-                    <Field
-                      type="text"
-                      placeholder="Post Code"
-                      id="toPostCode"
-                      name="toPostCode"
-                    />
-                    <ErrorMessage name="toPostCode" component="p" />
-                  </div>
-                  <div key="toCountry">
-                    <label>Country</label>
-                    <Field
-                      type="text"
-                      placeholder="Country"
-                      id="toCountry"
-                      name="toCountry"
-                    />
-                    <ErrorMessage name="toCountry" component="p" />
-                  </div>
-                </div>
-                {/* <div className="invoice-info-container">
-                  <div className="date-picker-container">
-                    <label htmlFor="invoiceDate">Invoice Date</label>
-                    <DatePicker
-                      styles={{
-                        wrapper: {
-                          width: "24rem",
-                        },
-                        calendarHeader: {
-                          width: "22rem",
-                        },
-                        month: {
-                          width: "21.5rem",
-                        },
-                        dropdown: {
-                          width: "24rem",
-                        },
-                        arrow: {
-                          color: "green",
-                        },
-                      }}
-                      className="mantine-date-picker"
-                      placeholder="Pick date"
-                      id="invoice-date"
-                      name="invoiceDate"
-                    ></DatePicker>
-                    <p>{formErrors.invoiceDate}</p>
-                  </div>
-                  <div className="payment-terms-container">
-                    <label>Payment Terms</label>
-                    <div className="payment-terms-select-box">
-                      <div className="options-container">
-                        <div
-                          className="option"
-                          key="net1Day"
-                          value={data.paymentTerms}
-                          onClick={() =>
-                            setData({
-                              ...data,
-                              paymentTerms: "Net 1 Day",
-                            })
-                          }
-                        >
-                          <input
-                            type="radio"
-                            className="radio"
-                            id="net1Day"
-                            name="payment-term-date"
-                          />
-                          <label htmlFor="net1Day">Net 1 Day</label>
-                        </div>
-                        <div
-                          className="option"
-                          key="net7Days"
-                          value={data.paymentTerms}
-                          onClick={() =>
-                            setData({
-                              ...data,
-                              paymentTerms: "Net 7 Days",
-                            })
-                          }
-                        >
-                          <input
-                            type="radio"
-                            className="radio"
-                            id="net7Days"
-                            name="payment-term-date"
-                          />
-                          <label htmlFor="net7Days">Net 7 Days</label>
-                        </div>
-                        <div
-                          className="option"
-                          key="net14Days"
-                          value={data.paymentTerms}
-                          onClick={() =>
-                            setData({
-                              ...data,
-                              paymentTerms: "Net 14 Days",
-                            })
-                          }
-                        >
-                          <input
-                            type="radio"
-                            className="radio"
-                            id="net14Days"
-                            name="payment-term-date"
-                          />
-                          <label htmlFor="net14Days">Net 14 Days</label>
-                        </div>
-                        <div
-                          className="option"
-                          key="net30Days"
-                          value={data.paymentTerms}
-                          onClick={() =>
-                            setData({
-                              ...data,
-                              paymentTerms: "Net 30 Days",
-                            })
-                          }
-                        >
-                          <input
-                            type="radio"
-                            className="radio"
-                            id="net30Days"
-                            name="payment-term-date"
-                          />
-                          <label htmlFor="net30Days">Net 30 Days</label>
-                        </div>
-                      </div>
-                      <div
-                        className="selected"
-                        onClick={() => handleSelectedPaymentTermBtn()}
-                      >
-                        <h4>Select Payment Terms</h4>
-                      </div>
-                      <p>{formErrors.paymentTerms}</p>
+            {(formik) => {
+              return (
+                <Form className="new-invoice-modal-container">
+                  <h1 className="title">New Invoice</h1>
+                  <section className="bill-from-container">
+                    <p className="bill-from-parapgrah">Bill From</p>
+                    <div className="from-address-container">
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Street Address"
+                        name="fromStreetAddress"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="City"
+                        name="fromCity"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Post Code"
+                        name="fromPostCode"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Country"
+                        name="fromCountry"
+                      />
                     </div>
-                  </div>
-                </div> */}
-                <div className="project-description-container">
-                  <label htmlFor="description">Project Description</label>
-                  <Field
-                    type="text"
-                    placeholder="Project Description"
-                    name="description"
-                  />
-                  <ErrorMessage name="description" component="p" />
-                </div>
-              </section>
-              <section className="item-list-container">
-                <h2>Item List</h2>
-                <div className="item-list-input-table">
-                  <FieldArray name="itemList">
-                    {(fieldArrayProps) => {
-                      const { push, remove, form } = fieldArrayProps;
-                      const { values } = form;
-                      const { itemList } = values;
-                      console.log(itemList);
-                      return (
-                        <>
-                          <div className="item-list-input-table-subcontainer">
-                            {itemList.map((item, index) => (
-                              <div key={index} className="item">
-                                {itemListInputs.map((input) => (
-                                  <div key={input.id}>
-                                    {index < 1 && (
-                                      <label htmlFor={input.id}>
-                                        {input.label}
-                                      </label>
-                                    )}
-                                    <Field
-                                      type={input.type}
-                                      placeholder={input.placeholder}
-                                      name={`itemList[${index}].${input.id}`}
-                                    />
-                                  </div>
-                                ))}
-                                {itemList.length > 1 && (
-                                  <img
-                                    src="/assets/icon-delete.svg"
-                                    alt="delete item"
-                                    onClick={() => remove(index)}
-                                  />
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                          <button
-                            className="add-new-item-btn"
+                  </section>
+                  <section className="bill-to-container">
+                    <p className="bill-to-parapgrah">Bill To</p>
+                    <div className="client-info-container">
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Client's Name"
+                        name="clientName"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="email"
+                        label="Client's Email"
+                        name="clientEmail"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Street Address"
+                        name="toStreetAddress"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="City"
+                        name="toCity"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Post Code"
+                        name="toPostCode"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Country"
+                        name="toCountry"
+                      />
+                    </div>
+                    <div className="invoice-info-container">
+                      {/* <div className="date-picker-container">
+                      <label htmlFor="invoiceDate">Invoice Date</label>
+                      <DatePicker
+                        styles={{
+                          wrapper: {
+                            width: "24rem",
+                          },
+                          calendarHeader: {
+                            width: "22rem",
+                          },
+                          month: {
+                            width: "21.5rem",
+                          },
+                          dropdown: {
+                            width: "24rem",
+                          },
+                          arrow: {
+                            color: "green",
+                          },
+                        }}
+                        className="mantine-date-picker"
+                        placeholder="Pick date"
+                        id="invoice-date"
+                        name="invoiceDate"
+                      ></DatePicker>
+                      <p>{formErrors.invoiceDate}</p>
+                    </div> */}
+                      <FormikControl
+                        control="select"
+                        label="Payment Terms"
+                        name="paymentTerms"
+                        options={dropdownOptions}
+                      />
+                      {/* <div className="payment-terms-container">
+                      <label>Payment Terms</label>
+                      <div className="payment-terms-select-box">
+                        <div className="options-container">
+                          <div
+                            className="option"
+                            key="net1Day"
+                            value={data.paymentTerms}
                             onClick={() =>
-                              push({
-                                uid: uuidv4(),
-                                itemName: "",
-                                price: "",
-                                qty: "",
-                                total: "",
+                              setData({
+                                ...data,
+                                paymentTerms: "Net 1 Day",
                               })
                             }
                           >
-                            + Add New Item
-                          </button>
-                        </>
-                      );
-                    }}
-                    {/* {data.itemList.map((item) => {
-                      // Cancer
-                      n += 1;
-                      m += 1;
-                      return (
-                        <div className="item" key={item.uid}>
-                          {itemListInputs.map((input) => (
-                            <div key={input.id}>
-                              {n <= 1 && (
-                                <label htmlFor={input.id}>{input.label}</label>
-                              )}
-                              <input
-                                type={input.type}
-                                placeholder={input.placeholder}
-                                id={input.id}
-                                value={data.itemList[m][input.id]}
-                                onChange={(e) => {
-                                  setData({
-                                    ...data,
-                                    itemList: data.itemList.map((i) =>
-                                      i.uid === item.uid
-                                        ? { ...i, [input.id]: e.target.value }
-                                        : i
-                                    ),
-                                  });
-                                }}
-                              />
-                            </div>
-                          ))}
-                          <img
-                            src="/assets/icon-delete.svg"
-                            alt="delete item"
-                            onClick={() => handleDeleteItem(item.uid)}
-                          />
+                            <input
+                              type="radio"
+                              className="radio"
+                              id="net1Day"
+                              name="payment-term-date"
+                            />
+                            <label htmlFor="net1Day">Net 1 Day</label>
+                          </div>
+                          <div
+                            className="option"
+                            key="net7Days"
+                            value={data.paymentTerms}
+                            onClick={() =>
+                              setData({
+                                ...data,
+                                paymentTerms: "Net 7 Days",
+                              })
+                            }
+                          >
+                            <input
+                              type="radio"
+                              className="radio"
+                              id="net7Days"
+                              name="payment-term-date"
+                            />
+                            <label htmlFor="net7Days">Net 7 Days</label>
+                          </div>
+                          <div
+                            className="option"
+                            key="net14Days"
+                            value={data.paymentTerms}
+                            onClick={() =>
+                              setData({
+                                ...data,
+                                paymentTerms: "Net 14 Days",
+                              })
+                            }
+                          >
+                            <input
+                              type="radio"
+                              className="radio"
+                              id="net14Days"
+                              name="payment-term-date"
+                            />
+                            <label htmlFor="net14Days">Net 14 Days</label>
+                          </div>
+                          <div
+                            className="option"
+                            key="net30Days"
+                            value={data.paymentTerms}
+                            onClick={() =>
+                              setData({
+                                ...data,
+                                paymentTerms: "Net 30 Days",
+                              })
+                            }
+                          >
+                            <input
+                              type="radio"
+                              className="radio"
+                              id="net30Days"
+                              name="payment-term-date"
+                            />
+                            <label htmlFor="net30Days">Net 30 Days</label>
+                          </div>
                         </div>
-                      );
-                    })} */}
-                  </FieldArray>
-                </div>
-                {/* <button
-                  className="add-new-item-btn"
-                  onClick={(e) => handleAddNewItem(e)}
-                >
-                  + Add New Item
-                </button> */}
-              </section>
-              <section className="new-invoice-btn-container">
-                <button
-                  className="discard-btn"
-                  onClick={() => {
-                    resetData();
-                    navigate("/");
-                  }}
-                >
-                  Discard
-                </button>
-                <div className="save-btn-container">
-                  <button
-                    type="submit"
-                    className="save-draft-btn"
-                    // onClick={(e) => {
-                    //   e.preventDefault();
-                    //   handleAddNewInvoice("Draft");
-                    // }}
-                  >
-                    Save as Draft
-                  </button>
-                  <button
-                    type="submit"
-                    className="save-send-btn"
-                    // onClick={(e) => {
-                    //   e.preventDefault();
-                    //   handleAddNewInvoice("Pending");
-                    // }}
-                  >
-                    Save & Send
-                  </button>
-                </div>
-              </section>
-            </Form>
+                        <div
+                          className="selected"
+                          onClick={() => handleSelectedPaymentTermBtn()}
+                        >
+                          <h4>Select Payment Terms</h4>
+                        </div>
+                        <p>{formErrors.paymentTerms}</p>
+                      </div>
+                    </div> */}
+                    </div>
+                    <div className="project-description-container">
+                      <label htmlFor="description">Project Description</label>
+                      <Field
+                        type="text"
+                        placeholder="Project Description"
+                        name="description"
+                      />
+                      <ErrorMessage name="description" component="p" />
+                    </div>
+                  </section>
+                  <section className="item-list-container">
+                    <h2>Item List</h2>
+                    <div className="item-list-input-table">
+                      <FieldArray name="itemList">
+                        {(fieldArrayProps) => {
+                          const { push, remove, form } = fieldArrayProps;
+                          const { values } = form;
+                          const { itemList } = values;
+                          return (
+                            <>
+                              <div className="item-list-input-table-subcontainer">
+                                {itemList.map((item, index) => (
+                                  <div key={index} className="item">
+                                    {itemListInputs.map((input) => (
+                                      <div key={input.id}>
+                                        {index < 1 && (
+                                          <label htmlFor={input.id}>
+                                            {input.label}
+                                          </label>
+                                        )}
+                                        <Field
+                                          type={input.type}
+                                          placeholder={input.placeholder}
+                                          name={`itemList[${index}].${input.id}`}
+                                        />
+                                        {/* <ErrorMessage
+                                          name={`itemList[${index}].${input.id}`}
+                                          component="p"
+                                        /> */}
+                                      </div>
+                                    ))}
+                                    {itemList.length > 1 && (
+                                      <img
+                                        src="/assets/icon-delete.svg"
+                                        alt="delete item"
+                                        onClick={() => remove(index)}
+                                      />
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                              <button
+                                // If type is not specified, Formik will assume type is "submit" and try to submit the form
+                                type="button"
+                                className="add-new-item-btn"
+                                onClick={() =>
+                                  push({
+                                    uid: uuidv4(),
+                                    itemName: "",
+                                    price: "",
+                                    qty: "",
+                                    total: "",
+                                  })
+                                }
+                              >
+                                + Add New Item
+                              </button>
+                            </>
+                          );
+                        }}
+                      </FieldArray>
+                    </div>
+                  </section>
+                  <section className="new-invoice-btn-container">
+                    <button
+                      type="button"
+                      className="discard-btn"
+                      onClick={() => {
+                        resetData();
+                        navigate("/");
+                      }}
+                    >
+                      Discard
+                    </button>
+                    <div className="save-btn-container">
+                      <button
+                        type="submit"
+                        className="save-draft-btn"
+                        disabled={formik.isSubmitting}
+                        // onClick={(e) => {
+                        //   e.preventDefault();
+                        //   handleAddNewInvoice("Draft");
+                        // }}
+                      >
+                        Save as Draft
+                      </button>
+                      <button
+                        type="submit"
+                        className="save-send-btn"
+                        disabled={formik.isSubmitting}
+                        // onClick={(e) => {
+                        //   e.preventDefault();
+                        //   handleAddNewInvoice("Pending");
+                        // }}
+                      >
+                        Save & Send
+                      </button>
+                    </div>
+                  </section>
+                </Form>
+              );
+            }}
           </Formik>
         </StyledNewInvoiceModal>
       )}
