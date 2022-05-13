@@ -190,7 +190,7 @@ export const StyledNewInvoiceModal = styled.div`
           justify-content: space-between;
           align-items: center;
           width: 100%;
-          margin-bottom: 0.5rem;
+          margin-bottom: 2.5rem;
           .item {
             display: flex;
             justify-content: space-between;
@@ -216,13 +216,13 @@ export const StyledNewInvoiceModal = styled.div`
             }
           }
         }
-      }
-      .add-new-item-btn {
-        background-color: #f9fafe;
-        color: ${(props) => props.theme.colors.shipCove};
-        width: 100%;
-        :hover {
-          background-color: ${(props) => props.theme.colors.selago};
+        .add-new-item-btn {
+          background-color: #f9fafe;
+          color: ${(props) => props.theme.colors.shipCove};
+          width: 100%;
+          :hover {
+            background-color: ${(props) => props.theme.colors.selago};
+          }
         }
       }
     }

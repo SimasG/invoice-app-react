@@ -11,7 +11,7 @@ import {
   createRandomLetters,
   createRandomNumbers,
 } from "../../misc/idGenerator";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 
 const itemListInputs = [
   {
@@ -61,15 +61,15 @@ const NewInvoiceModal = ({ data, setData }) => {
     description: "",
     // invoiceDate: "",
     // paymentTerms: "",
-    // itemList: [
-    //   {
-    //     uid: uuidv4(),
-    //     itemName: "",
-    //     price: "",
-    //     qty: "",
-    //     total: "",
-    //   },
-    // ],
+    itemList: [
+      {
+        uid: uuidv4(),
+        itemName: "",
+        price: "",
+        qty: "",
+        total: "",
+      },
+    ],
   };
 
   const validate = (values) => {
@@ -79,7 +79,7 @@ const NewInvoiceModal = ({ data, setData }) => {
       errors.fromStreetAddress = "Street Address is Required!";
     }
     if (!values.fromCity) {
-      errors.fromCity = "Country is Required!";
+      errors.fromCity = "City is Required!";
     }
     if (!values.fromPostCode) {
       errors.fromPostCode = "Post code is Required!";
@@ -113,6 +113,7 @@ const NewInvoiceModal = ({ data, setData }) => {
     // if (!values.paymentTerms) {
     //   errors.paymentTerms = "Payment Terms are Required!";
     // }
+
     if (!values.description) {
       errors.description = "Project Description is Required!";
     }
@@ -326,7 +327,6 @@ const NewInvoiceModal = ({ data, setData }) => {
       {data && (
         <StyledNewInvoiceModal className="new-invoice-modal-overlay">
           <Formik
-            className="new-invoice-modal-container"
             initialValues={initialValues}
             validate={validate}
             onSubmit={onSubmit}
@@ -344,7 +344,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="fromStreetAddress"
                       name="fromStreetAddress"
                     />
-                    <ErrorMessage name="fromStreetAddress" />
+                    <ErrorMessage name="fromStreetAddress" component="p" />
                   </div>
                   <div key="city">
                     <label htmlFor="fromCity">City</label>
@@ -354,7 +354,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="fromCity"
                       name="fromCity"
                     />
-                    <ErrorMessage name="fromCity" />
+                    <ErrorMessage name="fromCity" component="p" />
                   </div>
                   <div key="postCode">
                     <label htmlFor="fromPostCode">Post Code</label>
@@ -364,7 +364,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="fromPostCode"
                       name="fromPostCode"
                     />
-                    <ErrorMessage name="fromPostCode" />
+                    <ErrorMessage name="fromPostCode" component="p" />
                   </div>
                   <div key="country">
                     <label htmlFor="fromCountry">Country</label>
@@ -374,7 +374,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="fromCountry"
                       name="fromCountry"
                     />
-                    <ErrorMessage name="fromCountry" />
+                    <ErrorMessage name="fromCountry" component="p" />
                   </div>
                 </div>
               </section>
@@ -389,7 +389,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="clientName"
                       name="clientName"
                     />
-                    <ErrorMessage name="clientName" />
+                    <ErrorMessage name="clientName" component="p" />
                   </div>
                   <div key="clientEmail">
                     <label htmlFor="clientEmail">Client's Email</label>
@@ -399,7 +399,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="clientEmail"
                       name="clientEmail"
                     />
-                    <ErrorMessage name="clientEmail" />
+                    <ErrorMessage name="clientEmail" component="p" />
                   </div>
                   <div key="toStreetAddress">
                     <label htmlFor="toStreetAddress">Street Address</label>
@@ -409,7 +409,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="toStreetAddress"
                       name="toStreetAddress"
                     />
-                    <ErrorMessage name="toStreetAddress" />
+                    <ErrorMessage name="toStreetAddress" component="p" />
                   </div>
                   <div key="toCity">
                     <label htmlFor="toCity">City</label>
@@ -419,7 +419,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="toCity"
                       name="toCity"
                     />
-                    <ErrorMessage name="toCity" />
+                    <ErrorMessage name="toCity" component="p" />
                   </div>
                   <div key="toPostCode">
                     <label htmlFor="toPostCode">Post Code</label>
@@ -429,7 +429,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="toPostCode"
                       name="toPostCode"
                     />
-                    <ErrorMessage name="toPostCode" />
+                    <ErrorMessage name="toPostCode" component="p" />
                   </div>
                   <div key="toCountry">
                     <label>Country</label>
@@ -439,7 +439,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       id="toCountry"
                       name="toCountry"
                     />
-                    <ErrorMessage name="toCountry" />
+                    <ErrorMessage name="toCountry" component="p" />
                   </div>
                 </div>
                 {/* <div className="invoice-info-container">
@@ -568,14 +568,65 @@ const NewInvoiceModal = ({ data, setData }) => {
                     placeholder="Project Description"
                     name="description"
                   />
-                  <ErrorMessage name="description" />
+                  <ErrorMessage name="description" component="p" />
                 </div>
               </section>
-              {/* <section className="item-list-container">
+              <section className="item-list-container">
                 <h2>Item List</h2>
                 <div className="item-list-input-table">
-                  <div className="item-list-input-table-subcontainer">
-                    {data.itemList.map((item) => {
+                  <FieldArray name="itemList">
+                    {(fieldArrayProps) => {
+                      const { push, remove, form } = fieldArrayProps;
+                      const { values } = form;
+                      const { itemList } = values;
+                      console.log(itemList);
+                      return (
+                        <>
+                          <div className="item-list-input-table-subcontainer">
+                            {itemList.map((item, index) => (
+                              <div key={index} className="item">
+                                {itemListInputs.map((input) => (
+                                  <div key={input.id}>
+                                    {index < 1 && (
+                                      <label htmlFor={input.id}>
+                                        {input.label}
+                                      </label>
+                                    )}
+                                    <Field
+                                      type={input.type}
+                                      placeholder={input.placeholder}
+                                      name={`itemList[${index}].${input.id}`}
+                                    />
+                                  </div>
+                                ))}
+                                {itemList.length > 1 && (
+                                  <img
+                                    src="/assets/icon-delete.svg"
+                                    alt="delete item"
+                                    onClick={() => remove(index)}
+                                  />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <button
+                            className="add-new-item-btn"
+                            onClick={() =>
+                              push({
+                                uid: uuidv4(),
+                                itemName: "",
+                                price: "",
+                                qty: "",
+                                total: "",
+                              })
+                            }
+                          >
+                            + Add New Item
+                          </button>
+                        </>
+                      );
+                    }}
+                    {/* {data.itemList.map((item) => {
                       // Cancer
                       n += 1;
                       m += 1;
@@ -583,7 +634,9 @@ const NewInvoiceModal = ({ data, setData }) => {
                         <div className="item" key={item.uid}>
                           {itemListInputs.map((input) => (
                             <div key={input.id}>
-                              {n <= 1 && <label>{input.label}</label>}
+                              {n <= 1 && (
+                                <label htmlFor={input.id}>{input.label}</label>
+                              )}
                               <input
                                 type={input.type}
                                 placeholder={input.placeholder}
@@ -609,16 +662,16 @@ const NewInvoiceModal = ({ data, setData }) => {
                           />
                         </div>
                       );
-                    })}
-                  </div>
+                    })} */}
+                  </FieldArray>
                 </div>
-                <button
+                {/* <button
                   className="add-new-item-btn"
                   onClick={(e) => handleAddNewItem(e)}
                 >
                   + Add New Item
-                </button>
-              </section> */}
+                </button> */}
+              </section>
               <section className="new-invoice-btn-container">
                 <button
                   className="discard-btn"
