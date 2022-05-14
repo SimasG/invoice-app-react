@@ -1,3 +1,4 @@
+import DatePickerInput from "./DatePickerInput";
 import Input from "./Input";
 import Select from "./Select";
 
@@ -8,6 +9,7 @@ const FormikControl = ({ control, ...rest }) => {
     case "select":
       return <Select {...rest} />;
     case "date":
+      return <DatePickerInput {...rest} />;
     default:
       return null;
   }

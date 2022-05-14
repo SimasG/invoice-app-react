@@ -13,6 +13,7 @@ import {
 } from "../../misc/idGenerator";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import FormikControl from "../form/FormikControl";
+import * as Yup from "yup";
 
 const itemListInputs = [
   {
@@ -68,7 +69,7 @@ const NewInvoiceModal = ({ data, setData }) => {
     toPostCode: "",
     toCountry: "",
     description: "",
-    // invoiceDate: "",
+    invoiceDate: null,
     paymentTerms: "",
     itemList: [
       {
@@ -136,6 +137,13 @@ const NewInvoiceModal = ({ data, setData }) => {
     // });
     return errors;
   };
+
+  const validationSchema = Yup.object({
+    fromStreetAddress: Yup.string().required("Street Address is Required!"),
+    fromCity: Yup.string().required("City is Required!"),
+    fromPostCode: Yup.string().required("Post Code is Required!"),
+    fromCountry: Yup.string().required("Country is Required!"),
+  });
 
   const onSubmit = (values, onSubmitProps) => {
     console.log("Form Data", values);
@@ -339,17 +347,13 @@ const NewInvoiceModal = ({ data, setData }) => {
     return errors;
   };
 
-  // Counter for mapped items (cancer)
-  let n = 0;
-  let m = -1;
-
   return (
     <>
       {data && (
         <StyledNewInvoiceModal className="new-invoice-modal-overlay">
           <Formik
             initialValues={initialValues}
-            validate={validate}
+            validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
             {(formik) => {
@@ -426,6 +430,11 @@ const NewInvoiceModal = ({ data, setData }) => {
                       />
                     </div>
                     <div className="invoice-info-container">
+                      <FormikControl
+                        control="date"
+                        label="Invoice Date"
+                        name="invoiceDate"
+                      />
                       {/* <div className="date-picker-container">
                       <label htmlFor="invoiceDate">Invoice Date</label>
                       <DatePicker
