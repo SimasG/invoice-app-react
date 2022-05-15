@@ -29,3 +29,89 @@ BAD: Not as proper/uniform
 // console.log(total);
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+s
+const validate = (values) => {
+let errors = {};
+const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+if (!values.fromStreetAddress) {
+errors.fromStreetAddress = "Street Address is Required!";
+}
+if (!values.fromCity) {
+errors.fromCity = "City is Required!";
+}
+if (!values.fromPostCode) {
+errors.fromPostCode = "Post code is Required!";
+}
+if (!values.fromCountry) {
+errors.fromCountry = "Country is Required!";
+}
+if (!values.clientName) {
+errors.clientName = "Client Name is Required!";
+}
+if (!values.clientEmail) {
+errors.clientEmail = "Client Email is Required!";
+} else if (!regex.test(values.clientEmail)) {
+errors.clientEmail = "The Email Format is Incorrect!";
+}
+if (!values.toStreetAddress) {
+errors.toStreetAddress = "Street Address is Required!";
+}
+if (!values.toCity) {
+errors.toCity = "City is Required!";
+}
+if (!values.toPostCode) {
+errors.toPostCode = "Post Code is Required!";
+}
+if (!values.toCountry) {
+errors.toCountry = "Country is Required!";
+}
+// if (!values.invoiceDate) {
+// errors.invoiceDate = "Invoice Date is Required!";
+// }
+if (!values.paymentTerms) {
+errors.paymentTerms = "Payment Terms are Required!";
+}
+if (!values.description) {
+errors.description = "Project Description is Required!";
+}
+// if (!values.itemList[0].itemName) {
+// errors.itemList[0].itemName = "Name is Required!";
+// }
+
+    // values.itemList.forEach((item) => {
+    //   if (!item.itemName) {
+    //     errors.itemList[0].itemName = "Name is Required!";
+    //   }
+    // });
+    return errors;
+
+};
+
+                                  // <div key={index} className="item">
+                                  //   {itemListInputs.map((input) => (
+                                  //     <div key={input.id}>
+                                  //       {index < 1 && (
+                                  //         <label htmlFor={input.id}>
+                                  //           {input.label}
+                                  //         </label>
+                                  //       )}
+                                  //       <Field
+                                  //         type={input.type}
+                                  //         placeholder={input.placeholder}
+                                  //         name={`itemList[${index}].${input.id}`}
+                                  //       />
+                                  //       <ErrorMessage
+                                  //         name={`itemList[${index}].${input.id}`}
+                                  //         component="p"
+                                  //       />
+                                  //     </div>
+                                  //   ))}
+                                  //   {itemList.length > 1 && (
+                                  //     <img
+                                  //       src="/assets/icon-delete.svg"
+                                  //       alt="delete item"
+                                  //       onClick={() => remove(index)}
+                                  //     />
+                                  //   )}
+                                  // </div>

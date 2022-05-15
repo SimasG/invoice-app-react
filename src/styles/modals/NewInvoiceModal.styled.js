@@ -81,8 +81,12 @@ export const StyledNewInvoiceModal = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        margin-bottom: 2rem;
         .date-picker-container {
           .mantine-date-picker {
+            background: red;
+            width: 30rem;
+            height: 5rem;
           }
           p {
             color: red;
@@ -210,7 +214,7 @@ export const StyledNewInvoiceModal = styled.div`
           .item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             width: 100%;
             margin-bottom: 0.5rem;
             div {

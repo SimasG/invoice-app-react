@@ -82,67 +82,27 @@ const NewInvoiceModal = ({ data, setData }) => {
     ],
   };
 
-  const validate = (values) => {
-    let errors = {};
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if (!values.fromStreetAddress) {
-      errors.fromStreetAddress = "Street Address is Required!";
-    }
-    if (!values.fromCity) {
-      errors.fromCity = "City is Required!";
-    }
-    if (!values.fromPostCode) {
-      errors.fromPostCode = "Post code is Required!";
-    }
-    if (!values.fromCountry) {
-      errors.fromCountry = "Country is Required!";
-    }
-    if (!values.clientName) {
-      errors.clientName = "Client Name is Required!";
-    }
-    if (!values.clientEmail) {
-      errors.clientEmail = "Client Email is Required!";
-    } else if (!regex.test(values.clientEmail)) {
-      errors.clientEmail = "The Email Format is Incorrect!";
-    }
-    if (!values.toStreetAddress) {
-      errors.toStreetAddress = "Street Address is Required!";
-    }
-    if (!values.toCity) {
-      errors.toCity = "City is Required!";
-    }
-    if (!values.toPostCode) {
-      errors.toPostCode = "Post Code is Required!";
-    }
-    if (!values.toCountry) {
-      errors.toCountry = "Country is Required!";
-    }
-    // if (!values.invoiceDate) {
-    //   errors.invoiceDate = "Invoice Date is Required!";
-    // }
-    if (!values.paymentTerms) {
-      errors.paymentTerms = "Payment Terms are Required!";
-    }
-    if (!values.description) {
-      errors.description = "Project Description is Required!";
-    }
-    // if (!values.itemList[0].itemName) {
-    //   errors.itemList[0].itemName = "Name is Required!";
-    // }
-
-    // values.itemList.forEach((item) => {
-    //   if (!item.itemName) {
-    //     errors.itemList[0].itemName = "Name is Required!";
-    //   }
-    // });
-    return errors;
-  };
-
   const validationSchema = Yup.object({
     fromStreetAddress: Yup.string().required("Street Address is Required!"),
     fromCity: Yup.string().required("City is Required!"),
     fromPostCode: Yup.string().required("Post Code is Required!"),
     fromCountry: Yup.string().required("Country is Required!"),
+    clientName: Yup.string().required("Name is Required!"),
+    clientEmail: Yup.string()
+      .email("Invalid Email!")
+      .required("Email is Required!"),
+    toStreetAddress: Yup.string().required("Street Address is Required!"),
+    toCity: Yup.string().required("City is Required!"),
+    toPostCode: Yup.string().required("Post Code is Required!"),
+    toCountry: Yup.string().required("Country is Required!"),
+    invoiceDate: Yup.date().required("Invoice Date is Required!").nullable(),
+    paymentTerms: Yup.string().required("Payment Terms are Required!"),
+    description: Yup.string().required("Project Description is Required!"),
+    itemList: Yup.array().of(
+      Yup.object({
+        itemName: Yup.string().required("Name is Required!"),
+      })
+    ),
   });
 
   const onSubmit = (values, onSubmitProps) => {
@@ -357,6 +317,7 @@ const NewInvoiceModal = ({ data, setData }) => {
             onSubmit={onSubmit}
           >
             {(formik) => {
+              // console.log(formik);
               return (
                 <Form className="new-invoice-modal-container">
                   <h1 className="title">New Invoice</h1>
@@ -434,130 +395,14 @@ const NewInvoiceModal = ({ data, setData }) => {
                         control="date"
                         label="Invoice Date"
                         name="invoiceDate"
+                        placeholder="Pick a Date"
                       />
-                      {/* <div className="date-picker-container">
-                      <label htmlFor="invoiceDate">Invoice Date</label>
-                      <DatePicker
-                        styles={{
-                          wrapper: {
-                            width: "24rem",
-                          },
-                          calendarHeader: {
-                            width: "22rem",
-                          },
-                          month: {
-                            width: "21.5rem",
-                          },
-                          dropdown: {
-                            width: "24rem",
-                          },
-                          arrow: {
-                            color: "green",
-                          },
-                        }}
-                        className="mantine-date-picker"
-                        placeholder="Pick date"
-                        id="invoice-date"
-                        name="invoiceDate"
-                      ></DatePicker>
-                      <p>{formErrors.invoiceDate}</p>
-                    </div> */}
                       <FormikControl
                         control="select"
                         label="Payment Terms"
                         name="paymentTerms"
                         options={dropdownOptions}
                       />
-                      {/* <div className="payment-terms-container">
-                      <label>Payment Terms</label>
-                      <div className="payment-terms-select-box">
-                        <div className="options-container">
-                          <div
-                            className="option"
-                            key="net1Day"
-                            value={data.paymentTerms}
-                            onClick={() =>
-                              setData({
-                                ...data,
-                                paymentTerms: "Net 1 Day",
-                              })
-                            }
-                          >
-                            <input
-                              type="radio"
-                              className="radio"
-                              id="net1Day"
-                              name="payment-term-date"
-                            />
-                            <label htmlFor="net1Day">Net 1 Day</label>
-                          </div>
-                          <div
-                            className="option"
-                            key="net7Days"
-                            value={data.paymentTerms}
-                            onClick={() =>
-                              setData({
-                                ...data,
-                                paymentTerms: "Net 7 Days",
-                              })
-                            }
-                          >
-                            <input
-                              type="radio"
-                              className="radio"
-                              id="net7Days"
-                              name="payment-term-date"
-                            />
-                            <label htmlFor="net7Days">Net 7 Days</label>
-                          </div>
-                          <div
-                            className="option"
-                            key="net14Days"
-                            value={data.paymentTerms}
-                            onClick={() =>
-                              setData({
-                                ...data,
-                                paymentTerms: "Net 14 Days",
-                              })
-                            }
-                          >
-                            <input
-                              type="radio"
-                              className="radio"
-                              id="net14Days"
-                              name="payment-term-date"
-                            />
-                            <label htmlFor="net14Days">Net 14 Days</label>
-                          </div>
-                          <div
-                            className="option"
-                            key="net30Days"
-                            value={data.paymentTerms}
-                            onClick={() =>
-                              setData({
-                                ...data,
-                                paymentTerms: "Net 30 Days",
-                              })
-                            }
-                          >
-                            <input
-                              type="radio"
-                              className="radio"
-                              id="net30Days"
-                              name="payment-term-date"
-                            />
-                            <label htmlFor="net30Days">Net 30 Days</label>
-                          </div>
-                        </div>
-                        <div
-                          className="selected"
-                          onClick={() => handleSelectedPaymentTermBtn()}
-                        >
-                          <h4>Select Payment Terms</h4>
-                        </div>
-                        <p>{formErrors.paymentTerms}</p>
-                      </div>
-                    </div> */}
                     </div>
                     <div className="project-description-container">
                       <label htmlFor="description">Project Description</label>
@@ -581,25 +426,68 @@ const NewInvoiceModal = ({ data, setData }) => {
                             <>
                               <div className="item-list-input-table-subcontainer">
                                 {itemList.map((item, index) => (
-                                  <div key={index} className="item">
-                                    {itemListInputs.map((input) => (
-                                      <div key={input.id}>
-                                        {index < 1 && (
-                                          <label htmlFor={input.id}>
-                                            {input.label}
-                                          </label>
-                                        )}
-                                        <Field
-                                          type={input.type}
-                                          placeholder={input.placeholder}
-                                          name={`itemList[${index}].${input.id}`}
-                                        />
-                                        {/* <ErrorMessage
-                                          name={`itemList[${index}].${input.id}`}
-                                          component="p"
-                                        /> */}
-                                      </div>
-                                    ))}
+                                  // Wny can't I use <FormikControl> here?
+                                  <div key={item.uid} className="item">
+                                    <div key={`itemName${index}`}>
+                                      {index < 1 && (
+                                        <label htmlFor={`itemName${index}`}>
+                                          Item Name
+                                        </label>
+                                      )}
+                                      <Field
+                                        type="text"
+                                        name={`itemName${index}`}
+                                      />
+                                      <ErrorMessage
+                                        name={`itemName${index}`}
+                                        component="p"
+                                      />
+                                    </div>
+                                    <div key={`qty${index}`}>
+                                      {index < 1 && (
+                                        <label htmlFor={`qty${index}`}>
+                                          Qty
+                                        </label>
+                                      )}
+                                      <Field
+                                        type="number"
+                                        name={`qty${index}`}
+                                      />
+                                      <ErrorMessage
+                                        name={`qty${index}`}
+                                        component="p"
+                                      />
+                                    </div>
+                                    <div key={`price${index}`}>
+                                      {index < 1 && (
+                                        <label htmlFor={`price${index}`}>
+                                          Price
+                                        </label>
+                                      )}
+                                      <Field
+                                        type="number"
+                                        name={`price${index}`}
+                                      />
+                                      <ErrorMessage
+                                        name={`price${index}`}
+                                        component="p"
+                                      />
+                                    </div>
+                                    <div key={`total${index}`}>
+                                      {index < 1 && (
+                                        <label htmlFor={`total${index}`}>
+                                          Total
+                                        </label>
+                                      )}
+                                      <Field
+                                        type="number"
+                                        name={`total${index}`}
+                                      />
+                                      <ErrorMessage
+                                        name={`total${index}`}
+                                        component="p"
+                                      />
+                                    </div>
                                     {itemList.length > 1 && (
                                       <img
                                         src="/assets/icon-delete.svg"
