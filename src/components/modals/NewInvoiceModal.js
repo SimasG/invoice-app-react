@@ -101,6 +101,9 @@ const NewInvoiceModal = ({ data, setData }) => {
     itemList: Yup.array().of(
       Yup.object({
         itemName: Yup.string().required("Name is Required!"),
+        qty: Yup.string().required("Qty is Required!"),
+        price: Yup.string().required("Price is Required!"),
+        total: Yup.string().required("Total is Required!"),
       })
     ),
   });
@@ -317,7 +320,7 @@ const NewInvoiceModal = ({ data, setData }) => {
             onSubmit={onSubmit}
           >
             {(formik) => {
-              // console.log(formik);
+              console.log(formik.errors);
               return (
                 <Form className="new-invoice-modal-container">
                   <h1 className="title">New Invoice</h1>
@@ -428,69 +431,78 @@ const NewInvoiceModal = ({ data, setData }) => {
                                 {itemList.map((item, index) => (
                                   // Wny can't I use <FormikControl> here?
                                   <div key={item.uid} className="item">
-                                    <div key={`itemName${index}`}>
+                                    <div key={`itemList[${index}].itemName`}>
                                       {index < 1 && (
-                                        <label htmlFor={`itemName${index}`}>
+                                        <label
+                                          htmlFor={`itemList[${index}].itemName`}
+                                        >
                                           Item Name
                                         </label>
                                       )}
                                       <Field
                                         type="text"
-                                        name={`itemName${index}`}
+                                        name={`itemList[${index}].itemName`}
                                       />
                                       <ErrorMessage
-                                        name={`itemName${index}`}
+                                        name={`itemList[${index}].itemName`}
                                         component="p"
                                       />
                                     </div>
-                                    <div key={`qty${index}`}>
+                                    <div key={`itemList[${index}].qty`}>
                                       {index < 1 && (
-                                        <label htmlFor={`qty${index}`}>
+                                        <label
+                                          htmlFor={`itemList[${index}].qty`}
+                                        >
                                           Qty
                                         </label>
                                       )}
                                       <Field
                                         type="number"
-                                        name={`qty${index}`}
+                                        name={`itemList[${index}].qty`}
                                       />
                                       <ErrorMessage
-                                        name={`qty${index}`}
+                                        name={`itemList[${index}].qty`}
                                         component="p"
                                       />
                                     </div>
-                                    <div key={`price${index}`}>
+                                    <div key={`itemList[${index}].price`}>
                                       {index < 1 && (
-                                        <label htmlFor={`price${index}`}>
+                                        <label
+                                          htmlFor={`itemList[${index}].price`}
+                                        >
                                           Price
                                         </label>
                                       )}
                                       <Field
                                         type="number"
-                                        name={`price${index}`}
+                                        name={`itemList[${index}].price`}
                                       />
                                       <ErrorMessage
-                                        name={`price${index}`}
+                                        name={`itemList[${index}].price`}
                                         component="p"
                                       />
                                     </div>
-                                    <div key={`total${index}`}>
+                                    <div key={`itemList[${index}].total`}>
                                       {index < 1 && (
-                                        <label htmlFor={`total${index}`}>
+                                        <label
+                                          htmlFor={`itemList[${index}].total`}
+                                        >
                                           Total
                                         </label>
                                       )}
                                       <Field
                                         type="number"
-                                        name={`total${index}`}
+                                        name={`itemList[${index}].total`}
                                       />
                                       <ErrorMessage
-                                        name={`total${index}`}
+                                        name={`itemList[${index}].total`}
                                         component="p"
                                       />
                                     </div>
                                     {itemList.length > 1 && (
                                       <img
                                         src="/assets/icon-delete.svg"
+                                        className={`item-delete${index}`}
                                         alt="delete item"
                                         onClick={() => remove(index)}
                                       />

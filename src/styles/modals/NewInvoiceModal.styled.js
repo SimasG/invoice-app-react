@@ -231,8 +231,11 @@ export const StyledNewInvoiceModal = styled.div`
               }
             }
             img {
-              align-self: flex-end;
+              align-self: flex-start;
               cursor: pointer;
+            }
+            .item-delete0 {
+              align-self: center;
             }
           }
         }
