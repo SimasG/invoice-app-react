@@ -14,6 +14,7 @@ import {
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import FormikControl from "../form/FormikControl";
 import * as Yup from "yup";
+// import FormikForm from "../form/FormikForm";
 
 const itemListInputs = [
   {
@@ -43,6 +44,8 @@ const itemListInputs = [
 ];
 
 const NewInvoiceModal = ({ data, setData }) => {
+  const [total, setTotal] = useState("");
+
   // Pure cancer. Need to find a way to sync formErrors state when submitting the form.
   const [formErrors, setFormErrors] = useState({ fromDataStreetAddress: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -320,8 +323,9 @@ const NewInvoiceModal = ({ data, setData }) => {
             onSubmit={onSubmit}
           >
             {(formik) => {
-              console.log(formik.errors);
+              // console.log(formik.values.itemList);
               return (
+                // <FormikForm data={data} setData={setData} />
                 <Form className="new-invoice-modal-container">
                   <h1 className="title">New Invoice</h1>
                   <section className="bill-from-container">
@@ -423,8 +427,9 @@ const NewInvoiceModal = ({ data, setData }) => {
                       <FieldArray name="itemList">
                         {(fieldArrayProps) => {
                           const { push, remove, form } = fieldArrayProps;
-                          const { values } = form;
+                          const { values, setFieldValue, handleChange } = form;
                           const { itemList } = values;
+                          // console.log(fieldArrayProps);
                           return (
                             <>
                               <div className="item-list-input-table-subcontainer">
@@ -459,6 +464,17 @@ const NewInvoiceModal = ({ data, setData }) => {
                                       <Field
                                         type="number"
                                         name={`itemList[${index}].qty`}
+                                        onChange={(e) => {
+                                          handleChange(e);
+                                          const total =
+                                            itemList[index].price *
+                                            itemList[index].qty;
+                                          setFieldValue(
+                                            `itemList[${index}].total`,
+                                            total
+                                          );
+                                        }}
+                                        value={itemList[index].qty}
                                       />
                                       <ErrorMessage
                                         name={`itemList[${index}].qty`}
@@ -476,6 +492,17 @@ const NewInvoiceModal = ({ data, setData }) => {
                                       <Field
                                         type="number"
                                         name={`itemList[${index}].price`}
+                                        onChange={(e) => {
+                                          handleChange(e);
+                                          const total =
+                                            itemList[index].price *
+                                            itemList[index].qty;
+                                          setFieldValue(
+                                            `itemList[${index}].total`,
+                                            total
+                                          );
+                                        }}
+                                        value={itemList[index].price}
                                       />
                                       <ErrorMessage
                                         name={`itemList[${index}].price`}
@@ -493,6 +520,10 @@ const NewInvoiceModal = ({ data, setData }) => {
                                       <Field
                                         type="number"
                                         name={`itemList[${index}].total`}
+                                        value={
+                                          itemList[index].price *
+                                          itemList[index].qty
+                                        }
                                       />
                                       <ErrorMessage
                                         name={`itemList[${index}].total`}
@@ -547,7 +578,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       <button
                         type="submit"
                         className="save-draft-btn"
-                        disabled={formik.isSubmitting}
+                        disabled={!formik.isValid}
                         // onClick={(e) => {
                         //   e.preventDefault();
                         //   handleAddNewInvoice("Draft");
@@ -558,7 +589,7 @@ const NewInvoiceModal = ({ data, setData }) => {
                       <button
                         type="submit"
                         className="save-send-btn"
-                        disabled={formik.isSubmitting}
+                        disabled={!formik.isValid}
                         // onClick={(e) => {
                         //   e.preventDefault();
                         //   handleAddNewInvoice("Pending");

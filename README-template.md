@@ -115,3 +115,5 @@ errors.description = "Project Description is Required!";
                                   //     />
                                   //   )}
                                   // </div>
+
+1. Make sure that whenever qty/price is changed, the onChange runs for total as well

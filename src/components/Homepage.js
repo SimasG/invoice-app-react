@@ -99,9 +99,11 @@ const Homepage = () => {
             </div>
           </div>
           <div className="new-invoice-container">
-            <img src="/assets/icon-plus.svg" alt="" />
-            <Link to="/newInvoice">
-              <button>New Invoice</button>
+            <div className="img-container">
+              <img src="/assets/icon-plus.svg" alt="" />
+            </div>
+            <Link className="new-invoice-link" to="/newInvoice">
+              <p>New Invoice</p>
             </Link>
           </div>
         </header>

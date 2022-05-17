@@ -57,7 +57,27 @@ export const StyledHomepage = styled.main`
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-      /* background-color: ${(props) => props.theme.colors.cornflowerBlue}; */
+      background-color: ${(props) => props.theme.colors.cornflowerBlue};
+      padding: 0.8rem 1.6rem 0.8rem 0.8rem;
+      border-radius: 24px;
+      width: 15rem;
+      .img-container {
+        background-color: #fff;
+        border-radius: 90px;
+        height: 3.2rem;
+        width: 3.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .new-invoice-link {
+        p {
+          color: #fff;
+          font-size: 1.2rem;
+          font-weight: 400;
+          margin-top: 0.1rem;
+        }
+      }
     }
   }
   .invoices-container {

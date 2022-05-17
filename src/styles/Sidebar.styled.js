@@ -15,8 +15,30 @@ export const StyledSidebar = styled.nav`
   align-items: center;
   padding: 0 0 2.4rem 0;
   .logo-container {
-    background-color: ${(props) => props.theme.colors.cornflowerBlue};
-    padding: 3.75rem;
+    .logo-subcontainer {
+      background-color: ${(props) => props.theme.colors.cornflowerBlue};
+      height: 10.3rem;
+      width: 10.3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      border-bottom-right-radius: 20px;
+      img {
+        height: 3.771rem;
+        width: 4rem;
+        z-index: 3;
+      }
+    }
+    .logo-shadow {
+      background-color: ${(props) => props.theme.colors.heliotrope};
+      height: 5.15rem;
+      width: 10.3rem;
+      margin-top: -5.15rem;
+      z-index: 2;
+      border-bottom-right-radius: 20px;
+      border-top-left-radius: 20px;
+    }
   }
   .login-container {
     display: flex;
