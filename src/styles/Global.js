@@ -12,7 +12,7 @@ const GlobalStyles = createGlobalStyle`
 
 html {
     font-size: 62.5%;
-    font-family: 'League Spartan', sans-serif;    
+    font-family: 'Poppins', sans-serif;    
     scroll-behavior: smooth;
     overflow-x: hidden;
     background-color: ${(props) => props.theme.colors.whisperBg}
@@ -25,7 +25,7 @@ h1, h2, h3, h4, p, li, ul, span, a, button {
     list-style-type: none;
     text-decoration: none;
     background: none;
-    font-family: 'League Spartan', sans-serif;
+    font-family: 'Poppins', sans-serif;    
 }
 
 h1 {
@@ -71,13 +71,11 @@ p {
     color: ${(props) => props.theme.colors.baliHai};
     line-height: 2.2rem;
     letter-spacing: -0.025rem;
-    /* TEMPORARY FONT SIZE */
-    font-size: 2rem;
+    font-size: 1.2rem;
 }
 
 button {
-    /* TEMPORARY FONT SIZE */
-    font-size: 2rem;
+    font-size: 1.2rem;
     height: 4.8rem;
     border-radius: 24px;
     font-weight: bold;

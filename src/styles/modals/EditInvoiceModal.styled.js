@@ -219,6 +219,9 @@ export const StyledEditInvoiceModal = styled.div`
         background-color: ${(props) => props.theme.colors.cornflowerBlue};
         color: #fff;
         padding: 0 2.5rem;
+        :hover {
+          background-color: ${(props) => props.theme.colors.heliotrope};
+        }
       }
     }
   }

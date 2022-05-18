@@ -273,6 +273,9 @@ export const StyledNewInvoiceModal = styled.div`
           :disabled {
             background-color: rgba(136, 142, 176, 0.5);
           }
+          :hover {
+            background-color: rgba(55, 59, 83, 0.75);
+          }
         }
         .save-send-btn {
           background-color: ${(props) => props.theme.colors.cornflowerBlue};
@@ -280,6 +283,9 @@ export const StyledNewInvoiceModal = styled.div`
           padding: 0 2.5rem;
           :disabled {
             background-color: rgba(124, 93, 250, 0.5);
+          }
+          :hover {
+            background-color: ${(props) => props.theme.colors.heliotrope};
           }
         }
       }
