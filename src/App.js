@@ -62,36 +62,6 @@ function App() {
     }
   });
 
-  // Moving invoice state up
-  const [data, setData] = useState({
-    fromData: {
-      streetAddress: "",
-      city: "",
-      postCode: "",
-      country: "",
-    },
-    toData: {
-      clientName: "",
-      clientEmail: "",
-      streetAddress: "",
-      city: "",
-      postCode: "",
-      country: "",
-    },
-    invoiceDate: "",
-    paymentTerms: "",
-    description: "",
-    itemList: [
-      {
-        uid: uuidv4(),
-        itemName: "",
-        price: "",
-        qty: "",
-        total: "",
-      },
-    ],
-  });
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
@@ -100,17 +70,11 @@ function App() {
           <Sidebar />
           <Routes>
             <Route exact path="/" element={<Homepage />} />
-            <Route
-              path="/newInvoice"
-              element={<NewInvoiceModal data={data} setData={setData} />}
-            />
-            <Route
-              path="/:clientName/:id"
-              element={<Invoice data={data} setData={setData} />}
-            />
+            <Route path="/newInvoice" element={<NewInvoiceModal />} />
+            <Route path="/:clientName/:id" element={<Invoice />} />
             <Route
               path="/:clientName/:id/edit"
-              element={<EditInvoiceModal data={data} setData={setData} />}
+              element={<EditInvoiceModal />}
             />
             <Route
               path="*"

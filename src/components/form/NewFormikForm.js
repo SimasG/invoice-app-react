@@ -18,7 +18,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useContext } from "react";
 import toast from "react-hot-toast";
 
-const FormikForm = ({ data, setData }) => {
+const NewFormikForm = () => {
   let navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
 
@@ -30,41 +30,10 @@ const FormikForm = ({ data, setData }) => {
     { key: "Net 30 Days", value: "30" },
   ];
 
-  const resetData = () => {
-    // Re-setting invoice data
-    setData({
-      fromData: {
-        streetAddress: "",
-        city: "",
-        postCode: "",
-        country: "",
-      },
-      toData: {
-        clientName: "",
-        clientEmail: "",
-        streetAddress: "",
-        city: "",
-        postCode: "",
-        country: "",
-      },
-      invoiceDate: "",
-      paymentTerms: "",
-      description: "",
-      itemList: [
-        {
-          uid: uuidv4(),
-          itemName: "",
-          price: "",
-          qty: "",
-          total: "",
-        },
-      ],
-    });
-  };
-
   const formik = useFormikContext();
-  const { values, setSubmitting, isSubmitting, isValid, resetForm } = formik;
+  const { values, setSubmitting, resetForm } = formik;
 
+  // CRUD -> C: Storing main state in a db
   const handleSubmit = async (invoiceStatus) => {
     setSubmitting(true);
     const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
@@ -88,8 +57,6 @@ const FormikForm = ({ data, setData }) => {
     setSubmitting(false);
     console.log("Form Data", values);
   };
-
-  console.log(values);
 
   return (
     <Form className="new-invoice-modal-container">
@@ -309,7 +276,6 @@ const FormikForm = ({ data, setData }) => {
           type="button"
           className="discard-btn"
           onClick={() => {
-            resetData();
             navigate("/");
           }}
         >
@@ -344,4 +310,4 @@ const FormikForm = ({ data, setData }) => {
   );
 };
 
-export default FormikForm;
+export default NewFormikForm;

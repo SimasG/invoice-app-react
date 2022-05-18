@@ -449,3 +449,219 @@ errors.description = "Project Description is Required!";
     return errors;
 
 };
+
+/
+/
+/
+
+const handleAddNewInvoice = async (invoiceStatus) => {
+setFormErrors(validateOld(data));
+setIsSubmitted(true);
+
+    if (Object.keys(formErrors).length === 0) {
+      const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
+
+      const invoicesCollectionRef = doc(
+        db,
+        "users",
+        currentUser.uid,
+        "invoices",
+        id
+      );
+      await setDoc(invoicesCollectionRef, {
+        ...data,
+        status: invoiceStatus,
+        id: id,
+        updatedAt: Timestamp.fromDate(new Date()),
+      });
+      toast.success("New invoice created!");
+      navigate("/");
+
+      resetData();
+    }
+
+};
+
+/
+/
+/
+
+// HANDLING ADDING & DELETING NEW ITEMS
+const handleAddNewItem = (e) => {
+e.preventDefault();
+const updatedData = {
+...data,
+itemList: [
+...data.itemList,
+{
+uid: uuidv4(),
+itemName: "",
+price: "",
+qty: "",
+total: "",
+},
+],
+};
+setData(updatedData);
+};
+
+const handleDeleteItem = (uid) => {
+setData({
+...data,
+itemList: data.itemList.filter((item) => uid !== item.uid),
+});
+toast.success("Item deleted");
+};
+
+/
+/
+/
+
+document.querySelectorAll(".option").forEach((option) => {
+option.addEventListener("click", () => {
+document.querySelector(".selected").innerHTML =
+option.querySelector("label").innerHTML;
+document.querySelector(".options-container").classList.remove("active");
+});
+});
+
+/
+/
+/
+
+const onSubmit = (values, onSubmitProps) => {
+console.log("Form Data", values);
+// Setting "isSubmitting" back to false once the form has been submitted. IRL, would be done after the server response.
+onSubmitProps.setSubmitting(false);
+onSubmitProps.resetForm();
+toast.success("New invoice created!");
+};
+
+const resetData = () => {
+// Re-setting invoice data
+setData({
+fromData: {
+streetAddress: "",
+city: "",
+postCode: "",
+country: "",
+},
+toData: {
+clientName: "",
+clientEmail: "",
+streetAddress: "",
+city: "",
+postCode: "",
+country: "",
+},
+invoiceDate: "",
+paymentTerms: "",
+description: "",
+itemList: [
+{
+uid: uuidv4(),
+itemName: "",
+price: "",
+qty: "",
+total: "",
+},
+],
+});
+};
+
+// Resetting the data on the first render
+useEffect(() => {
+setData({
+fromData: {
+streetAddress: "",
+city: "",
+postCode: "",
+country: "",
+},
+toData: {
+clientName: "",
+clientEmail: "",
+streetAddress: "",
+city: "",
+postCode: "",
+country: "",
+},
+invoiceDate: "",
+paymentTerms: "",
+description: "",
+itemList: [
+{
+uid: uuidv4(),
+itemName: "",
+price: "",
+qty: "",
+total: "",
+},
+],
+});
+}, []);
+
+/
+/
+/
+
+const itemListInputs = [
+{
+id: "itemName",
+label: "Item Name",
+type: "text",
+placeholder: "Item Name",
+},
+{
+id: "qty",
+label: "Qty.",
+type: "number",
+placeholder: "Qty.",
+},
+{
+id: "price",
+label: "Price",
+type: "number",
+placeholder: "Price",
+},
+{
+id: "total",
+label: "Total",
+type: "number",
+placeholder: "Total",
+},
+];
+
+/
+/
+/
+
+// Moving invoice state up
+const [data, setData] = useState({
+fromData: {
+streetAddress: "",
+city: "",
+postCode: "",
+country: "",
+},
+toData: {
+clientName: "",
+clientEmail: "",
+streetAddress: "",
+city: "",
+postCode: "",
+country: "",
+},
+invoiceDate: "",
+paymentTerms: "",
+description: "",
+itemList: [
+{
+uid: uuidv4(),
+itemName: "",
+price: "",
+qty: "",
+total: "",
+},
+],
+});

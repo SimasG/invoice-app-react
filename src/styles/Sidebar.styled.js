@@ -15,6 +15,7 @@ export const StyledSidebar = styled.nav`
   align-items: center;
   padding: 0 0 2.4rem 0;
   .logo-container {
+    cursor: pointer;
     .logo-subcontainer {
       background-color: ${(props) => props.theme.colors.cornflowerBlue};
       height: 10.3rem;

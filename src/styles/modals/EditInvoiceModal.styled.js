@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledNewInvoiceModal = styled.div`
+export const StyledEditInvoiceModal = styled.div`
   height: 100vh;
   position: fixed;
   width: 100%;
@@ -13,9 +13,13 @@ export const StyledNewInvoiceModal = styled.div`
     height: 100vh;
     padding: 5.6rem;
     overflow-y: scroll;
-    h1 {
+    .title {
       margin-bottom: 4rem;
       span {
+        color: ${(props) => props.theme.colors.baliHai};
+        font-size: 3.2rem;
+      }
+      .edit-heading-span {
         color: ${(props) => props.theme.colors.baliHai};
         font-size: 3.2rem;
       }
@@ -198,30 +202,23 @@ export const StyledNewInvoiceModal = styled.div`
         }
       }
     }
-    .new-invoice-btn-container {
+    .edit-invoice-btn-container {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
-      .discard-btn {
+      gap: 0.8rem;
+      .cancel-btn {
         background-color: #f9fafe;
         color: ${(props) => props.theme.colors.shipCove};
         padding: 0 2.5rem;
+        :hover {
+          background-color: ${(props) => props.theme.colors.selago};
+        }
       }
-      .save-btn-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.8rem;
-        .save-draft-btn {
-          background-color: #373b53;
-          color: ${(props) => props.theme.colors.baliHai};
-          padding: 0 2.5rem;
-        }
-        .save-send-btn {
-          background-color: ${(props) => props.theme.colors.cornflowerBlue};
-          color: #fff;
-          padding: 0 2.5rem;
-        }
+      .save-changes-btn {
+        background-color: ${(props) => props.theme.colors.cornflowerBlue};
+        color: #fff;
+        padding: 0 2.5rem;
       }
     }
   }

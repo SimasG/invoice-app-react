@@ -20,12 +20,12 @@ const Sidebar = () => {
 
   return (
     <StyledSidebar>
-      <div className="logo-container">
-        <Link to="/" className="logo-subcontainer">
+      <Link to="/" className="logo-container">
+        <div className="logo-subcontainer">
           <img src="/assets/logo.svg" alt="" />
-        </Link>
+        </div>
         <div className="logo-shadow"></div>
-      </div>
+      </Link>
       {currentUser && (
         <Link to="/" onClick={signOutUser} className="logout-container">
           <button>

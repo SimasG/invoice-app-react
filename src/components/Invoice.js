@@ -1,8 +1,7 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyledInvoice } from "../styles/Invoice.styled";
 import { Link, useParams, Outlet, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import EditInvoiceModal from "./modals/EditInvoiceModal";
 import dayjs from "dayjs";
 import { deleteDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -10,7 +9,8 @@ import { AuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import useFetchInvoices from "../hooks/useFetchInvoices";
 
-const Invoice = ({ data, setData }) => {
+const Invoice = () => {
+  const [data, setData] = useState();
   const { currentUser } = useContext(AuthContext);
   const invoices = useFetchInvoices();
   let params = useParams();
