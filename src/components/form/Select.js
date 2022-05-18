@@ -13,7 +13,7 @@ const Select = ({ label, name, options, ...rest }) => {
           );
         })}
       </Field>
-      <ErrorMessage name={name} component="p" />
+      <ErrorMessage name={name} component="p" className="error-msg" />
     </div>
   );
 };

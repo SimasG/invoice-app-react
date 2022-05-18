@@ -43,10 +43,6 @@ export const StyledNewInvoiceModal = styled.div`
           input {
             width: 15.2rem;
           }
-          p {
-            color: red;
-            font-size: 1rem;
-          }
         }
       }
     }
@@ -65,16 +61,15 @@ export const StyledNewInvoiceModal = styled.div`
         margin-bottom: 3rem;
         div {
           margin-bottom: 1.5rem;
-          p {
-            color: red;
-            font-size: 1rem;
-          }
         }
         div:nth-child(-n + 3) {
           width: 100%;
           input {
             width: 100%;
           }
+        }
+        .short-input {
+          width: 15.2rem;
         }
       }
       .invoice-info-container {
@@ -89,6 +84,7 @@ export const StyledNewInvoiceModal = styled.div`
             height: 5rem;
           }
           p {
+            margin-top: 0.5rem;
             color: red;
             font-size: 1rem;
           }
@@ -105,83 +101,6 @@ export const StyledNewInvoiceModal = styled.div`
           border: 1px solid #ccc;
           border-radius: 4px;
         }
-        p {
-          font-size: 1rem;
-          color: red;
-        }
-        /* .payment-terms-container {
-          .payment-terms-select-box {
-            display: flex;
-            flex-direction: column;
-            width: 24rem;
-            cursor: pointer;
-            .options-container {
-              max-height: 0;
-              opacity: 0;
-              background-color: #c8c5c5;
-              border-radius: 8px;
-              overflow: hidden;
-              order: 1;
-              .option {
-                padding: 1.55rem 2.4rem;
-                cursor: pointer;
-                :hover {
-                  background-color: ${(props) => props.theme.colors.whisperBg};
-                }
-                .radio {
-                  display: none;
-                }
-                label {
-                  display: inline;
-                  color: ${(props) => props.theme.colors.vulcan};
-                  cursor: pointer;
-                  :hover {
-                    color: ${(props) => props.theme.colors.cornflowerBlue};
-                  }
-                }
-              }
-            }
-            .options-container.active {
-              max-height: 19.1rem;
-              opacity: 1;
-            }
-            .options-container.active + .selected::after {
-              transform: rotateX(180deg);
-              top: -2rem;
-            }
-            .selected {
-              padding: 1.55rem 2.4rem;
-              border-radius: 8px;
-              border: 1px solid ${(props) => props.theme.colors.selago};
-              position: relative;
-              order: 0;
-              ::after {
-                content: "";
-                background-image: url("/assets/icon-arrow-down.svg");
-                background-size: contain;
-                background-repeat: no-repeat;
-                position: absolute;
-                height: 100%;
-                width: 1rem;
-                top: 2rem;
-                right: 1.4rem;
-                transition: 0.4s all;
-              }
-              :focus,
-              :active {
-                border: 1px solid
-                  ${(props) => props.theme.colors.cornflowerBlue};
-              }
-            }
-            .selected.margin-bottom {
-              margin-bottom: 2.4rem;
-            }
-            p {
-              color: red;
-              font-size: 1rem;
-            }
-          }
-        } */
       }
       .project-description-container {
         input {
@@ -213,17 +132,41 @@ export const StyledNewInvoiceModal = styled.div`
           margin-bottom: 2.5rem;
           .item {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: flex-start;
+            gap: 1.2rem;
             width: 100%;
             margin-bottom: 0.5rem;
             div {
-              width: 11rem;
+              :nth-child(1) {
+                width: 19.5rem;
+              }
+              :nth-child(2) {
+                width: 4.6rem;
+              }
+              :nth-child(3) {
+                width: 10rem;
+              }
+              :nth-child(4) {
+                width: 10rem;
+              }
               label {
                 width: 11rem;
               }
-              input {
-                width: 11rem;
+              .item-name-input {
+                width: 19.5rem;
+              }
+              .qty-input {
+                width: 4.6rem;
+                padding: 0 0.6rem;
+                text-align: center;
+              }
+              .price-input {
+                width: 10rem;
+              }
+              .total-input {
+                width: 10rem;
+                border: none;
               }
               p {
                 color: red;
@@ -290,5 +233,19 @@ export const StyledNewInvoiceModal = styled.div`
         }
       }
     }
+  }
+  label {
+    padding: 0.5rem 0;
+  }
+  input {
+    font-family: "Poppins", sans-serif;
+    color: ${(props) => props.theme.colors.vulcan};
+    font-weight: 700;
+    letter-spacing: 0.25px;
+  }
+  .error-msg {
+    color: red;
+    font-size: 1rem;
+    margin-top: 0.5rem;
   }
 `;

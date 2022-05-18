@@ -23,8 +23,8 @@ const NewInvoiceModal = () => {
       {
         uid: uuidv4(),
         itemName: "",
-        price: "",
-        qty: "",
+        price: 0,
+        qty: 0,
       },
     ],
   };
@@ -48,7 +48,7 @@ const NewInvoiceModal = () => {
     itemList: Yup.array().of(
       Yup.object({
         itemName: Yup.string().required("Name is Required!"),
-        qty: Yup.string().required("Qty is Required!"),
+        qty: Yup.string().required("Required!"),
         price: Yup.string().required("Price is Required!"),
       })
     ),

@@ -665,3 +665,82 @@ total: "",
 },
 ],
 });
+
+/
+/
+/
+/
+
+        /* .payment-terms-container {
+          .payment-terms-select-box {
+            display: flex;
+            flex-direction: column;
+            width: 24rem;
+            cursor: pointer;
+            .options-container {
+              max-height: 0;
+              opacity: 0;
+              background-color: #c8c5c5;
+              border-radius: 8px;
+              overflow: hidden;
+              order: 1;
+              .option {
+                padding: 1.55rem 2.4rem;
+                cursor: pointer;
+                :hover {
+                  background-color: ${(props) => props.theme.colors.whisperBg};
+                }
+                .radio {
+                  display: none;
+                }
+                label {
+                  display: inline;
+                  color: ${(props) => props.theme.colors.vulcan};
+                  cursor: pointer;
+                  :hover {
+                    color: ${(props) => props.theme.colors.cornflowerBlue};
+                  }
+                }
+              }
+            }
+            .options-container.active {
+              max-height: 19.1rem;
+              opacity: 1;
+            }
+            .options-container.active + .selected::after {
+              transform: rotateX(180deg);
+              top: -2rem;
+            }
+            .selected {
+              padding: 1.55rem 2.4rem;
+              border-radius: 8px;
+              border: 1px solid ${(props) => props.theme.colors.selago};
+              position: relative;
+              order: 0;
+              ::after {
+                content: "";
+                background-image: url("/assets/icon-arrow-down.svg");
+                background-size: contain;
+                background-repeat: no-repeat;
+                position: absolute;
+                height: 100%;
+                width: 1rem;
+                top: 2rem;
+                right: 1.4rem;
+                transition: 0.4s all;
+              }
+              :focus,
+              :active {
+                border: 1px solid
+                  ${(props) => props.theme.colors.cornflowerBlue};
+              }
+            }
+            .selected.margin-bottom {
+              margin-bottom: 2.4rem;
+            }
+            p {
+              color: red;
+              font-size: 1rem;
+            }
+          }
+        } */

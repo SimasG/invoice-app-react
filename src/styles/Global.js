@@ -69,7 +69,7 @@ p, li, span, input, ul, a, label {
 
 p {
     color: ${(props) => props.theme.colors.baliHai};
-    line-height: 2.2rem;
+    line-height: 1.5rem;
     letter-spacing: -0.025rem;
     font-size: 1.2rem;
 }
@@ -85,12 +85,15 @@ button {
 
 label {
     display: block;
+    color: ${(props) => props.theme.colors.shipCove};
 }
 
 input {
     outline: none;
     border-radius: 4px;
     border: 1px solid ${(props) => props.theme.colors.selago};
+    height: 4.8rem;
+    padding: 0 2.1rem;
     :focus {
         border: 1px solid ${(props) => props.theme.colors.cornflowerBlue};
     }
@@ -98,6 +101,18 @@ input {
 
 ul, li, button {
     cursor: pointer;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 `;
 
