@@ -38,7 +38,7 @@ const Invoice = ({ data, setData }) => {
     if (selectedInvoice) {
       let total = 0;
       selectedInvoice.itemList.map((item) => {
-        return (total += parseInt(item.total));
+        return (total += item.qty * item.price);
       });
       return total;
     }
@@ -75,7 +75,7 @@ const Invoice = ({ data, setData }) => {
             </div>
             <div className="invoice-control-subcontainer">
               <Link
-                to={`/${selectedInvoice.toData.clientName}/${selectedInvoice.id}/edit`}
+                to={`/${selectedInvoice.clientName}/${selectedInvoice.id}/edit`}
                 // onClick={() => setEditOpen(true)}
               >
                 Edit
@@ -98,10 +98,10 @@ const Invoice = ({ data, setData }) => {
                 <p>{selectedInvoice.description}</p>
               </div>
               <div className="sender-address-container">
-                <p>{selectedInvoice.fromData.streetAddress}</p>
-                <p>{selectedInvoice.fromData.city}</p>
-                <p>{selectedInvoice.fromData.postCode}</p>
-                <p>{selectedInvoice.fromData.country}</p>
+                <p>{selectedInvoice.fromStreetAddress}</p>
+                <p>{selectedInvoice.fromCity}</p>
+                <p>{selectedInvoice.fromPostCode}</p>
+                <p>{selectedInvoice.fromCountry}</p>
               </div>
             </div>
             <div className="invoice-content-subcontainer-2">
@@ -109,7 +109,6 @@ const Invoice = ({ data, setData }) => {
                 <div className="invoice-date-container">
                   <p>Invoice Date</p>
                   <h3>
-                    {" "}
                     {dayjs
                       .unix(selectedInvoice.invoiceDate.seconds)
                       .format("DD MMM YYYY")}
@@ -117,20 +116,27 @@ const Invoice = ({ data, setData }) => {
                 </div>
                 <div className="payment-date-container">
                   <p>Payment Date</p>
-                  <h3>{selectedInvoice.paymentTerms}</h3>
+                  <h3>
+                    {dayjs
+                      .unix(
+                        selectedInvoice.invoiceDate.seconds +
+                          parseInt(selectedInvoice.paymentTerms) * 24 * 60 * 60
+                      )
+                      .format("DD MMM YYYY")}
+                  </h3>
                 </div>
               </div>
               <div className="invoice-recipient-container">
                 <p>Bill To</p>
-                <h3>{selectedInvoice.toData.clientName}</h3>
-                <p>{selectedInvoice.toData.street}</p>
-                <p>{selectedInvoice.toData.city}</p>
-                <p>{selectedInvoice.toData.postCode}</p>
-                <p>{selectedInvoice.toData.country}</p>
+                <h3>{selectedInvoice.clientName}</h3>
+                <p>{selectedInvoice.toStreet}</p>
+                <p>{selectedInvoice.toCity}</p>
+                <p>{selectedInvoice.toPostCode}</p>
+                <p>{selectedInvoice.toCountry}</p>
               </div>
               <div className="invoice-recipient-email">
                 <p>Sent to</p>
-                <h3>{selectedInvoice.toData.clientEmail}</h3>
+                <h3>{selectedInvoice.clientEmail}</h3>
               </div>
             </div>
             <div className="price-container">
@@ -157,10 +163,13 @@ const Invoice = ({ data, setData }) => {
                           })}
                         </td>
                         <td className="total-item dark">
-                          {parseInt(item.total).toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "GBP",
-                          })}
+                          {parseInt(item.qty * item.price).toLocaleString(
+                            "en-US",
+                            {
+                              style: "currency",
+                              currency: "GBP",
+                            }
+                          )}
                         </td>
                       </tr>
                     );

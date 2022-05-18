@@ -1,17 +1,33 @@
-import { ErrorMessage, Field, FieldArray, Form, useFormik } from "formik";
+import {
+  ErrorMessage,
+  Field,
+  FieldArray,
+  Form,
+  useFormikContext,
+} from "formik";
 import FormikControl from "./FormikControl";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import {
+  createRandomLetters,
+  createRandomNumbers,
+} from "../../misc/idGenerator";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { db } from "../../firebase";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useContext } from "react";
+import toast from "react-hot-toast";
 
 const FormikForm = ({ data, setData }) => {
   let navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
 
   const dropdownOptions = [
     { key: "Select Payment Terms", value: "" },
-    { key: "Net 1 Day", value: "net1day" },
-    { key: "Net 7 Days", value: "net7days" },
-    { key: "Net 14 Days", value: "net14days" },
-    { key: "Net 30 Days", value: "net30days" },
+    { key: "Net 1 Day", value: "1" },
+    { key: "Net 7 Days", value: "7" },
+    { key: "Net 14 Days", value: "14" },
+    { key: "Net 30 Days", value: "30" },
   ];
 
   const resetData = () => {
@@ -46,9 +62,34 @@ const FormikForm = ({ data, setData }) => {
     });
   };
 
-  const formik = useFormik({});
+  const formik = useFormikContext();
+  const { values, setSubmitting, isSubmitting, isValid, resetForm } = formik;
 
-  // console.log(formik.values);
+  const handleSubmit = async (invoiceStatus) => {
+    setSubmitting(true);
+    const id = `${createRandomLetters(2)}${createRandomNumbers(4)}`;
+
+    const invoicesCollectionRef = doc(
+      db,
+      "users",
+      currentUser.uid,
+      "invoices",
+      id
+    );
+    await setDoc(invoicesCollectionRef, {
+      ...values,
+      status: invoiceStatus,
+      id: id,
+      updatedAt: Timestamp.fromDate(new Date()),
+    });
+    toast.success("New invoice created!");
+    navigate("/");
+    resetForm();
+    setSubmitting(false);
+    console.log("Form Data", values);
+  };
+
+  console.log(values);
 
   return (
     <Form className="new-invoice-modal-container">
@@ -152,9 +193,9 @@ const FormikForm = ({ data, setData }) => {
           <FieldArray name="itemList">
             {(fieldArrayProps) => {
               const { push, remove, form } = fieldArrayProps;
-              const { values, setFieldValue, handleChange } = form;
+              const { values, setFieldValue, handleChange, handleSubmit } =
+                form;
               const { itemList } = values;
-              // console.log(fieldArrayProps);
               return (
                 <>
                   <div className="item-list-input-table-subcontainer">
@@ -185,12 +226,7 @@ const FormikForm = ({ data, setData }) => {
                           <Field
                             type="number"
                             name={`itemList[${index}].qty`}
-                            onChange={(e) => {
-                              handleChange(e);
-                              const total =
-                                itemList[index].price * itemList[index].qty;
-                              setFieldValue(`itemList[${index}].total`, total);
-                            }}
+                            onChange={(e) => handleChange(e)}
                             value={itemList[index].qty}
                           />
                           <ErrorMessage
@@ -207,12 +243,7 @@ const FormikForm = ({ data, setData }) => {
                           <Field
                             type="number"
                             name={`itemList[${index}].price`}
-                            onChange={(e) => {
-                              handleChange(e);
-                              const total =
-                                itemList[index].price * itemList[index].qty;
-                              setFieldValue(`itemList[${index}].total`, total);
-                            }}
+                            onChange={(e) => handleChange(e)}
                             value={itemList[index].price}
                           />
                           <ErrorMessage
@@ -229,7 +260,11 @@ const FormikForm = ({ data, setData }) => {
                           <Field
                             type="number"
                             name={`itemList[${index}].total`}
-                            value={itemList[index].price * itemList[index].qty}
+                            disabled
+                            value={
+                              Number(values.itemList[index].qty) *
+                              Number(values.itemList[index].price)
+                            }
                           />
                           <ErrorMessage
                             name={`itemList[${index}].total`}
@@ -284,22 +319,22 @@ const FormikForm = ({ data, setData }) => {
           <button
             type="submit"
             className="save-draft-btn"
-            disabled={!formik.isValid}
-            // onClick={(e) => {
-            //   e.preventDefault();
-            //   handleAddNewInvoice("Draft");
-            // }}
+            disabled={!formik.isValid || formik.isSubmitting}
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit("Draft");
+            }}
           >
             Save as Draft
           </button>
           <button
             type="submit"
             className="save-send-btn"
-            disabled={!formik.isValid}
-            // onClick={(e) => {
-            //   e.preventDefault();
-            //   handleAddNewInvoice("Pending");
-            // }}
+            disabled={!formik.isValid || formik.isSubmitting}
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit("Pending");
+            }}
           >
             Save & Send
           </button>

@@ -20,6 +20,8 @@ const Homepage = () => {
     setData(invoices);
   }, [invoices]);
 
+  console.log(data);
+
   const handleCheckedState = (position, status) => {
     const currentIndex = checkedState.indexOf(status);
     const newCheckedState = [...checkedState];
@@ -36,7 +38,7 @@ const Homepage = () => {
   const getTotal = (selectedItem) => {
     let total = 0;
     selectedItem.map((item) => {
-      return (total += parseInt(item.total));
+      return (total += item.qty * item.price);
     });
     return total;
   };
@@ -114,7 +116,7 @@ const Homepage = () => {
             })
             .map((item) => (
               <Link
-                to={`/${item.toData.clientName}/${item.id}`}
+                to={`/${item.clientName}/${item.id}`}
                 className="invoice-container"
                 key={item.id}
               >
@@ -124,9 +126,14 @@ const Homepage = () => {
                 </h3>
                 <p>
                   Due{" "}
-                  {dayjs.unix(item.invoiceDate.seconds).format("DD MMM YYYY")}
+                  {dayjs
+                    .unix(
+                      item.invoiceDate.seconds +
+                        parseInt(item.paymentTerms) * 24 * 60 * 60
+                    )
+                    .format("DD MMM YYYY")}
                 </p>
-                <p>{item.toData.clientName}</p>
+                <p>{item.clientName}</p>
                 <p>
                   {getTotal(item.itemList).toLocaleString("en-US", {
                     style: "currency",
@@ -134,7 +141,6 @@ const Homepage = () => {
                   })}
                 </p>
                 <p>{item.status}</p>
-                <p>{item.paymentTerms}</p>
                 <img src="/assets/icon-arrow-right.svg" alt="" />
               </Link>
             ))}
