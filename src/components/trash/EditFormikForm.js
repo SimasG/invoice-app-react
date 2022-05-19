@@ -5,12 +5,12 @@ import {
   Form,
   useFormikContext,
 } from "formik";
-import FormikControl from "../components/form/FormikControl";
+import FormikControl from "../form/FormikControl";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { doc, Timestamp, updateDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { AuthContext } from "../contexts/AuthContext";
+import { db } from "../../firebase";
+import { AuthContext } from "../../contexts/AuthContext";
 import { useContext } from "react";
 import toast from "react-hot-toast";
 

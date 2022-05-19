@@ -63,7 +63,7 @@ const Invoice = () => {
       {selectedInvoice && (
         <StyledInvoice>
           <Link to="/" className="back-btn">
-            <img src="/assets/icon-arrow-left.svg" alt="" />
+            <img src="/assets/icon-arrow-left.svg" alt="icon arrow left" />
             <h4>Go Back</h4>
           </Link>
           <section className="invoice-control-container">

@@ -22,7 +22,7 @@ const Sidebar = () => {
     <StyledSidebar>
       <Link to="/" className="logo-container">
         <div className="logo-subcontainer">
-          <img src="/assets/logo.svg" alt="" />
+          <img src="/assets/logo.svg" alt="logo" />
         </div>
         <div className="logo-shadow"></div>
       </Link>

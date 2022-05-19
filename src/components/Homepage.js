@@ -80,7 +80,7 @@ const Homepage = () => {
                 onClick={openFilterOptions}
               >
                 <h4>Filter by status</h4>
-                <img src="/assets/icon-arrow-down.svg" alt="" />
+                <img src="/assets/icon-arrow-down.svg" alt="icon arrow down" />
               </div>
               <div className="filter-option-container">
                 {statusFilterInputs.map((input) => {
@@ -104,7 +104,7 @@ const Homepage = () => {
             </div>
             <Link to="/newInvoice" className="new-invoice-subcontainer">
               <div className="img-container">
-                <img src="/assets/icon-plus.svg" alt="" />
+                <img src="/assets/icon-plus.svg" alt="icon plus" />
               </div>
               <div className="new-invoice-link">
                 <p>New Invoice</p>
@@ -161,7 +161,10 @@ const Homepage = () => {
                     <h4 className="status green">{item.status}</h4>
                   </div>
                 )}
-                <img src="/assets/icon-arrow-right.svg" alt="" />
+                <img
+                  src="/assets/icon-arrow-right.svg"
+                  alt="icon arrow right"
+                />
               </Link>
             ))}
         </section>
