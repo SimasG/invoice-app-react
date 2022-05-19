@@ -36,6 +36,7 @@ export const StyledInvoice = styled.main`
     padding: 2rem 3.2rem;
     border-radius: 8px;
     margin-bottom: 2.4rem;
+    box-shadow: 0px 2px 12px -10px ${(props) => props.theme.colors.cornflowerBlue};
     .status-subcontainer {
       display: flex;
       justify-content: center;
@@ -102,6 +103,7 @@ export const StyledInvoice = styled.main`
     background-color: #fff;
     padding: 4.8rem;
     border-radius: 8px;
+    box-shadow: 0px 2px 12px -10px ${(props) => props.theme.colors.cornflowerBlue};
     .invoice-content-subcontainer-1 {
       display: flex;
       justify-content: space-between;

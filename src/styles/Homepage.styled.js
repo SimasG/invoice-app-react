@@ -27,7 +27,8 @@ export const StyledHomepage = styled.main`
           border-radius: 24px;
           padding: 0 1rem;
           :hover {
-            background-color: #fff;
+            /* background-color: #fff; */
+            box-shadow: 0px 2px 12px -8px ${(props) => props.theme.colors.cornflowerBlue};
           }
           h3 {
             cursor: pointer;
@@ -40,6 +41,7 @@ export const StyledHomepage = styled.main`
           position: fixed;
           width: 19.2rem;
           display: none;
+          box-shadow: 0px 2px 12px -10px ${(props) => props.theme.colors.cornflowerBlue};
           .filter-option {
             display: flex;
             justify-content: flex-start;
@@ -104,6 +106,10 @@ export const StyledHomepage = styled.main`
       justify-content: space-between;
       align-items: center;
       padding: 1.6rem 3.2rem;
+      box-shadow: 0px 2px 12px -10px ${(props) => props.theme.colors.cornflowerBlue};
+      :hover {
+        box-shadow: 0px 2px 12px -7px ${(props) => props.theme.colors.cornflowerBlue};
+      }
       h4 {
         .hashtag {
           color: ${(props) => props.theme.colors.shipCove};
