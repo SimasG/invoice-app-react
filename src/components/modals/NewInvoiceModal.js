@@ -24,7 +24,7 @@ const NewInvoiceModal = () => {
         uid: uuidv4(),
         itemName: "",
         price: 0,
-        qty: 0,
+        qty: "",
       },
     ],
   };

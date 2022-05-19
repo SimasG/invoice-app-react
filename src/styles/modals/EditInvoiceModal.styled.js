@@ -157,6 +157,7 @@ export const StyledEditInvoiceModal = styled.div`
       margin-bottom: 3.5rem;
       h2 {
         font-size: 1.8rem;
+        color: #777f98;
       }
       .item-list-input-table {
         display: flex;

@@ -88,7 +88,7 @@ label {
     color: ${(props) => props.theme.colors.shipCove};
 }
 
-input {
+input, select {
     outline: none;
     border-radius: 4px;
     border: 1px solid ${(props) => props.theme.colors.selago};

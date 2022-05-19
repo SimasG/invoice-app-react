@@ -77,29 +77,16 @@ export const StyledNewInvoiceModal = styled.div`
         justify-content: space-between;
         align-items: flex-start;
         margin-bottom: 2rem;
-        .date-picker-container {
-          .mantine-date-picker {
-            background: red;
-            width: 30rem;
-            height: 5rem;
+        .payment-terms-container {
+          #paymentTerms {
+            display: block;
+            width: 24rem;
+            height: 4.8rem;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+            color: ${(props) => props.theme.colors.vulcan};
+            border-radius: 4px;
           }
-          p {
-            margin-top: 0.5rem;
-            color: red;
-            font-size: 1rem;
-          }
-        }
-        select {
-          display: block;
-          width: 24rem;
-          padding: 6px 12px;
-          font-size: 14px;
-          line-height: 1.42857143;
-          color: #555;
-          background-color: #fff;
-          background-image: none;
-          border: 1px solid #ccc;
-          border-radius: 4px;
         }
       }
       .project-description-container {
@@ -107,7 +94,7 @@ export const StyledNewInvoiceModal = styled.div`
           width: 100%;
         }
         p {
-          color: red;
+          color: ${(props) => props.theme.colors.burntSienna};
           font-size: 1rem;
         }
       }
@@ -116,6 +103,7 @@ export const StyledNewInvoiceModal = styled.div`
       margin-bottom: 3.5rem;
       h2 {
         font-size: 1.8rem;
+        color: #777f98;
       }
       .item-list-input-table {
         display: flex;
@@ -130,9 +118,30 @@ export const StyledNewInvoiceModal = styled.div`
           align-items: center;
           width: 100%;
           margin-bottom: 2.5rem;
+          .item-list-label-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1.2rem;
+            width: 100%;
+            label {
+              :nth-child(1) {
+                width: 19.5rem;
+              }
+              :nth-child(2) {
+                width: 4.6rem;
+              }
+              :nth-child(3) {
+                width: 12rem;
+              }
+              :nth-child(4) {
+                width: 10rem;
+              }
+            }
+          }
           .item {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: flex-start;
             gap: 1.2rem;
             width: 100%;
@@ -167,18 +176,21 @@ export const StyledNewInvoiceModal = styled.div`
               .total-input {
                 width: 10rem;
                 border: none;
+                background-color: #fff;
               }
               p {
-                color: red;
+                color: ${(props) => props.theme.colors.burntSienna};
                 font-size: 1rem;
               }
             }
-            img {
-              align-self: flex-start;
-              cursor: pointer;
-            }
-            .item-delete0 {
+            svg {
               align-self: center;
+              cursor: pointer;
+              path {
+                :hover {
+                  fill: ${(props) => props.theme.colors.burntSienna};
+                }
+              }
             }
           }
         }
@@ -235,7 +247,7 @@ export const StyledNewInvoiceModal = styled.div`
     }
   }
   label {
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
   }
   input {
     font-family: "Poppins", sans-serif;
@@ -244,8 +256,15 @@ export const StyledNewInvoiceModal = styled.div`
     letter-spacing: 0.25px;
   }
   .error-msg {
-    color: red;
+    color: ${(props) => props.theme.colors.burntSienna};
     font-size: 1rem;
     margin-top: 0.5rem;
+  }
+  /* Mantine styling */
+  .mantine-DatePicker-input {
+    height: 4.8rem;
+  }
+  .mantine-DatePicker-dropdown {
+    height: 32rem;
   }
 `;

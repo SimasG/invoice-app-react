@@ -7,14 +7,13 @@ import NewInvoiceModal from "./components/modals/NewInvoiceModal";
 import DeleteInvoiceModal from "./components/modals/DeleteInvoiceModal";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthModal from "./components/modals/AuthModal";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { auth, db } from "./firebase";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import EditInvoiceModal from "./components/modals/EditInvoiceModal";
-import { v4 as uuidv4 } from "uuid";
 
 const theme = {
   colors: {

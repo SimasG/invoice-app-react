@@ -138,9 +138,8 @@ const NewFormikForm = () => {
             <div className="invoice-info-container">
               <FormikControl
                 control="date"
-                label="Invoice Date"
+                label="Issue Date"
                 name="invoiceDate"
-                placeholder="Pick a Date"
               />
               <FormikControl
                 control="select"
@@ -165,21 +164,21 @@ const NewFormikForm = () => {
               <FieldArray name="itemList">
                 {(fieldArrayProps) => {
                   const { push, remove, form } = fieldArrayProps;
-                  const { values, setFieldValue, handleChange, handleSubmit } =
-                    form;
+                  const { values, handleChange } = form;
                   const { itemList } = values;
                   return (
                     <>
                       <div className="item-list-input-table-subcontainer">
+                        <div className="item-list-label-container">
+                          <label>Item Name</label>
+                          <label>Qty</label>
+                          <label>Price</label>
+                          <label>Total</label>
+                        </div>
                         {itemList.map((item, index) => (
                           // Wny can't I use <FormikControl> here?
                           <div key={item.uid} className="item">
                             <div key={`itemList[${index}].itemName`}>
-                              {index < 1 && (
-                                <label htmlFor={`itemList[${index}].itemName`}>
-                                  Item Name
-                                </label>
-                              )}
                               <Field
                                 type="text"
                                 name={`itemList[${index}].itemName`}
@@ -192,11 +191,6 @@ const NewFormikForm = () => {
                               />
                             </div>
                             <div key={`itemList[${index}].qty`}>
-                              {index < 1 && (
-                                <label htmlFor={`itemList[${index}].qty`}>
-                                  Qty
-                                </label>
-                              )}
                               <Field
                                 type="number"
                                 name={`itemList[${index}].qty`}
@@ -211,11 +205,6 @@ const NewFormikForm = () => {
                               />
                             </div>
                             <div key={`itemList[${index}].price`}>
-                              {index < 1 && (
-                                <label htmlFor={`itemList[${index}].price`}>
-                                  Price
-                                </label>
-                              )}
                               <Field
                                 type="number"
                                 name={`itemList[${index}].price`}
@@ -230,11 +219,6 @@ const NewFormikForm = () => {
                               />
                             </div>
                             <div key={`itemList[${index}].total`}>
-                              {index < 1 && (
-                                <label htmlFor={`itemList[${index}].total`}>
-                                  Total
-                                </label>
-                              )}
                               <Field
                                 type="number"
                                 name={`itemList[${index}].total`}
@@ -247,12 +231,18 @@ const NewFormikForm = () => {
                               />
                             </div>
                             {itemList.length > 1 && (
-                              <img
-                                src="/assets/icon-delete.svg"
-                                className={`item-delete${index}`}
-                                alt="delete item"
+                              <svg
+                                width="13"
+                                height="16"
+                                xmlns="http://www.w3.org/2000/svg"
                                 onClick={() => remove(index)}
-                              />
+                              >
+                                <path
+                                  d="M11.583 3.556v10.666c0 .982-.795 1.778-1.777 1.778H2.694a1.777 1.777 0 01-1.777-1.778V3.556h10.666zM8.473 0l.888.889h3.111v1.778H.028V.889h3.11L4.029 0h4.444z"
+                                  fill="#888EB0"
+                                  fillRule="nonzero"
+                                />
+                              </svg>
                             )}
                           </div>
                         ))}

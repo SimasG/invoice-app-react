@@ -125,9 +125,8 @@ const EditFormikForm = ({ data }) => {
             <div className="invoice-info-container">
               <FormikControl
                 control="date"
-                label="Invoice Date"
+                label="Issue Date"
                 name="invoiceDate"
-                placeholder="Pick a Date"
               />
               <FormikControl
                 control="select"
