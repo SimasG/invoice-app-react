@@ -103,6 +103,38 @@ ul, li, button {
     cursor: pointer;
 }
 
+  /* Status circle colors */
+  .dark-gray-bg {
+    background-color: #373b53;
+  }
+  .orange-bg {
+    background-color: #ff8f00;
+  }
+  .green-bg {
+    background-color: #33d69f;
+  }
+  /* Status h4 colors */
+  .dark-gray {
+    color: #373b53;
+  }
+  .orange {
+    color: #ff8f00;
+  }
+  .green {
+    color: #33d69f;
+  }
+  /* Status backgrounds */
+  .light-gray-bg {
+    background-color: #f4f4f5;
+  }
+  .light-orange-bg {
+    background-color: #fef9f0;
+  }
+  .light-green-bg {
+    background-color: #f3fdfa;
+  }
+
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

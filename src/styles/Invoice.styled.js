@@ -10,7 +10,6 @@ export const StyledInvoice = styled.main`
     align-items: center;
     gap: 2.4rem;
     padding: 0 2.5rem;
-
     font-size: 1.2rem;
     height: 4.8rem;
     width: fit-content;
@@ -18,8 +17,15 @@ export const StyledInvoice = styled.main`
     font-weight: bold;
     line-height: 1.5rem;
     letter-spacing: -0.025rem;
+    h4 {
+      :hover {
+        color: ${(props) => props.theme.colors.shipCove};
+      }
+    }
     :hover {
-      background-color: ${(props) => props.theme.colors.selago};
+      h4 {
+        color: ${(props) => props.theme.colors.shipCove};
+      }
     }
   }
   .invoice-control-container {
@@ -27,7 +33,7 @@ export const StyledInvoice = styled.main`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 3.65rem 3.2rem;
+    padding: 2rem 3.2rem;
     border-radius: 8px;
     margin-bottom: 2.4rem;
     .status-subcontainer {
@@ -36,13 +42,59 @@ export const StyledInvoice = styled.main`
       align-items: center;
       gap: 1.6rem;
     }
+    .status-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.8rem;
+      width: 10.8rem;
+      height: 4rem;
+      border-radius: 6px;
+      .circle {
+        height: 0.8rem;
+        width: 0.8rem;
+        border-radius: 90px;
+      }
+    }
     .invoice-control-subcontainer {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 0.8rem;
-      a {
-        font-size: 2rem;
+      .edit-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4.8rem;
+        width: 7.3rem;
+        background-color: #f9fafe;
+        border-radius: 24px;
+        :hover {
+          background-color: ${(props) => props.theme.colors.selago};
+        }
+        button {
+          font-size: 1.2rem;
+          color: ${(props) => props.theme.colors.shipCove};
+          font-weight: 700;
+        }
+      }
+      button {
+        border-radius: 24px;
+        color: #fff;
+      }
+      .delete-btn {
+        background-color: ${(props) => props.theme.colors.burntSienna};
+        width: 8.9rem;
+        :hover {
+          background-color: #ff9797;
+        }
+      }
+      .mark-paid-btn {
+        background-color: ${(props) => props.theme.colors.cornflowerBlue};
+        width: 13.1rem;
+        :hover {
+          background-color: ${(props) => props.theme.colors.heliotrope};
+        }
       }
     }
   }
@@ -63,6 +115,7 @@ export const StyledInvoice = styled.main`
         gap: 0.5rem;
         span {
           color: ${(props) => props.theme.colors.baliHai};
+          font-size: 1.6rem;
         }
       }
       .sender-address-container {
@@ -70,6 +123,9 @@ export const StyledInvoice = styled.main`
         flex-direction: column;
         justify-content: center;
         align-items: flex-end;
+        p {
+          font-size: 1.1rem;
+        }
       }
     }
     .invoice-content-subcontainer-2 {
@@ -79,9 +135,25 @@ export const StyledInvoice = styled.main`
       margin-bottom: 4.8rem;
       .date-container {
         margin-right: 10rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        div {
+          p {
+            margin-bottom: 0.5rem;
+          }
+        }
       }
       .invoice-recipient-container {
-        margin-right: 12rem;
+        margin-right: 8rem;
+        .bill-to {
+          margin-bottom: 0.5rem;
+        }
+        h3 {
+          margin-bottom: 0.5rem;
+        }
       }
       .invoice-recipient-email {
       }
@@ -89,8 +161,7 @@ export const StyledInvoice = styled.main`
     .price-container {
       table {
         width: 100%;
-        background-color: #d5d5d5;
-        /* F9FAFE */
+        background-color: #f9fafe;
         border-radius: 8px;
         border-collapse: collapse;
         border-spacing: 0;
@@ -116,7 +187,7 @@ export const StyledInvoice = styled.main`
               font-size: 1.1rem;
               line-height: 1.8rem;
               letter-spacing: -0.023rem;
-              font-weight: 500;
+              font-weight: 400;
             }
           }
         }
@@ -174,5 +245,14 @@ export const StyledInvoice = styled.main`
         }
       }
     }
+  }
+
+  /* Invoice-specific stuff */
+  p {
+    color: #858bb2;
+    line-height: 1.8rem;
+  }
+  h3 {
+    font-size: 1.5rem;
   }
 `;

@@ -46,15 +46,14 @@ export const StyledHomepage = styled.main`
             align-items: center;
             gap: 1rem;
             height: 3.15rem;
-            cursor: pointer;
-            :hover {
-              background-color: ${(props) => props.theme.colors.baliHai};
-            }
             label {
               color: ${(props) => props.theme.colors.mirage};
               font-size: 1.2rem;
               font-weight: 700;
               cursor: pointer;
+            }
+            input {
+              height: 1.2rem;
             }
           }
         }
@@ -126,39 +125,7 @@ export const StyledHomepage = styled.main`
           width: 0.8rem;
           border-radius: 90px;
         }
-        .status {
-        }
       }
     }
-  }
-  /* Status circle colors */
-  .dark-gray-bg {
-    background-color: #373b53;
-  }
-  .orange-bg {
-    background-color: #ff8f00;
-  }
-  .green-bg {
-    background-color: #33d69f;
-  }
-  /* Status h4 colors */
-  .dark-gray {
-    color: #373b53;
-  }
-  .orange {
-    color: #ff8f00;
-  }
-  .green {
-    color: #33d69f;
-  }
-  /* Status backgrounds */
-  .light-gray-bg {
-    background-color: #f4f4f5;
-  }
-  .light-orange-bg {
-    background-color: #fef9f0;
-  }
-  .light-green-bg {
-    background-color: #f3fdfa;
   }
 `;

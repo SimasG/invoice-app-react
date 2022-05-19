@@ -64,26 +64,47 @@ const Invoice = () => {
         <StyledInvoice>
           <Link to="/" className="back-btn">
             <img src="/assets/icon-arrow-left.svg" alt="" />
-            <h3>Go Back</h3>
+            <h4>Go Back</h4>
           </Link>
           <section className="invoice-control-container">
             <div className="status-subcontainer">
               <p>Status</p>
-              <div className="status">
-                <p>{selectedInvoice.status}</p>
-              </div>
+              {selectedInvoice.status === "Draft" && (
+                <div className="status-container light-gray-bg">
+                  <div className="circle dark-gray-bg"></div>
+                  <h4 className="status dark-gray">{selectedInvoice.status}</h4>
+                </div>
+              )}
+              {selectedInvoice.status === "Pending" && (
+                <div className="status-container light-orange-bg">
+                  <div className="circle orange-bg"></div>
+                  <h4 className="status orange">{selectedInvoice.status}</h4>
+                </div>
+              )}
+              {selectedInvoice.status === "Paid" && (
+                <div className="status-container light-green-bg">
+                  <div className="circle green-bg"></div>
+                  <h4 className="status green">{selectedInvoice.status}</h4>
+                </div>
+              )}
             </div>
             <div className="invoice-control-subcontainer">
               <Link
                 to={`/${selectedInvoice.clientName}/${selectedInvoice.id}/edit`}
-                // onClick={() => setEditOpen(true)}
+                className="edit-link"
               >
-                Edit
+                <button>Edit</button>
               </Link>
-              <button onClick={() => deleteInvoice(selectedInvoice.id)}>
+              <button
+                onClick={() => deleteInvoice(selectedInvoice.id)}
+                className="delete-btn"
+              >
                 Delete
               </button>
-              <button onClick={() => handlePaidInvoice(selectedInvoice.id)}>
+              <button
+                onClick={() => handlePaidInvoice(selectedInvoice.id)}
+                className="mark-paid-btn"
+              >
                 Mark as Paid
               </button>
             </div>
@@ -91,10 +112,10 @@ const Invoice = () => {
           <section className="invoice-content-container">
             <div className="invoice-content-subcontainer-1">
               <div className="description-container">
-                <h2>
+                <h3>
                   <span>#</span>
                   {selectedInvoice.id}
-                </h2>
+                </h3>
                 <p>{selectedInvoice.description}</p>
               </div>
               <div className="sender-address-container">
@@ -127,9 +148,9 @@ const Invoice = () => {
                 </div>
               </div>
               <div className="invoice-recipient-container">
-                <p>Bill To</p>
+                <p className="bill-to">Bill To</p>
                 <h3>{selectedInvoice.clientName}</h3>
-                <p>{selectedInvoice.toStreet}</p>
+                <p>{selectedInvoice.toStreetAddress}</p>
                 <p>{selectedInvoice.toCity}</p>
                 <p>{selectedInvoice.toPostCode}</p>
                 <p>{selectedInvoice.toCountry}</p>
