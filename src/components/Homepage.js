@@ -20,10 +20,6 @@ const Homepage = () => {
     setData(invoices);
   }, [invoices]);
 
-  invoices.forEach((invoice) => {
-    console.log(invoice.status);
-  });
-
   const handleCheckedState = (position, status) => {
     const currentIndex = checkedState.indexOf(status);
     const newCheckedState = [...checkedState];

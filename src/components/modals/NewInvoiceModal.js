@@ -1,8 +1,10 @@
-import { StyledNewInvoiceModal } from "../../styles/modals/NewInvoiceModal.styled";
+// import { StyledNewInvoiceModal } from "../../styles/modals/NewInvoiceModal.styled";
+import { StyledInvoiceModal } from "../../styles/modals/InvoiceModal.styled";
 import { v4 as uuidv4 } from "uuid";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import NewFormikForm from "../form/NewFormikForm";
+// import NewFormikForm from "../form/NewFormikForm";
+import FormikForm from "../form/FormikForm";
 
 const NewInvoiceModal = () => {
   const initialValues = {
@@ -56,16 +58,17 @@ const NewInvoiceModal = () => {
 
   return (
     <>
-      <StyledNewInvoiceModal className="new-invoice-modal-overlay">
+      <StyledInvoiceModal className="new-invoice-modal-overlay">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
         >
           {(formik) => {
-            return <NewFormikForm />;
+            // return <NewFormikForm />;
+            return <FormikForm status="new" />;
           }}
         </Formik>
-      </StyledNewInvoiceModal>
+      </StyledInvoiceModal>
     </>
   );
 };

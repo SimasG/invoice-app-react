@@ -35,7 +35,7 @@ export const StyledHomepage = styled.main`
         }
         .filter-option-container {
           background-color: #fff;
-          padding: 2rem;
+          padding: 1.7rem 2.4rem;
           border-radius: 8px;
           position: fixed;
           width: 19.2rem;
@@ -45,15 +45,15 @@ export const StyledHomepage = styled.main`
             justify-content: flex-start;
             align-items: center;
             gap: 1rem;
-            padding: 1rem 0 1rem 0;
+            height: 3.15rem;
             cursor: pointer;
             :hover {
               background-color: ${(props) => props.theme.colors.baliHai};
             }
-            input {
-              cursor: pointer;
-            }
             label {
+              color: ${(props) => props.theme.colors.mirage};
+              font-size: 1.2rem;
+              font-weight: 700;
               cursor: pointer;
             }
           }

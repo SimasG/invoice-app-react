@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledNewInvoiceModal = styled.div`
+export const StyledInvoiceModal = styled.div`
   height: 100vh;
   position: fixed;
   width: 100%;
@@ -245,7 +245,34 @@ export const StyledNewInvoiceModal = styled.div`
         }
       }
     }
+    .edit-invoice-btn-container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.8rem;
+      .cancel-btn {
+        background-color: #f9fafe;
+        color: ${(props) => props.theme.colors.shipCove};
+        padding: 0 2.5rem;
+        :hover {
+          background-color: ${(props) => props.theme.colors.selago};
+        }
+      }
+      .save-changes-btn {
+        background-color: ${(props) => props.theme.colors.cornflowerBlue};
+        color: #fff;
+        padding: 0 2.5rem;
+        :disabled {
+          background-color: rgba(124, 93, 250, 0.5);
+        }
+        :hover {
+          background-color: ${(props) => props.theme.colors.heliotrope};
+        }
+      }
+    }
   }
+
+  /* Side stuff */
   label {
     padding: 0.75rem 0;
   }
@@ -258,7 +285,7 @@ export const StyledNewInvoiceModal = styled.div`
   .error-msg {
     color: ${(props) => props.theme.colors.burntSienna};
     font-size: 1rem;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
   }
   /* Mantine styling */
   .mantine-DatePicker-input {

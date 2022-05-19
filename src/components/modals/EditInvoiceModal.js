@@ -1,14 +1,16 @@
-import { StyledEditInvoiceModal } from "../../styles/modals/EditInvoiceModal.styled";
+// import { StyledEditInvoiceModal } from "../../styles/modals/EditInvoiceModal.styled";
+import { StyledInvoiceModal } from "../../styles/modals/InvoiceModal.styled";
 import { v4 as uuidv4 } from "uuid";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import EditFormikForm from "../form/EditFormikForm";
 import { useParams } from "react-router-dom";
 import useFetchInvoices from "../../hooks/useFetchInvoices";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+// import EditFormikForm from "../form/EditFormikForm";
+import FormikForm from "../form/FormikForm";
 
-const NewInvoiceModal = () => {
+const EditInvoiceModal = () => {
   const [data, setData] = useState();
   const invoices = useFetchInvoices();
 
@@ -83,19 +85,21 @@ const NewInvoiceModal = () => {
 
   return (
     <>
-      <StyledEditInvoiceModal className="new-invoice-modal-overlay">
+      <StyledInvoiceModal className="new-invoice-modal-overlay">
         <Formik
+          // !!! If the invoice # is found in the database, use that data, if not, use initialValues object
           initialValues={data || initialValues}
           validationSchema={validationSchema}
           enableReinitialize
         >
           {(formik) => {
-            return <EditFormikForm data={data} />;
+            // return <EditFormikForm data={data} />;
+            return <FormikForm />;
           }}
         </Formik>
-      </StyledEditInvoiceModal>
+      </StyledInvoiceModal>
     </>
   );
 };
 
-export default NewInvoiceModal;
+export default EditInvoiceModal;
