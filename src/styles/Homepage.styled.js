@@ -48,6 +48,7 @@ export const StyledHomepage = styled.main`
             align-items: center;
             gap: 1rem;
             height: 3.15rem;
+            cursor: pointer;
             label {
               color: ${(props) => props.theme.colors.mirage};
               font-size: 1.2rem;
@@ -56,6 +57,7 @@ export const StyledHomepage = styled.main`
             }
             input {
               height: 1.2rem;
+              cursor: pointer;
             }
           }
         }
