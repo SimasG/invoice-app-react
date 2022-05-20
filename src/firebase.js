@@ -20,6 +20,7 @@ export const auth = getAuth();
 // Passwordless auth set up
 export const actionCodeSettings = {
   // http://localhost:3000
-  url: `${window.location.origin}`,
+  // url: `${window.location.origin}`,
+  url: `https://invoice-app-react-simas.netlify.app/`,
   handleCodeInApp: true,
 };
