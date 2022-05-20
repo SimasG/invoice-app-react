@@ -1,5 +1,5 @@
 import { StyledSidebar } from "../styles/Sidebar.styled";
-import { FiLogIn, FiLogOut } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { signOut } from "firebase/auth";

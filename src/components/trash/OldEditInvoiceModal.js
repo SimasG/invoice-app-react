@@ -1,6 +1,6 @@
 import { StyledNewInvoiceModal } from "../styles/modals/EditInvoiceModal.styled";
 import { DatePicker } from "@mantine/dates";
-import { doc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
+import { doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import toast from "react-hot-toast";
 import {

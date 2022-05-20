@@ -4,7 +4,7 @@ import Homepage from "./components/Homepage";
 import Sidebar from "./components/Sidebar";
 import Invoice from "./components/Invoice";
 import NewInvoiceModal from "./components/modals/NewInvoiceModal";
-import DeleteInvoiceModal from "./components/modals/DeleteInvoiceModal";
+// import DeleteInvoiceModal from "./components/modals/DeleteInvoiceModal";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthModal from "./components/modals/AuthModal";
 import { useContext, useEffect } from "react";

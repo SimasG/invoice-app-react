@@ -151,8 +151,7 @@ const NewInvoiceModal = ({ data }) => {
               <FieldArray name="itemList">
                 {(fieldArrayProps) => {
                   const { push, remove, form } = fieldArrayProps;
-                  const { values, setFieldValue, handleChange, handleSubmit } =
-                    form;
+                  const { values, handleChange } = form;
                   const { itemList } = values;
                   return (
                     <>
