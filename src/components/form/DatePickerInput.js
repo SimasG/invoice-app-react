@@ -12,35 +12,9 @@ const DatePickerInput = ({ label, name, ...rest }) => {
         {({ form, field }) => {
           const { setFieldValue, validateField } = form;
           const { value } = field;
-          // console.log("setFieldValue", setFieldValue);
-          // console.log("value", value);
           // Don't understand the "{...field}" syntax
           return (
-            <MantineProvider
-              theme={{
-                // Theme is deeply merged with default theme
-                colorScheme: "light",
-                colors: {
-                  // Add your color
-                  "deep-blue": ["#E9EDFC", "#C1CCF6", "#99ABF0" /* ... */],
-                  // or replace default theme color
-                  blue: ["#E9EDFC", "#C1CCF6", "#99ABF0" /* ... */],
-                },
-
-                shadows: {
-                  // other shadows (xs, sm, lg) will be merged from default theme
-                  md: "1px 1px 3px rgba(0,0,0,.25)",
-                  xl: "15px 15px 13px rgba(0,0,0,.25)",
-                },
-
-                headings: {
-                  fontFamily: "Roboto, sans-serif",
-                  sizes: {
-                    h1: { fontSize: 30 },
-                  },
-                },
-              }}
-            >
+            <MantineProvider>
               <DatePicker
                 id={name}
                 {...field}

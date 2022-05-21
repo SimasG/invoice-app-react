@@ -71,7 +71,6 @@ const FormikForm = ({ status }) => {
     navigate("/");
     resetForm();
     setSubmitting(false);
-    console.log("Form Data", values);
   };
 
   return (

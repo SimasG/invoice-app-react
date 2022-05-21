@@ -8,8 +8,6 @@ const useFetchInvoices = () => {
   const { currentUser } = useContext(AuthContext);
   const [data, setData] = useState([]);
 
-  console.log("useFetchInvoices", currentUser);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

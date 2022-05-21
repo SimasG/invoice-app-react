@@ -42,7 +42,6 @@ const NewInvoiceModal = ({ data }) => {
     navigate("/");
     resetForm();
     setSubmitting(false);
-    console.log("Form Data", values);
   };
 
   return (

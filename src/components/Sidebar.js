@@ -35,13 +35,13 @@ const Sidebar = () => {
         </Link>
       )}
       <div>
-        <div className="theme-toggle-container">
+        {/* <div className="theme-toggle-container">
           <img
             className="theme-toggle"
             src="/assets/icon-moon.svg"
             alt="theme toggle"
           />
-        </div>
+        </div> */}
         <div className="gray-line"></div>
         {currentUser && (
           <img
