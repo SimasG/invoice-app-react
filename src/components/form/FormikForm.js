@@ -55,7 +55,6 @@ const FormikForm = ({ status }) => {
     navigate("/");
     resetForm();
     setSubmitting(false);
-    console.log("Form Data", values);
   };
 
   // CRUD -> U: Updating main state in a db

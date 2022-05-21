@@ -8,7 +8,10 @@ import {
 import FormikControl from "../form/FormikControl";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { createRandomLetters, createRandomNumbers } from "../../misc/idGenerator";
+import {
+  createRandomLetters,
+  createRandomNumbers,
+} from "../../misc/idGenerator";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -52,7 +55,6 @@ const NewFormikForm = () => {
     navigate("/");
     resetForm();
     setSubmitting(false);
-    console.log("Form Data", values);
   };
 
   return (
